@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youth Tech Asia Challenge 2026 (YTAC)</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome CDN -->
+    <script src="https://kit.fontawesome.com/6629857a22.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <!-- HERO VIDEO SECTION -->
+    <div class="hero-video-wrapper">
+        <video id="promoVideo" autoplay muted playsinline>
+            <source src="img/ytac_video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <div class="video-control-bar">
+            <button class="video-btn" id="playPauseToggle" aria-label="Play or pause video">
+                <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <svg id="pauseIcon" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+            </button>
+            <div class="progress-bar-track" id="progressTrack">
+                <div class="progress-bar-fill" id="progressFill"></div>
+            </div>
+            <span class="video-timer" id="videoTimer">0:00</span>
+            <button class="video-btn" id="muteToggle" aria-label="Mute or unmute video">
+                <svg id="muteIcon" viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0014 7.97v8.05a4.5 4.5 0 002.5-4.02zM3 9v6h4l5 5V4L7 9H3z"/></svg>
+                <svg id="unmuteIcon" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.59 3l2.71-2.71-1.41-1.41L15.17 12l-2.71-2.71-1.41 1.41L13.76 13l-2.71 2.71 1.41 1.41L15.17 14l2.71 2.71 1.41-1.41L16.59 12z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- NAVIGATION BAR -->
+    <header class="main-header">
+        <img src="img/YTAC logo.jpg" alt="Youth Tech Asia Challenge Logo" class="brand-logo">
+        <div class="header-right-menu">
+            <button class="menu-open-btn" id="openMenuBtn">☰ MENU</button>
+        </div>
+    </header>
+
+    <!-- FULLSCREEN MENU OVERLAY -->
+    <nav class="navigation-overlay" id="navigationMenu">
+        <div class="navigation-header">
+            <span class="navigation-brand">YTAC 2026</span>
+            <button class="menu-close-btn" id="closeMenuBtn">✕</button>
+        </div>
+        <ul class="navigation-list">
+            <li><a href="#home" class="navigation-link">01 — Home</a></li>
+            <li><a href="#experience" class="navigation-link">02 — Experience</a></li>
+            <li><a href="#about" class="navigation-link">03 — About YTAC</a></li>
+            <li><a href="#gallery" class="navigation-link">04 — Gallery</a></li>
+            <li><a href="#pathway" class="navigation-link">05 — Pathway</a></li>
+            <li><a href="#endorsements" class="navigation-link">06 — Recognition</a></li>
+            <li><a href="#articles" class="navigation-link">07 — Stories</a></li>
+            <li><a href="#register" class="navigation-link">08 — Register</a></li>
+            <li><a href="#contact" class="navigation-link">09 — Contact</a></li>
+        </ul>
+        <div class="navigation-footer">
+            <div class="organizer-details">
+                <p>Eduwel Sdn Bhd</p>
+                <p>Tech Dome Penang</p>
+            </div>
+            <div class="event-year">2026</div>
+        </div>
+    </nav>
+
+    <!-- 01 HERO SECTION -->
+    <section class="hero-section" id="home">
+        <div class="hero-text-container">
+            <span class="section-badge">A TECH COMPETITION THAT BELONGS TO MALAYSIA.</span>
+            <h1 class="main-heading">
+                <span class="heading-line"><span class="heading-text">YOUTH TECH</span></span>
+                <span class="heading-line"><span class="heading-text">ASIA</span></span>
+                <span class="heading-line"><span class="heading-text">CHALLENGE</span></span>
+                <span class="heading-line highlight-year"><span class="heading-text">2026</span></span>
+            </h1>
+            <div class="event-details">
+                <p class="venue-location">Tech Dome Penang, Malaysia</p>
+                <p class="event-dates">07 — 09 January 2027</p>
+            </div>
+            <a href="#experience" class="scroll-down-link">
+                ↓ EXPLORE YTAC
+            </a>
+        </div>
+        <div class="hero-media-card" id="heroMediaCard">
+            <img src="img/tagline.jpeg" alt="Students engaging in technology competition">
+        </div>
+    </section>
+
+    <!-- 02 YTAC EXPERIENCE -->
+    <section class="experience-section" id="experience">
+        <div class="experience-banner">
+            <img src="img/grouppic.jpg" alt="YTAC Group Event">
+            <div class="experience-text-wrapper">
+                <div class="banner-heading-line">FROM MALAYSIA.</div>
+                <div class="banner-heading-line color-accent">TO ASIA.</div>
+                <div class="banner-heading-line">TO THE WORLD.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03 ABOUT YTAC - COMPETITION CATEGORIES -->
+    <section class="about-section" id="about">
+        <span class="section-badge">ABOUT YTAC</span>
+        <h2 class="section-title">COMPETITION CATEGORIES</h2>
+
+        <div class="category-carousel-container" id="categoryCarousel">
+            <div class="carousel-nav-zone nav-zone-left" id="carouselNavLeft">
+                <div class="navigation-tooltip">◄ Previous</div>
+            </div>
+            <div class="carousel-nav-zone nav-zone-right" id="carouselNavRight">
+                <div class="navigation-tooltip">Next ►</div>
+            </div>
+
+            <!-- Card 0: INNO-TECH -->
+            <div class="category-card">
+                <h3 class="category-title">INNO-TECH CHALLENGE</h3>
+                <p class="category-description">
+                    A digital innovation challenge where participants develop creative solutions using technology, software and hardware.
+                </p>
+            </div>
+
+            <!-- Card 1: INNO-MAKER -->
+            <div class="category-card">
+                <h3 class="category-title">INNO-MAKER CHALLENGE</h3>
+                <p class="category-description">
+                    A hands-on innovation challenge that encourages participants to create practical solutions using creativity, design and physical materials.
+                </p>
+            </div>
+
+            <!-- Card 2: TECH-HACKATHON -->
+            <div class="category-card">
+                <h3 class="category-title">TECH-HACKATHON</h3>
+                <p class="category-description">
+                    A fast-paced coding challenge where participants solve problems, develop ideas and build innovative digital solutions.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04 GALLERY / JOURNEY -->
+    <section class="gallery-section" id="gallery">
+        <div class="gallery-header-container">
+            <span class="section-badge">04 — YTAC JOURNEY</span>
+            <h2 class="section-title">OUR JOURNEY</h2>
+        </div>
+        
+        <div class="gallery-scroll-track" id="galleryTrack">
+            <!-- 2022 -->
+            <article class="timeline-year-group">
+                <h3 class="year-heading">2022</h3>
+                <div class="gallery-card">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" alt="YTAC 2022 Event Highlights 1">
+                </div>
+                <div class="gallery-card">
+                    <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80" alt="YTAC 2022 Event Highlights 2">
+                </div>
+            </article>
+
+            <!-- 2023 -->
+            <article class="timeline-year-group">
+                <h3 class="year-heading">2023</h3>
+                <div class="gallery-card">
+                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80" alt="YTAC 2023 Event Highlights 1">
+                </div>
+                <div class="gallery-card">
+                    <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80" alt="YTAC 2023 Event Highlights 2">
+                </div>
+            </article>
+
+            <!-- 2024 -->
+            <article class="timeline-year-group">
+                <h3 class="year-heading">2024</h3>
+                <div class="gallery-card">
+                    <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80" alt="YTAC 2024 Event Highlights 1">
+                </div>
+                <div class="gallery-card">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" alt="YTAC 2024 Event Highlights 2">
+                </div>
+            </article>
+
+            <!-- 2025 -->
+            <article class="timeline-year-group">
+                <h3 class="year-heading">2025</h3>
+                <div class="gallery-card">
+                    <img src="img/2025.jpg" alt="YTAC 2025 Event Highlights 1">
+                </div>
+                <div class="gallery-card">
+                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80" alt="YTAC 2025 Event Highlights 2">
+                </div>
+            </article>
+
+            <!-- 2026 -->
+            <article class="timeline-year-group">
+                <h3 class="year-heading">2026</h3>
+                <div class="gallery-card">
+                    <img src="img/student1.jpg" alt="YTAC 2026 Event Highlights 1">
+                </div>
+                <div class="gallery-card">
+                    <img src="img/grouppic.jpg" alt="YTAC 2026 Event Highlights 2">
+                </div>
+            </article>
+        </div>
+
+        <div class="scroll-instruction">
+            <span>SCROLL TO EXPLORE</span>
+            <span class="animated-arrow">→</span>
+        </div>
+        <div class="gallery-progress-bar">
+            <div class="gallery-progress-fill" id="galleryProgressFill"></div>
+        </div>
+    </section>
+
+    <!-- 05 THE PATHWAY / PROGRESSION -->
+    <section class="pathway-section" id="pathway">
+        <div class="pathway-content-container">
+            <span class="section-badge">05 — THE PATHWAY</span>
+            <h2 class="section-title">Progression & Growth</h2>
+            
+            <div class="stage-filter-buttons">
+                <button class="stage-btn active" data-stage-filter="malaysia">MALAYSIA</button>
+                <button class="stage-btn" data-stage-filter="asean">ASEAN</button>
+                <button class="stage-btn" data-stage-filter="international">INTERNATIONAL</button>
+            </div>
+
+            <div class="pathway-tree-container">
+                <!-- YTAC Node -->
+                <article class="pathway-card" data-competition-level="malaysia">
+                    <div class="pathway-card-header">
+                        <div class="card-header-main">
+                            <img src="img/YTAC logo.jpg" class="competition-logo" alt="YTAC Logo">
+                            <span class="level-badge">NATIONAL LEVEL</span>
+                        </div>
+                        <span class="step-number">01</span>
+                    </div>
+                    <h3 class="competition-title">YTAC — Youth Tech Asia Challenge</h3>
+                    <p class="competition-summary">The initial launchpad for Malaysian students to showcase local innovation.</p>
+                    <div class="pathway-card-details">
+                        <p>Annual technology competition uniting young innovators from across Malaysia. Offers workshop training, mentorship, and national accreditation.</p>
+                        <div class="resource-links">
+                            <a href="#" class="resource-button">Handbook 📄</a>
+                            <a href="#" class="resource-button">Webpage 🌐</a>
+                            <a href="#" class="resource-button">Surat Pengiktirafan 📜</a>
+                        </div>
+                    </div>
+                </article>
+
+                <div class="tree-connecting-line"></div>
+
+                <!-- ICIA Node -->
+                <article class="pathway-card" data-competition-level="asean">
+                    <div class="pathway-card-header">
+                        <div class="card-header-main">
+                            <img src="img/ICIA-logo.png" class="competition-logo" alt="ICIA Logo">
+                            <span class="level-badge">REGIONAL LEVEL</span>
+                        </div>
+                        <span class="step-number">02</span>
+                    </div>
+                    <h3 class="competition-title">ICIA — International Cultural & Innovation Competition</h3>
+                    <p class="competition-summary">Regional ASEAN stage connecting cross-border technological solutions.</p>
+                    <div class="pathway-card-details">
+                        <p>Top teams from YTAC advance to compete against regional ASEAN counterparts, focusing on cross-cultural tech integration and sustainability.</p>
+                        <div class="resource-links">
+                            <a href="#" class="resource-button">Handbook 📄</a>
+                            <a href="#" class="resource-button">Webpage 🌐</a>
+                            <a href="#" class="resource-button">Surat Pengiktirafan 📜</a>
+                        </div>
+                    </div>
+                </article>
+
+                <div class="tree-connecting-line"></div>
+
+                <!-- IITS Node -->
+                <article class="pathway-card" data-competition-level="international">
+                    <div class="pathway-card-header">
+                        <div class="card-header-main">
+                            <img src="img/IITS-logo.png" class="competition-logo" alt="IITS Logo">
+                            <span class="level-badge">GLOBAL LEVEL</span>
+                        </div>
+                        <span class="step-number">03</span>
+                    </div>
+                    <h3 class="competition-title">IITS — International Innovation Tech Summit</h3>
+                    <p class="competition-summary">The apex global event for world-class youth technological achievements.</p>
+                    <div class="pathway-card-details">
+                        <p>The global final stage bringing together top youth innovators from Asia, Europe, and America to present projects to global tech leaders.</p>
+                        <div class="resource-links">
+                            <a href="#" class="resource-button">Handbook 📄</a>
+                            <a href="#" class="resource-button">Webpage 🌐</a>
+                            <a href="#" class="resource-button">Surat Pengiktirafan 📜</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- 06 ACHIEVEMENTS / RECOGNITION -->
+    <section class="endorsements-section" id="endorsements">
+        <span class="section-badge">06 — CREDIBILITY & RECOGNITION</span>
+        <h2 class="section-title">Official Endorsements</h2>
+        
+        <div class="documents-grid">
+            <div class="document-card">
+                <div class="document-preview-box">DOCUMENT PREVIEW</div>
+                <h3 class="document-title">Ministry Endorsement</h3>
+                <p class="document-subtitle">Official Co-Curricular Certificate</p>
+            </div>
+            <div class="document-card">
+                <div class="document-preview-box">DOCUMENT PREVIEW</div>
+                <h3 class="document-title">Venue Partnership</h3>
+                <p class="document-subtitle">Tech Dome Penang Collaboration</p>
+            </div>
+            <div class="document-card">
+                <div class="document-preview-box">DOCUMENT PREVIEW</div>
+                <h3 class="document-title">International Accreditation</h3>
+                <p class="document-subtitle">STEM Education Framework</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- RECOGNITION MODAL -->
+    <div class="preview-modal-overlay" id="documentModal">
+        <div class="modal-content-box">
+            <h3 class="modal-heading" id="modalTitle"></h3>
+            <p class="modal-description" id="modalDescription"></p>
+            <button class="modal-close-button">Close Preview</button>
+        </div>
+    </div>
+
+    <!-- 07 STORIES & ARTICLES -->
+    <section class="articles-section" id="articles">
+        <span class="section-badge">07 — STORIES & ARTICLES</span>
+        <h2 class="section-title">Youth Innovation Stories</h2>
+
+        <div class="articles-layout-grid">
+            <article class="featured-article-card">
+                <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80" alt="Featured innovation story preview">
+                <div class="article-text-body">
+                    <span class="article-category-label">FEATURED STORY</span>
+                    <h3 class="article-heading">Young Innovators Shaping Sustainable AI Tech</h3>
+                    <p class="article-excerpt">Discover how YTAC 2025 winners engineered an AI-powered sorting system using recycled micro-controllers...</p>
+                </div>
+            </article>
+            
+            <div class="side-articles-list">
+                <article class="side-article-card">
+                    <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=200&q=80" alt="YTAC 2025 Highlights thumbnail">
+                    <div>
+                        <h4 class="side-article-heading">YTAC 2025 Highlights</h4>
+                        <p class="side-article-excerpt">Over 500 students showcased projects at Penang.</p>
+                    </div>
+                </article>
+                <article class="side-article-card">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=200&q=80" alt="Parent and Teacher Guide thumbnail">
+                    <div>
+                        <h4 class="side-article-heading">Parent & Teacher Guide</h4>
+                        <p class="side-article-excerpt">How to support your student during competition prep.</p>
+                    </div>
+                </article>
+                <article class="side-article-card">
+                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=200&q=80" alt="Robotics in Sustainable Farming thumbnail">
+                    <div>
+                        <h4 class="side-article-heading">Robotics in Sustainable Farming</h4>
+                        <p class="side-article-excerpt">How youth are addressing agricultural challenges.</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- 08 COUNTDOWN / REGISTER -->
+    <section class="registration-countdown-section" id="register">
+        <span class="section-badge">08 — JOIN THE CHALLENGE</span>
+        <h2 class="countdown-main-heading">The Countdown Has Begun.</h2>
+        <p class="countdown-subheading">Registrations are open now for YTAC 2026 — don't miss your spot on the launchpad.</p>
+
+        <div class="countdown-timer-grid" id="timerGrid">
+            <div class="time-card">
+                <span class="time-digit" id="daysCount">00</span>
+                <span class="time-unit-label">Days</span>
+            </div>
+            <div class="time-card">
+                <span class="time-digit" id="hoursCount">00</span>
+                <span class="time-unit-label">Hours</span>
+            </div>
+            <div class="time-card">
+                <span class="time-digit" id="minutesCount">00</span>
+                <span class="time-unit-label">Minutes</span>
+            </div>
+            <div class="time-card">
+                <span class="time-digit" id="secondsCount">00</span>
+                <span class="time-unit-label">Seconds</span>
+            </div>
+        </div>
+
+        <a href="#" class="primary-register-button">Register Now →</a>
+    </section>
+
+    <!-- 09 CONTACT -->
+    <section class="contact-section" id="contact">
+        <div class="contact-layout-grid">
+            <div class="contact-header-block">
+                <span class="section-badge">09 — CONTACT US</span>
+                <h2 class="contact-main-heading">Let's Build the Future Together.</h2>
+            </div>
+            <div class="contact-details-block">
+                <h3 class="company-name">Eduwel Sdn Bhd</h3>
+                <p><strong>Email:</strong> codekids@eduwel.asia</p>
+                <p><strong>Phone:</strong> +60 10-827 1349</p>
+                <p><strong>Venue Host:</strong> Tech Dome Penang, Jalan Dr Lim Chwee Leong, 10000 George Town, Penang</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FLOATING CONTACT BUTTON WITH HOVER LINKS -->
+    <div class="floating-contact-container">
+        <div class="contact-popover-menu">
+            <a href="https://wa.me/YOUR_PHONE_NUMBER" target="_blank" rel="noopener noreferrer" class="contact-channel-button">
+                <img src="img/whatsapp.png" alt="WhatsApp Icon">
+                <span>WhatsApp</span>
+            </a>
+            <a href="mailto:your-email@example.com" class="contact-channel-button">
+                <img src="img/gmail.png" alt="Email Icon">
+                <span>Email Us</span>
+            </a>
+        </div>
+        <button class="floating-action-button">Contact Us</button>
+    </div>
+
+</body>
+</html>
