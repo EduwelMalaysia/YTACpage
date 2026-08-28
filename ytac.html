@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youth Tech Asia Challenge (YTAC) 2026</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+
+    <!--Font Awesome-->
+    <script src="https://kit.fontawesome.com/6629857a22.js" crossorigin="anonymous"></script>
+
+    <!--lenis and gsap cdn-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+    <!--Tailwind CSS-->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {
+        --color-ytac-blue: #00607A;
+        --color-ytac-green: #14A39A;
+        --color-ytac-purple: #822384;
+        --color-ytac-mint: #84D4C7;
+        --color-ytac-gray: #F4F4F4;
+        --font-sans: 'Plus Jakarta Sans', sans-serif;
+        --font-heading: 'Space Grotesk', sans-serif;
+      }
+      .hero-anim, .hero-card-anim {
+            opacity: 0;
+            transform: translateY(90px) scale(0.94);
+            transition: opacity 1.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        /* 2. Slow Staggered Delays for Each Specific Element */
+        .hero-tag-anim   { transition-delay: 0.1s; }
+        .hero-line1-anim { transition-delay: 0.3s; }
+        .hero-line2-anim { transition-delay: 0.45s; }
+        .hero-line3-anim { transition-delay: 0.6s; }
+        .hero-year-anim  { transition-delay: 0.8s; }
+        .hero-btn-anim   { transition-delay: 1.0s; }
+        .hero-card-anim  { transition-delay: 1.2s; }
+
+        /* 3. Revealed State (Activated when JS adds .animated to #home) */
+        #home.animated .hero-anim,
+        #home.animated .hero-card-anim {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="w-screen h-screen" id="video-container">
+            <video id="video" class="w-full h-full object-cover" autoplay muted playsinline>
+                <source src="img/ytac_video.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+            <nav
+                class="tagline fixed top-0 left-0 z-[1000] w-full flex items-center justify-between px-6 py-2 bg-white font-display opacity-0 -translate-y-5 pointer-events-none transition-all duration-400 ease-in-out [&.visible]:opacity-100 [&.visible]:translate-y-0 [&.visible]:pointer-events-auto">
+                <a href="index.html">
+                    <img src="img/logo_nobg.png" alt="YTAC logo" class="h-12">
+                </a>
+
+                <div class="flex items-center gap-8 font-bold">
+                    <a href="#home" class="text-ytac-blue">HOME</a>
+                    <a href="#category" class="text-ytac-blue">ABOUT YTAC</a>
+                    <a href="#pathway" class="text-ytac-blue">PATHWAY</a>
+                    <a href="#recognition" class="text-ytac-blue">RECOGNITION</a>
+                    <a href="#gallery" class="text-ytac-blue">GALLERY</a>
+                    <a href="#contact" class="text-ytac-blue">CONTACT</a>
+                </div>
+
+            </nav>
+
+            <div class="video-controls absolute bottom-6 left-1/2 -translate-x-1/2
+            w-[70%] max-w-4xl
+            flex items-center gap-4
+            px-5 py-3
+            bg-ytac-blue/60 backdrop-blur-md
+            rounded-full">
+
+                <!-- Play / Pause -->
+                <button class="vc-btn w-9 h-9 flex items-center justify-center
+               text-white hover:scale-110 transition" id="videoPlayToggle" aria-label="Play or pause video">
+
+                    <svg id="vcPlayIcon" class="w-5 h-5 fill-white" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+
+                    <svg id="vcPauseIcon" class="w-5 h-5 fill-white" viewBox="0 0 24 24" style="display:none;">
+                        <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
+                    </svg>
+                </button>
+
+                <!-- Progress Bar -->
+                <div class="vc-progress-track
+               flex-1 h-1.5
+               bg-white/30
+               rounded-full
+               cursor-pointer overflow-hidden" id="vcProgressTrack">
+
+                    <div class="vc-progress-fill
+                   h-full w-0
+                   bg-white
+                   rounded-full" id="vcProgressFill">
+                    </div>
+                </div>
+
+                <!-- Time -->
+                <span class="vc-time text-white text-sm font-medium whitespace-nowrap" id="vcTime">
+                    0:00
+                </span>
+
+                <!-- Mute -->
+                <button class="vc-btn w-9 h-9 flex items-center justify-center
+               text-white hover:scale-110 transition" id="videoMuteToggle" aria-label="Mute or unmute video">
+
+                    <svg id="vcMuteIcon" class="w-5 h-5 fill-white" viewBox="0 0 24 24">
+                        <path d="M16.5 12A4.5 4.5 0 0014 7.97v8.05a4.5 4.5 0 002.5-4.02zM3 9v6h4l5 5V4L7 9H3z" />
+                    </svg>
+
+                    <svg id="vcUnmuteIcon" class="w-5 h-5 fill-white" viewBox="0 0 24 24" style="display:none;">
+                        <path
+                            d="M3 9v6h4l5 5V4L7 9H3zm13.59 3l2.71-2.71-1.41-1.41L15.17 12l-2.71-2.71-1.41 1.41L13.76 13l-2.71 2.71-2.71-1.41 1.41-1.41L15.17 14l2.71 2.71-1.41-1.41L16.59 12z" />
+                    </svg>
+                </button>
+
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="home min-h-screen w-full px-[5%] py-12 flex items-center justify-center bg-[#F9FBFC]" id="home">
+            <div class="w-full max-w-[90%] mx-auto flex flex-col lg:flex-row items-center justify-between gap-12">
+
+                <!-- Left Side Text Container -->
+                <div id="heroTextContainer" class="flex-1 flex flex-col items-start text-left">
+                    <span
+                        class="hero-anim hero-tag-anim font-heading text-ytac-purple text-sm md:text-base font-extrabold tracking-wide mb-6 inline-block bg-ytac-purple/10 px-6 py-2.5 rounded-lg uppercase">
+                        A TECH COMPETITION THAT BELONGS TO MALAYSIA.
+                    </span>
+
+                    <h1
+                        class="font-heading font-black text-6xl sm:text-7xl xl:text-8xl text-ytac-blue leading-[0.9] tracking-tight uppercase mb-2">
+                        <span class="hero-anim hero-line1-anim block">YOUTH TECH</span>
+                        <span class="hero-anim hero-line2-anim block">ASIA</span>
+                        <span class="hero-anim hero-line3-anim block">CHALLENGE</span>
+                    </h1>
+
+                    <span
+                        class="hero-anim hero-year-anim font-heading font-black text-7xl sm:text-8xl xl:text-9xl text-ytac-purple leading-none block mb-8">
+                        2026
+                    </span>
+
+                    <a href="#category"
+                        class="hero-anim hero-btn-anim inline-flex items-center gap-3 font-heading font-bold text-lg md:text-xl text-ytac-blue hover:text-ytac-green transition-colors duration-200 group">
+                        <span class="text-2xl group-hover:translate-y-1 transition-transform duration-200">↓</span>
+                        <span>EXPLORE YTAC</span>
+                    </a>
+                </div>
+
+                <!-- Right Side Graphic Card Container -->
+                <div class="hero-card-anim flex-1 w-full max-w-xl flex justify-center lg:justify-end">
+                    <div
+                        class="relative w-full bg-white rounded-3xl p-6 shadow-2xl border border-gray-100 transform hover:scale-[1.02] transition-transform duration-300">
+                        <img src="img/tagline.jpeg" alt="YTAC Tech Dome Penang"
+                            class="w-full h-auto object-contain rounded-2xl">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section
+            class="experience relative h-screen w-full px-[5%] py-16 flex items-center justify-center text-center overflow-hidden"
+            id="experience">
+
+            <!-- Background Image -->
+            <img src="img/grouppic.jpg" alt="YTAC Group Event"
+                class="absolute inset-0 w-full h-full object-cover z-0 brightness-40">
+
+            <!-- Container pinning relative elements in absolute center -->
+            <div class="relative z-10 w-full max-w-4xl h-full flex items-center justify-center pointer-events-none">
+
+                <!-- SCENE 1: Text Banner (Initially Hidden) -->
+                <div id="expScene1" class="absolute inset-0 flex flex-col items-center justify-center gap-4 text-white">
+                    <div
+                        class="experience-text-wrapper font-heading font-black text-4xl sm:text-6xl md:text-7xl tracking-tight leading-tight uppercase drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] flex flex-col items-center">
+                        <div id="s1Line1" class="banner-heading-line text-white opacity-0 translate-y-16">FROM MALAYSIA.
+                        </div>
+                        <div id="s1Line2" class="banner-heading-line text-ytac-mint opacity-0 translate-y-16">TO ASIA.
+                        </div>
+                        <div id="s1Line3" class="banner-heading-line text-white opacity-0 translate-y-16">TO THE WORLD.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SCENE 2: Countdown & Register Button (Initially Hidden) -->
+                <div id="expScene2" class="absolute inset-0 flex flex-col items-center justify-center gap-8 text-white">
+
+                    <!-- Countdown Header -->
+                    <div class="space-y-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                        <h2 id="s2Heading"
+                            class="font-heading font-bold text-2xl sm:text-4xl text-white opacity-0 translate-y-16">
+                            The Countdown Has Begun.
+                        </h2>
+                        <p id="s2Subheading"
+                            class="font-sans text-sm sm:text-lg text-white max-w-xl mx-auto font-medium opacity-0 translate-y-16">
+                            Registrations are open now for YTAC 2026 — don't miss your spot on the launchpad.
+                        </p>
+                    </div>
+
+                    <!-- Countdown Timer Grid -->
+                    <div id="s2Timer"
+                        class="countdown-timer-grid grid grid-cols-2 sm:grid-cols-4 gap-4 w-full max-w-2xl opacity-0 translate-y-16">
+                        <div
+                            class="time-card bg-ytac-blue/40 backdrop-blur-md border border-white/20 p-6 rounded-3xl flex flex-col items-center shadow-lg">
+                            <span class="time-digit font-heading font-bold text-4xl sm:text-6xl text-ytac-mint"
+                                id="daysCount">00</span>
+                            <span
+                                class="time-unit-label font-heading font-black text-xs sm:text-sm uppercase tracking-widest text-white/80 mt-2">Days</span>
+                        </div>
+                        <div
+                            class="time-card bg-ytac-blue/40 backdrop-blur-md border border-white/20 p-6 rounded-3xl flex flex-col items-center shadow-lg">
+                            <span class="time-digit font-heading font-bold text-4xl sm:text-6xl text-ytac-mint"
+                                id="hoursCount">00</span>
+                            <span
+                                class="time-unit-label font-heading font-black text-xs sm:text-sm uppercase tracking-widest text-white/80 mt-2">Hours</span>
+                        </div>
+                        <div
+                            class="time-card bg-ytac-blue/40 backdrop-blur-md border border-white/20 p-6 rounded-3xl flex flex-col items-center shadow-lg">
+                            <span class="time-digit font-heading font-bold text-4xl sm:text-6xl text-ytac-mint"
+                                id="minutesCount">00</span>
+                            <span
+                                class="time-unit-label font-heading font-black text-xs sm:text-sm uppercase tracking-widest text-white/80 mt-2">Minutes</span>
+                        </div>
+                        <div
+                            class="time-card bg-ytac-blue/40 backdrop-blur-md border border-white/20 p-6 rounded-3xl flex flex-col items-center shadow-lg">
+                            <span class="time-digit font-heading font-black text-3xl sm:text-6xl text-ytac-mint"
+                                id="secondsCount">00</span>
+                            <span
+                                class="time-unit-label font-heading font-black text-xs sm:text-sm uppercase tracking-widest text-white/80 mt-2">Seconds</span>
+                        </div>
+                    </div>
+
+                    <!-- Call To Action Button -->
+                    <a id="s2Button" href="https://wa.me/message/CS2SJFC4EELDP1"
+                        class="primary-register-button pointer-events-auto inline-flex items-center gap-2 bg-white text-ytac-blue font-heading font-extrabold text-lg sm:text-xl px-10 py-4 rounded-full shadow-2xl hover:bg-ytac-mint hover:text-white hover:scale-105 opacity-0 translate-y-16">
+                        Register Now →
+                    </a>
+
+                </div>
+
+            </div>
+        </section>
+
+        <section class="category-section relative pt-12 pb-20 bg-[#F9FBFC] overflow-hidden" id="category">
+            <div class="max-w-6xl mx-auto px-4 flex flex-col items-center">
+
+                <!-- Section Heading (Reduced bottom margin from mb-16 to mb-6) -->
+                <div class="text-center mb-6">
+                    <span
+                        class="font-heading text-ytac-purple text-sm font-extrabold tracking-widest uppercase bg-ytac-purple/10 px-4 py-1 rounded-lg inline-block mb-2">
+                        CHALLENGE CATEGORIES
+                    </span>
+                    <h2 class="font-heading font-black text-4xl sm:text-5xl text-ytac-blue uppercase tracking-tight">
+                        EXPLORE THE TRACKS
+                    </h2>
+                </div>
+
+                <!-- 3D Circular Carousel Container (Reduced height from h-[650px] to h-[480px]) -->
+                <div class="relative w-full max-w-5xl h-[480px] flex items-center justify-center perspective-[1200px]"
+                    id="carouselContainer">
+
+                    <div class="category-grid relative w-full h-full flex items-center justify-center">
+
+                        <!-- 1. Inno-Tech Challenge -->
+                        <div class="carousel-card absolute w-[340px] sm:w-[400px] transition-all duration-700 ease-out cursor-pointer"
+                            data-index="0">
+                            <button type="button"
+                                class="category-card w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 flex flex-col items-center text-center hover:border-ytac-blue/40 transition-all duration-300 min-h-[380px]"
+                                aria-expanded="false" aria-controls="details-inno-tech"
+                                onclick="toggleDetails(this, 'details-inno-tech')">
+                                <h3
+                                    class="font-heading font-black text-2xl sm:text-3xl text-ytac-blue mb-4 tracking-tight">
+                                    INNO-TECH CHALLENGE
+                                </h3>
+                                <span
+                                    class="card-desc font-sans text-gray-600 text-base sm:text-lg leading-relaxed mb-6">
+                                    A coding-based innovation competition where participants design and develop
+                                    functional projects using programming languages.
+                                </span>
+                                <span
+                                    class="text-sm font-extrabold text-ytac-purple uppercase tracking-wider flex items-center gap-2 mt-auto">
+                                    Click to Open Book <i class="fa-solid fa-book-open ml-1"></i>
+                                </span>
+                            </button>
+
+                            <!-- Book Opening Details Card -->
+                            <div class="category-details absolute top-0 left-0 w-[350px] sm:w-[420px] min-h-[380px] bg-white rounded-3xl p-8 shadow-2xl border border-ytac-blue/30 opacity-0 pointer-events-none transform -rotate-y-90 transition-all duration-700 ease-in-out z-50 overflow-y-auto"
+                                id="details-inno-tech" aria-hidden="true">
+                                <div class="details-content flex flex-col gap-4">
+                                    <div class="flex justify-between items-center border-b pb-2">
+                                        <h4 class="font-heading font-bold text-xl text-ytac-blue">Inno-Tech Showcase
+                                        </h4>
+                                        <button type="button" onclick="closeBook('details-inno-tech')"
+                                            class="text-gray-400 hover:text-ytac-purple text-lg font-bold">✕</button>
+                                    </div>
+                                    <div class="image-gallery grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                        <img src="https://picsum.photos/300/200?random=1"
+                                            alt="Students presenting an Inno-Tech project"
+                                            class="rounded-xl object-cover w-full h-24 shadow-sm">
+                                        <img src="https://picsum.photos/300/200?random=2"
+                                            alt="Inno-Tech student project"
+                                            class="rounded-xl object-cover w-full h-24 shadow-sm">
+                                        <img src="https://picsum.photos/300/200?random=3"
+                                            alt="Students demonstrating their technology project"
+                                            class="rounded-xl object-cover w-full h-24 shadow-sm">
+                                        <img src="https://picsum.photos/300/200?random=4"
+                                            alt="Inno-Tech competition project"
+                                            class="rounded-xl object-cover w-full h-24 shadow-sm">
+                                        <img src="https://picsum.photos/300/200?random=5"
+                                            alt="Students showcasing their coding project"
+                                            class="rounded-xl object-cover w-full h-24 shadow-sm col-span-2 sm:col-span-1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Inno-Maker Challenge -->
+                        <div class="carousel-card absolute w-[340px] sm:w-[400px] transition-all duration-700 ease-out cursor-pointer"
+                            data-index="1">
+                            <button type="button"
+                                class="category-card w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 flex flex-col items-center text-center hover:border-ytac-blue/40 transition-all duration-300 min-h-[380px]"
+                                aria-expanded="false" aria-controls="details-inno-maker"
+                                onclick="toggleDetails(this, 'details-inno-maker')">
+                                <h3
+                                    class="font-heading font-black text-2xl sm:text-3xl text-ytac-blue mb-4 tracking-tight">
+                                    INNO-MAKER CHALLENGE
+                                </h3>
+                                <span
+                                    class="card-desc font-sans text-gray-600 text-base sm:text-lg leading-relaxed mb-6">
+                                    A non-coding innovation competition where participants design and present creative
+                                    product concepts or physical prototypes.
+                                </span>
+                                <span
+                                    class="text-sm font-extrabold text-ytac-purple uppercase tracking-wider flex items-center gap-2 mt-auto">
+                                    Click to Open Book <i class="fa-solid fa-book-open ml-1"></i>
+                                </span>
+                            </button>
+
+                            <!-- Book Opening Details Card -->
+                            <div class="category-details absolute top-0 left-0 w-[350px] sm:w-[420px] min-h-[380px] bg-white rounded-3xl p-8 shadow-2xl border border-ytac-blue/30 opacity-0 pointer-events-none transform -rotate-y-90 transition-all duration-700 ease-in-out z-50 overflow-y-auto"
+                                id="details-inno-maker" aria-hidden="true">
+                                <div class="details-content flex flex-col gap-4">
+                                    <div class="flex justify-between items-center border-b pb-2">
+                                        <h4 class="font-heading font-bold text-xl text-ytac-blue">Inno-Maker Showcase
+                                        </h4>
+                                        <button type="button" onclick="closeBook('details-inno-maker')"
+                                            class="text-gray-400 hover:text-ytac-purple text-lg font-bold">✕</button>
+                                    </div>
+                                    <div class="image-gallery grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                        <img src="https://picsum.photos/300/200?random=6"
+                                            alt="Inno-Maker physical prototype"
+                                            class="rounded-xl object-cover w-full h-24 shadow-sm">
+                                        <img src="https://picsum.photos/300/200?random=7"
+                                            alt="Student-designed innovation prototype"
+                                            class="rounded-xl object-cover w-full h-24 shadow-sm">
+                                        <img src="https://picsum.photos/300/200?random=8"
+                                            alt="Students presenting a product concept"
+                                            class="rounded-xl object-cover w-full h-24 shadow-sm">
+                                        <img src="https://picsum.photos/300/200?random=9"
+                                            alt="Inno-Maker competition prototype"
+                                            class="rounded-xl object-cover w-full h-24 shadow-sm">
+                                        <img src="https://picsum.photos/300/200?random=10"
+                                            alt="Students showcasing their physical innovation"
+                                            class="rounded-xl object-cover w-full h-24 shadow-sm col-span-2 sm:col-span-1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Inno-Junior Challenge -->
+                        <div class="carousel-card absolute w-[340px] sm:w-[400px] transition-all duration-700 ease-out cursor-pointer"
+                            data-index="2">
+                            <button type="button"
+                                class="category-card w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 flex flex-col items-center text-center hover:border-ytac-blue/40 transition-all duration-300 min-h-[380px]"
+                                aria-expanded="false" aria-controls="details-inno-junior"
+                                onclick="toggleDetails(this, 'details-inno-junior')">
+                                <h3
+                                    class="font-heading font-black text-2xl sm:text-3xl text-ytac-blue mb-4 tracking-tight">
+                                    INNO-JUNIOR CHALLENGE
+                                </h3>
+                                <span
+                                    class="card-desc font-sans text-gray-600 text-base sm:text-lg leading-relaxed mb-6">
+                                    An introductory tech challenge tailored for primary school innovators to ignite
+                                    creativity and problem solving.
+                                </span>
+                                <span
+                                    class="text-sm font-extrabold text-ytac-purple uppercase tracking-wider flex items-center gap-2 mt-auto">
+                                    Click to Open Book <i class="fa-solid fa-book-open ml-1"></i>
+                                </span>
+                            </button>
+
+                            <!-- Book Opening Details Card -->
+                            <div class="category-details absolute top-0 left-0 w-[350px] sm:w-[420px] min-h-[380px] bg-white rounded-3xl p-8 shadow-2xl border border-ytac-blue/30 opacity-0 pointer-events-none transform -rotate-y-90 transition-all duration-700 ease-in-out z-50 overflow-y-auto"
+                                id="details-inno-junior" aria-hidden="true">
+                                <div class="details-content flex flex-col gap-4">
+                                    <div class="flex justify-between items-center border-b pb-2">
+                                        <h4 class="font-heading font-bold text-xl text-ytac-blue">Inno-Junior Showcase
+                                        </h4>
+                                        <button type="button" onclick="closeBook('details-inno-junior')"
+                                            class="text-gray-400 hover:text-ytac-purple text-lg font-bold">✕</button>
+                                    </div>
+                                    <div class="image-gallery grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                        <img src="https://picsum.photos/300/200?random=11" alt="Junior students coding"
+                                            class="rounded-xl object-cover w-full h-24 shadow-sm">
+                                        <img src="https://picsum.photos/300/200?random=12" alt="Junior STEM prototype"
+                                            class="rounded-xl object-cover w-full h-24 shadow-sm">
+                                        <img src="https://picsum.photos/300/200?random=13" alt="Junior robotics demo"
+                                            class="rounded-xl object-cover w-full h-24 shadow-sm">
+                                        <img src="https://picsum.photos/300/200?random=14"
+                                            alt="Junior tech presentation"
+                                            class="rounded-xl object-cover w-full h-24 shadow-sm">
+                                        <img src="https://picsum.photos/300/200?random=15"
+                                            alt="Junior innovation showcase"
+                                            class="rounded-xl object-cover w-full h-24 shadow-sm col-span-2 sm:col-span-1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <button id="prevBtn" type="button" aria-label="Previous Category"
+                        class="absolute left-2 sm:-left-12 top-1/2 -translate-y-1/2 w-14 h-14 bg-white text-ytac-blue rounded-full shadow-2xl flex items-center justify-center text-xl z-40 hover:bg-ytac-purple hover:text-white hover:scale-110 active:scale-95 transition-all duration-300 group">
+                        <i class="fa-solid fa-chevron-left group-hover:-translate-x-1 transition-transform"></i>
+                    </button>
+
+                    <button id="nextBtn" type="button" aria-label="Next Category"
+                        class="absolute right-2 sm:-right-12 top-1/2 -translate-y-1/2 w-14 h-14 bg-white text-ytac-blue rounded-full shadow-2xl flex items-center justify-center text-xl z-40 hover:bg-ytac-purple hover:text-white hover:scale-110 active:scale-95 transition-all duration-300 group">
+                        <i class="fa-solid fa-chevron-right group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+
+                </div>
+            </div>
+        </section>
+        <!-- Pathway Section -->
+        <section class="pathway relative py-20 px-[5%] bg-white text-center overflow-hidden" id="pathway">
+            <span
+                class="font-heading text-ytac-purple text-sm font-extrabold tracking-widest uppercase bg-ytac-purple/10 px-4 py-1.5 rounded-lg inline-block mb-3">PATHWAY</span>
+            <h2 class="font-heading font-black text-4xl sm:text-5xl text-ytac-blue uppercase tracking-tight mb-8">
+                PROGRESSION AND GROWTH</h2>
+
+            <div class="filter-button flex flex-wrap justify-center gap-3 mb-12">
+                <button type="button"
+                    class="stage-btn active px-6 py-2.5 rounded-full font-heading font-bold text-sm tracking-wider uppercase border border-ytac-blue/20 bg-ytac-blue text-white shadow-sm hover:bg-ytac-blue hover:text-white transition-all duration-300 cursor-pointer"
+                    data-stage-filter="malaysia">MALAYSIA</button>
+                <button type="button"
+                    class="stage-btn px-6 py-2.5 rounded-full font-heading font-bold text-sm tracking-wider uppercase border border-ytac-blue/20 text-ytac-blue shadow-sm hover:bg-ytac-blue hover:text-white transition-all duration-300 cursor-pointer"
+                    data-stage-filter="asean">ASEAN</button>
+                <button type="button"
+                    class="stage-btn px-6 py-2.5 rounded-full font-heading font-bold text-sm tracking-wider uppercase border border-ytac-blue/20 text-ytac-blue shadow-sm hover:bg-ytac-blue hover:text-white transition-all duration-300 cursor-pointer"
+                    data-stage-filter="international">INTERNATIONAL</button>
+            </div>
+
+            <div class="pathway-layout max-w-6xl mx-auto">
+                <div class="pathway-cards-wrapper grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- YTAC Card -->
+                    <div
+                        class="pathway-card bg-white p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col items-center text-center hover:shadow-2xl transition-all duration-300">
+                        <img src="img/logo.jpeg" alt="YTAC logo" class="h-16 object-contain mb-6">
+                        <div class="pathway-title font-heading font-extrabold text-xl text-ytac-blue mb-3">Youth Tech
+                            Asia Challenge, YTAC</div>
+                        <div class="pathway-description font-sans text-gray-600 text-sm leading-relaxed mb-6 flex-1">
+                            <p>A regional youth competition serving as an initial launchpad for students to showcase
+                                innovation and problem-solving through technology.</p>
+                        </div>
+                        <div class="resource-buttons flex flex-wrap justify-center gap-2 mt-auto w-full relative">
+                            <div class="dropdown-container relative">
+                                <button type="button"
+                                    class="res-btn dropdown-toggle bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
+                                    onclick="toggleDropdown('ytacDropdown')">Handbook ▾</button>
+                                <div class="dropdown-menu hidden absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-50 flex flex-col gap-1 min-w-[100px]"
+                                    id="ytacDropdown">
+                                    <button type="button"
+                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
+                                        onclick="openDocument('ytacViewer', 'docs/ytac2026_handbook.pdf', 'YTAC 2026 Handbook')">2026</button>
+                                    <button type="button"
+                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
+                                        onclick="openDocument('ytacViewer', 'docs/ytac2025_handbook.pdf', 'YTAC 2025 Handbook')">2025</button>
+                                    <button type="button"
+                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
+                                        onclick="openDocument('ytacViewer', 'docs/ytac2024_handbook.pdf', 'YTAC 2024 Handbook')">2024</button>
+                                </div>
+                            </div>
+                            <button type="button"
+                                class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
+                                onclick="openDocument('ytacViewer', 'https://example.com/ytac', 'YTAC Webpage')">Webpage</button>
+                            <button type="button"
+                                class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
+                                onclick="openDocument('ytacViewer', 'docs/ytac_surat.pdf', 'YTAC Surat Pengiktirafan')">Surat
+                                Pengiktirafan</button>
+                        </div>
+                        <div class="expand-card hidden mt-4 w-full" id="ytacViewer">
+                            <div class="expand-header flex justify-between items-center mb-2">
+                                <h3 class="viewer-title font-heading font-bold text-sm text-ytac-blue">Document View
+                                </h3>
+                                <button type="button"
+                                    class="close-expand text-gray-400 hover:text-ytac-purple font-bold text-sm"
+                                    onclick="closeDocument('ytacViewer')">✕</button>
+                            </div>
+                            <div class="expand-body">
+                                <iframe id="ytacDocument" src=""
+                                    class="w-full h-[400px] rounded-xl border border-gray-200"
+                                    title="YTAC Document Viewer"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ICIA Card -->
+                    <div
+                        class="pathway-card bg-white p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col items-center text-center hover:shadow-2xl transition-all duration-300">
+                        <img src="img/icia_logo.jpeg" alt="ICIA logo" class="h-16 object-contain mb-6">
+                        <div class="pathway-title font-heading font-extrabold text-xl text-ytac-blue mb-3">International
+                            Cultural & Innovation Competition, ICIA</div>
+                        <div class="pathway-description font-sans text-gray-600 text-sm leading-relaxed mb-6 flex-1">
+                            <p>Regional ASEAN stage connecting cross-border technological solutions and innovative
+                                projects.</p>
+                        </div>
+                        <div class="resource-buttons flex flex-wrap justify-center gap-2 mt-auto w-full relative">
+                            <div class="dropdown-container relative">
+                                <button type="button"
+                                    class="res-btn dropdown-toggle bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
+                                    onclick="toggleDropdown('iciaDropdown')">Handbook ▾</button>
+                                <div class="dropdown-menu hidden absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-50 flex flex-col gap-1 min-w-[100px]"
+                                    id="iciaDropdown">
+                                    <button type="button"
+                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
+                                        onclick="openDocument('iciaViewer', 'docs/icia2026_handbook.pdf', 'ICIA 2026 Handbook')">2026</button>
+                                    <button type="button"
+                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
+                                        onclick="openDocument('iciaViewer', 'docs/icia2025_handbook.pdf', 'ICIA 2025 Handbook')">2025</button>
+                                    <button type="button"
+                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
+                                        onclick="openDocument('iciaViewer', 'docs/icia2024_handbook.pdf', 'ICIA 2024 Handbook')">2024</button>
+                                </div>
+                            </div>
+                            <button type="button"
+                                class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
+                                onclick="openDocument('iciaViewer', 'https://example.com/icia', 'ICIA Webpage')">Webpage</button>
+                            <button type="button"
+                                class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
+                                onclick="openDocument('iciaViewer', 'docs/icia_surat.pdf', 'ICIA Surat Pengiktirafan')">Surat
+                                Pengiktirafan</button>
+                        </div>
+                        <div class="expand-card hidden mt-4 w-full" id="iciaViewer">
+                            <div class="expand-header flex justify-between items-center mb-2">
+                                <h3 class="viewer-title font-heading font-bold text-sm text-ytac-blue">Document View
+                                </h3>
+                                <button type="button"
+                                    class="close-expand text-gray-400 hover:text-ytac-purple font-bold text-sm"
+                                    onclick="closeDocument('iciaViewer')">✕</button>
+                            </div>
+                            <div class="expand-body">
+                                <iframe id="iciaDocument" src=""
+                                    class="w-full h-[400px] rounded-xl border border-gray-200"
+                                    title="ICIA Document Viewer"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- IITS Card -->
+                    <div
+                        class="pathway-card bg-white p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col items-center text-center hover:shadow-2xl transition-all duration-300">
+                        <img src="img/iits_logo.jpeg" alt="IITS logo" class="h-16 object-contain mb-6">
+                        <div class="pathway-title font-heading font-extrabold text-xl text-ytac-blue mb-3">International
+                            Innovative Tech Summit, IITS</div>
+                        <div class="pathway-description font-sans text-gray-600 text-sm leading-relaxed mb-6 flex-1">
+                            <p>The apex global event for world-class youth technological achievements and market-ready
+                                prototypes.</p>
+                        </div>
+                        <div class="resource-buttons flex flex-wrap justify-center gap-2 mt-auto w-full relative">
+                            <div class="dropdown-container relative">
+                                <button type="button"
+                                    class="res-btn dropdown-toggle bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
+                                    onclick="toggleDropdown('iitsDropdown')">Handbook ▾</button>
+                                <div class="dropdown-menu hidden absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-50 flex flex-col gap-1 min-w-[100px]"
+                                    id="iitsDropdown">
+                                    <button type="button"
+                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
+                                        onclick="openDocument('iitsViewer', 'docs/iits2026_handbook.pdf', 'IITS 2026 Handbook')">2026</button>
+                                    <button type="button"
+                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
+                                        onclick="openDocument('iitsViewer', 'docs/iits2025_handbook.pdf', 'IITS 2025 Handbook')">2025</button>
+                                    <button type="button"
+                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
+                                        onclick="openDocument('iitsViewer', 'docs/iits2024_handbook.pdf', 'IITS 2024 Handbook')">2024</button>
+                                </div>
+                            </div>
+                            <button type="button"
+                                class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
+                                onclick="openDocument('iitsViewer', 'https://example.com/iits', 'IITS Webpage')">Webpage</button>
+                            <button type="button"
+                                class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
+                                onclick="openDocument('iitsViewer', 'docs/iits_surat.pdf', 'IITS Surat Pengiktirafan')">Surat
+                                Pengiktirafan</button>
+                        </div>
+                        <div class="expand-card hidden mt-4 w-full" id="iitsViewer">
+                            <div class="expand-header flex justify-between items-center mb-2">
+                                <h3 class="viewer-title font-heading font-bold text-sm text-ytac-blue">Document View
+                                </h3>
+                                <button type="button"
+                                    class="close-expand text-gray-400 hover:text-ytac-purple font-bold text-sm"
+                                    onclick="closeDocument('iitsViewer')">✕</button>
+                            </div>
+                            <div class="expand-body">
+                                <iframe id="iitsDocument" src=""
+                                    class="w-full h-[400px] rounded-xl border border-gray-200"
+                                    title="IITS Document Viewer"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recognition Section -->
+        <section class="recognition relative py-20 px-[5%] bg-[#F9FBFC] text-center overflow-hidden" id="recognition">
+            <span
+                class="font-heading text-ytac-purple text-sm font-extrabold tracking-widest uppercase bg-ytac-purple/10 px-4 py-1.5 rounded-lg inline-block mb-3">CREDIBILITY
+                & RECOGNITION</span>
+            <h2 class="font-heading font-black text-4xl sm:text-5xl text-ytac-blue uppercase tracking-tight mb-12">
+                Official Endorsements</h2>
+
+            <div class="documents-container grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div
+                    class="doc-card bg-white p-8 rounded-3xl shadow-lg border border-gray-100 flex flex-col items-center hover:scale-105 transition-transform duration-300">
+                    <div
+                        class="preview w-full h-48 bg-ytac-gray rounded-2xl flex items-center justify-center font-heading font-bold text-gray-400 text-sm mb-6 border border-dashed border-gray-300">
+                        DOCUMENT PREVIEW</div>
+                    <h3 class="font-heading font-bold text-xl text-ytac-blue mb-2">Ministry Endorsement</h3>
+                    <p class="font-sans text-gray-500 text-sm">Official Co-Curricular Certificate</p>
+                </div>
+                <div
+                    class="doc-card bg-white p-8 rounded-3xl shadow-lg border border-gray-100 flex flex-col items-center hover:scale-105 transition-transform duration-300">
+                    <div
+                        class="preview w-full h-48 bg-ytac-gray rounded-2xl flex items-center justify-center font-heading font-bold text-gray-400 text-sm mb-6 border border-dashed border-gray-300">
+                        DOCUMENT PREVIEW</div>
+                    <h3 class="font-heading font-bold text-xl text-ytac-blue mb-2">Venue Partnership</h3>
+                    <p class="font-sans text-gray-500 text-sm">Tech Dome Penang Collaboration</p>
+                </div>
+                <div
+                    class="doc-card bg-white p-8 rounded-3xl shadow-lg border border-gray-100 flex flex-col items-center hover:scale-105 transition-transform duration-300">
+                    <div
+                        class="preview w-full h-48 bg-ytac-gray rounded-2xl flex items-center justify-center font-heading font-bold text-gray-400 text-sm mb-6 border border-dashed border-gray-300">
+                        DOCUMENT PREVIEW</div>
+                    <h3 class="font-heading font-bold text-xl text-ytac-blue mb-2">International Accreditation</h3>
+                    <p class="font-sans text-gray-500 text-sm">STEM Education Framework</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="gallery" id="gallery">
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact relative py-20 px-[5%] bg-white" id="contact">
+            <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-stretch justify-between gap-12">
+
+                <!-- Left: Heading & Interactive Google Map -->
+                <div class="contact-container-1 flex-1 flex flex-col justify-between">
+                    <h3
+                        class="font-heading font-black text-3xl sm:text-4xl text-ytac-blue uppercase tracking-tight mb-6">
+                        IGNITE YOUR JOURNEY AND CONNECT WITH US
+                    </h3>
+                    <div
+                        class="map-container w-full h-[350px] rounded-3xl overflow-hidden shadow-xl border border-gray-100">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3605.3435929285715!2d101.6904511744704!3d3.085504953541636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc4bf370d14b0f%3A0x49a006ae9caa139d!2sCodeKids%20by%20EDUWEL!5e1!3m2!1sen!2smy!4v1787562569506!5m2!1sen!2smy"
+                            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="strict-origin-when-cross-origin" title="YTAC Location Map"></iframe>
+                    </div>
+                </div>
+
+                <!-- Right: Contact Information & Social Links -->
+                <div
+                    class="contact-container-2 flex-1 bg-[#F9FBFC] p-8 sm:p-10 rounded-3xl border border-gray-100 shadow-lg flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-heading font-extrabold text-2xl text-ytac-blue mb-6">
+                            YTAC - YOUTH TECH ASIA CHALLENGE
+                        </h4>
+                        <div class="space-y-4 font-sans text-gray-700 text-sm sm:text-base leading-relaxed">
+                            <p class="flex flex-wrap items-center gap-1">
+                                <strong class="text-ytac-purple font-bold">Email:</strong>
+                                <a href="mailto:ytac@eduwel.asia"
+                                    class="hover:text-ytac-blue underline transition-colors">ytac@eduwel.asia</a>
+                            </p>
+                            <p class="flex flex-wrap items-center gap-1">
+                                <strong class="text-ytac-purple font-bold">Phone:</strong>
+                                <a href="tel:+60149756369" class="hover:text-ytac-blue transition-colors">+6014-975 6369
+                                    (Customer Support)</a>
+                            </p>
+                            <p class="flex flex-wrap items-center gap-1">
+                                <strong class="text-ytac-purple font-bold">Phone:</strong>
+                                <a href="tel:+60183858888" class="hover:text-ytac-blue transition-colors">+6018-385 8888
+                                    (Ms Yivonn)</a>
+                            </p>
+                            <p>
+                                <strong class="text-ytac-purple font-bold block mb-1">Venue Host:</strong>
+                                A-3-6 Block A, Kuchai Exchange, 58200 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-gray-200">
+                        <p class="font-heading font-bold text-xs uppercase tracking-wider text-gray-500 mb-4">
+                            Follow us on our social media to get the latest info!
+                        </p>
+                        <div class="flex items-center gap-4">
+                            <a href="https://www.facebook.com/official.ytac/" target="_blank" rel="noopener noreferrer"
+                                class="w-12 h-12 rounded-2xl bg-white shadow-md flex items-center justify-center p-2.5 hover:scale-110 hover:shadow-xl transition-all duration-300 border border-gray-100">
+                                <img src="img/facebook.png" alt="YTAC Facebook Page"
+                                    class="w-full h-full object-contain">
+                            </a>
+                            <a href="https://www.instagram.com/ytac.official/?hl=en" target="_blank"
+                                rel="noopener noreferrer"
+                                class="w-12 h-12 rounded-2xl bg-white shadow-md flex items-center justify-center p-2.5 hover:scale-110 hover:shadow-xl transition-all duration-300 border border-gray-100">
+                                <img src="img/instagram.png" alt="YTAC Instagram Page"
+                                    class="w-full h-full object-contain">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Floating Contact Popover Widget -->
+        <div class="floating-contact-container fixed bottom-6 right-6 z-[999] flex flex-col items-end gap-3">
+
+            <!-- Popover Menu Channels (Initially hidden) -->
+            <div id="contactPopoverMenu"
+                class="contact-popover-menu flex flex-col gap-3 opacity-0 pointer-events-none translate-y-4 transition-all duration-300 ease-out">
+                <a href="https://wa.me/message/CS2SJFC4EELDP1" target="_blank" rel="noopener noreferrer"
+                    class="contact-channel-button w-14 h-14 bg-white rounded-full shadow-2xl flex items-center justify-center p-3 hover:scale-110 border border-gray-100 transition-transform">
+                    <img src="img/whatsapp.png" alt="WhatsApp Icon" class="w-full h-full object-contain">
+                </a>
+                <a href="mailto:ytac@eduwel.asia"
+                    class="contact-channel-button w-14 h-14 bg-white rounded-full shadow-2xl flex items-center justify-center p-3 hover:scale-110 border border-gray-100 transition-transform">
+                    <img src="img/gmail.png" alt="Email Icon" class="w-full h-full object-contain">
+                </a>
+            </div>
+
+            <!-- Floating Toggle Button -->
+            <button id="floatingContactBtn" type="button"
+                class="floating-action-button bg-ytac-purple hover:bg-ytac-blue text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 cursor-pointer">
+                <span>Contact Us</span>
+            </button>
+        </div>
+
+    </main>
+
+    <script>
+        const $ = (selector) => document.querySelector(selector);
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        const lenis = new Lenis({
+            duration: 1.2,
+            smoothWheel: true
+        });
+
+        lenis.on('scroll', ScrollTrigger.update);
+
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+
+        gsap.ticker.lagSmoothing(0);
+
+        ScrollTrigger.create({
+            trigger: '#home',
+            start: 'top 80%',
+            onEnter: () => $('.tagline')?.classList.add('visible'),
+            onLeaveBack: () => $('.tagline')?.classList.remove('visible')
+        });
+
+        ScrollTrigger.create({
+            trigger: '#home',
+            start: 'top 75%',
+            onEnter: () => $('#home')?.classList.add('animated'),
+            onLeaveBack: () => $('#home')?.classList.remove('animated')
+        });
+
+        lenis.on('scroll', ScrollTrigger.update);
+
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+        const expTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#experience",
+                start: "top top",
+                end: "+=200%",
+                scrub: 0.5,
+                pin: true,
+                anticipatePin: 1
+            }
+        });
+
+        expTimeline
+            .to("#s1Line1", { y: 0, opacity: 1, duration: 1, ease: "power1.out" })
+            .to("#s1Line2", { y: 0, opacity: 1, duration: 1, ease: "power1.out" }, "+=0.2")
+            .to("#s1Line3", { y: 0, opacity: 1, duration: 1, ease: "power1.out" }, "+=0.2")
+
+            .to("#expScene1", { y: "-60px", opacity: 0, duration: 1.2, ease: "power1.in" }, "+=0.5")
+
+            .to("#s2Heading, #s2Subheading, #s2Timer, #s2Button", {
+                y: 0,
+                opacity: 1,
+                duration: 1,
+                ease: "power1.out"
+            }, "-=0.2");
+
+        let currentAngle = 0;
+
+        function updateCarouselPositions(extraSwirl = 0) {
+            const cards = document.querySelectorAll('.carousel-card');
+            const radius = window.innerWidth < 640 ? 180 : 320;
+
+            cards.forEach((card, i) => {
+                const baseAngle = i * 120;
+                const totalAngle = (baseAngle + currentAngle + extraSwirl) * (Math.PI / 180);
+
+                const x = Math.sin(totalAngle) * radius;
+                const z = Math.cos(totalAngle) * radius;
+                const scale = (z + radius * 1.5) / (radius * 2.5);
+                const opacity = Math.max(0.35, (z + radius) / (radius * 2));
+
+                card.style.transform = `translate3d(${x}px, 0, ${z}px) scale(${scale})`;
+                card.style.zIndex = Math.round(z + radius);
+                card.style.opacity = opacity;
+
+                const btn = card.querySelector('.category-card');
+                if (btn) {
+                    btn.className = "category-card w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 flex flex-col items-center text-center hover:border-ytac-blue/40 transition-all duration-300 min-h-[380px]";
+
+                    const heading = btn.querySelector('h3');
+                    if (heading) heading.className = "font-heading font-black text-2xl sm:text-3xl text-ytac-blue mb-4 tracking-tight";
+
+                    const desc = btn.querySelector('.card-desc');
+                    if (desc) desc.className = "card-desc font-sans text-gray-600 text-base sm:text-lg leading-relaxed mb-6";
+
+                    const cta = btn.querySelector('span:last-child');
+                    if (cta) cta.className = "text-sm font-extrabold text-ytac-purple uppercase tracking-wider flex items-center gap-2 mt-auto";
+                }
+
+                if (Math.round(z) >= Math.round(radius) - 20) {
+                    btn.style.pointerEvents = 'auto';
+                } else {
+                    btn.style.pointerEvents = 'none';
+                }
+            });
+        }
+
+        document.getElementById('nextBtn')?.addEventListener('click', () => {
+            currentAngle -= 120;
+            updateCarouselPositions();
+        });
+
+        document.getElementById('prevBtn')?.addEventListener('click', () => {
+            currentAngle += 120;
+            updateCarouselPositions();
+        });
+
+        document.getElementById('nextBtn')?.addEventListener('mouseenter', () => {
+            updateCarouselPositions(-20);
+        });
+
+        document.getElementById('nextBtn')?.addEventListener('mouseleave', () => {
+            updateCarouselPositions(0);
+        });
+
+        document.getElementById('prevBtn')?.addEventListener('mouseenter', () => {
+            updateCarouselPositions(20);
+        });
+
+        document.getElementById('prevBtn')?.addEventListener('mouseleave', () => {
+            updateCarouselPositions(0);
+        });
+
+        function toggleDetails(buttonEl, detailsId) {
+            const detailsCard = document.getElementById(detailsId);
+            if (!detailsCard) return;
+
+            const parentCarouselCard = buttonEl.closest('.carousel-card');
+            const isOpen = detailsCard.classList.contains('rotate-y-0');
+
+            // Reset all cards and detail windows back to standard closed state
+            document.querySelectorAll('.carousel-card').forEach(card => {
+                card.classList.remove('-translate-x-12', 'sm:-translate-x-24');
+            });
+
+            document.querySelectorAll('.category-details').forEach(card => {
+                card.classList.add('opacity-0', 'pointer-events-none', '-rotate-y-90', 'translate-x-0');
+                card.classList.remove('opacity-100', 'pointer-events-auto', 'rotate-y-0', 'translate-x-[102%]');
+                card.setAttribute('aria-hidden', 'true');
+            });
+
+            if (!isOpen) {
+                if (parentCarouselCard) {
+                    parentCarouselCard.classList.add('-translate-x-40', 'sm:-translate-x-50');
+                }
+
+                detailsCard.className = "category-details absolute top-0 left-0 w-[350px] sm:w-[420px] min-h-[380px] bg-white rounded-3xl p-8 shadow-2xl border border-ytac-blue/30 opacity-0 pointer-events-none transform -rotate-y-90 transition-all duration-700 ease-in-out z-50 overflow-y-auto";
+                detailsCard.style.transformOrigin = 'left center';
+
+                detailsCard.classList.remove('opacity-0', 'pointer-events-none', '-rotate-y-90', 'translate-x-0');
+                detailsCard.classList.add('opacity-100', 'pointer-events-auto', 'rotate-y-0', 'translate-x-[102%]');
+                detailsCard.setAttribute('aria-hidden', 'false');
+            }
+        }
+
+        function closeBook(detailsId) {
+            const detailsCard = document.getElementById(detailsId);
+            if (!detailsCard) return;
+
+            const parentCarouselCard = detailsCard.closest('.carousel-card');
+            if (parentCarouselCard) {
+                parentCarouselCard.classList.remove('-translate-x-12', 'sm:-translate-x-24');
+            }
+
+            detailsCard.classList.add('opacity-0', 'pointer-events-none', '-rotate-y-90', 'translate-x-0');
+            detailsCard.classList.remove('opacity-100', 'pointer-events-auto', 'rotate-y-0', 'translate-x-[102%]');
+            detailsCard.setAttribute('aria-hidden', 'true');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tighten container height to pull cards up closer to the heading
+            const carouselContainer = document.getElementById('carouselContainer');
+            if (carouselContainer) {
+                carouselContainer.className = "relative w-full max-w-5xl h-[480px] flex items-center justify-center perspective-[1200px]";
+            }
+
+            document.querySelectorAll('.carousel-card').forEach(card => {
+                card.className = "carousel-card absolute w-[340px] sm:w-[400px] transition-all duration-700 ease-out cursor-pointer";
+            });
+
+            updateCarouselPositions();
+        });
+
+        function toggleDropdown(dropdownId) {
+            document.querySelectorAll(".dropdown-menu").forEach(menu => {
+                if (menu.id !== dropdownId) {
+                    menu.classList.remove("show");
+                }
+            });
+            document.getElementById(dropdownId)?.classList.toggle("show");
+        }
+
+        function openDocument(viewerId, filePath, title) {
+            const viewer = document.getElementById(viewerId);
+            if (!viewer) return;
+
+            const iframe = viewer.querySelector("iframe");
+            const heading = viewer.querySelector(".viewer-title");
+
+            viewer.classList.add("open");
+            if (iframe) iframe.src = filePath;
+            if (heading) heading.textContent = title;
+
+            document.querySelectorAll(".dropdown-menu").forEach(menu => {
+                menu.classList.remove("show");
+            });
+        }
+
+        function closeDocument(viewerId) {
+            const viewer = document.getElementById(viewerId);
+            if (!viewer) return;
+
+            const iframe = viewer.querySelector("iframe");
+            viewer.classList.remove("open");
+            if (iframe) iframe.src = "";
+        }
+        // Floating Contact Popover Toggle
+        const floatingBtn = document.getElementById('floatingContactBtn');
+        const popoverMenu = document.getElementById('contactPopoverMenu');
+
+        floatingBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = !popoverMenu.classList.contains('opacity-0');
+
+            if (isOpen) {
+                popoverMenu.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+                popoverMenu.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            } else {
+                popoverMenu.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                popoverMenu.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            }
+        });
+
+        // Close Popover when clicking outside
+        document.addEventListener('click', (e) => {
+            if (popoverMenu && !popoverMenu.contains(e.target) && e.target !== floatingBtn) {
+                popoverMenu.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+                popoverMenu.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            }
+        });
+    </script>
+</body>
+
+</html>
