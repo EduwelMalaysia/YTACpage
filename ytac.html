@@ -69,7 +69,7 @@
 </head>
 
 <body
-    class="bg-[#F9FBFC] bg-[radial-gradient(rgba(118,111,208,0.08)_1px,transparent_1px),linear-gradient(to_right,rgba(67,100,164,0.03)_1px,transparent_1px)] [background-size:32px_32px,64px_64px]">
+    class="bg-[#F9FBFC] bg-[radial-gradient(rgba(118,111,208,0.08)_1px,transparent_1px),linear-gradient(to_right,rgba(67,100,164,0.03)_1px,transparent_1px)] [background-size:32px_32px,64px_64px] select-none">
     <header>
         <div class="h-screen" id="video-container">
             <video id="video" class="w-full h-full object-cover" autoplay muted playsinline>
@@ -95,49 +95,47 @@
                 </div>
             </nav>
 
-            <div class="video-controls absolute bottom-6 left-1/2 -translate-x-1/2
-            w-[70%] max-w-4xl
-            flex items-center gap-4
-            px-5 py-3
-            bg-ytac-blue/60 backdrop-blur-md
-            rounded-full">
+            <!-- Visible Gray Track Line -->
+            <div class="video-controls group absolute bottom-6 left-1/2 -translate-x-1/2
+    w-[70%] max-w-4xl h-2.5 hover:h-14
+    flex items-center gap-4 px-5 py-0 hover:py-3
+    bg-transparent hover:bg-ytac-blue/80 backdrop-blur-none hover:backdrop-blur-md
+    rounded-full transition-all duration-300 ease-in-out cursor-pointer overflow-hidden">
 
-                <button class="vc-btn w-9 h-9 flex items-center justify-center
-               text-white hover:scale-110 transition" id="videoPlayToggle" aria-label="Play or pause video">
-
+                <!-- Play/Pause Toggle -->
+                <button
+                    class="vc-btn w-9 h-9 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0 flex items-center justify-center text-white hover:scale-110"
+                    id="videoPlayToggle" aria-label="Play or pause video">
                     <svg id="vcPlayIcon" class="w-5 h-5 fill-white" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z" />
                     </svg>
-
                     <svg id="vcPauseIcon" class="w-5 h-5 fill-white" viewBox="0 0 24 24" style="display:none;">
                         <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
                     </svg>
                 </button>
 
-                <div class="vc-progress-track
-               flex-1 h-1.5
-               bg-white/30
-               rounded-full
-               cursor-pointer overflow-hidden" id="vcProgressTrack">
-
-                    <div class="vc-progress-fill
-                   h-full w-0
-                   bg-white
-                   rounded-full" id="vcProgressFill">
-                    </div>
+                <!-- Progress Track (Increased height: h-2.5) -->
+                <div class="vc-progress-track flex-1 h-2.5 bg-black/50 group-hover:bg-white/30 rounded-full cursor-pointer overflow-hidden transition-colors"
+                    id="vcProgressTrack">
+                    <!-- Solid White Played Line -->
+                    <div class="vc-progress-fill h-full w-0 bg-white rounded-full shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+                        id="vcProgressFill"></div>
                 </div>
 
-                <span class="vc-time text-white text-sm font-medium whitespace-nowrap" id="vcTime">
+                <!-- Time Stamp -->
+                <span
+                    class="vc-time text-white text-sm font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    id="vcTime">
                     0:00
                 </span>
 
-                <button class="vc-btn w-9 h-9 flex items-center justify-center
-               text-white hover:scale-110 transition" id="videoMuteToggle" aria-label="Mute or unmute video">
-
+                <!-- Mute/Unmute Toggle -->
+                <button
+                    class="vc-btn w-9 h-9 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0 flex items-center justify-center text-white hover:scale-110"
+                    id="videoMuteToggle" aria-label="Mute or unmute video">
                     <svg id="vcMuteIcon" class="w-5 h-5 fill-white" viewBox="0 0 24 24">
                         <path d="M16.5 12A4.5 4.5 0 0014 7.97v8.05a4.5 4.5 0 002.5-4.02zM3 9v6h4l5 5V4L7 9H3z" />
                     </svg>
-
                     <svg id="vcUnmuteIcon" class="w-5 h-5 fill-white" viewBox="0 0 24 24" style="display:none;">
                         <path
                             d="M3 9v6h4l5 5V4L7 9H3zm13.59 3l2.71-2.71-1.41-1.41L15.17 12l-2.71-2.71-1.41 1.41L13.76 13l-2.71 2.71-2.71-1.41 1.41-1.41L15.17 14l2.71 2.71-1.41-1.41L16.59 12z" />
@@ -176,7 +174,7 @@
                     <!-- Shifted down 1 size: text-lg md:text-xl (Icon: text-2xl) -->
                     <a href="#category"
                         class="hero-anim hero-btn-anim inline-flex items-center gap-3 font-heading font-bold text-lg md:text-xl text-ytac-blue hover:text-ytac-green transition-colors duration-200 group">
-                        <span class="text-2xl group-hover:translate-y-1 transition-transform duration-200">↓</span>
+                        <span class="text-3xl group-hover:translate-y-1 transition-transform duration-200">↓</span>
                         <span>EXPLORE YTAC</span>
                     </a>
                 </div>
@@ -282,78 +280,134 @@
                     </h2>
                 </div>
 
+                <!-- 1. Inno-Tech Challenge -->
                 <div class="relative w-full max-w-5xl min-h-[460px] py-4 flex items-center justify-center perspective-[1200px]"
                     id="carouselContainer">
 
                     <div class="category-grid relative w-full h-full flex items-center justify-center min-h-[440px]">
 
-                        <div class="carousel-card absolute w-[340px] sm:w-[400px] transition-all duration-700 ease-out cursor-pointer"
-                            data-index="0">
+                        <!-- 1. Inno-Tech Challenge -->
+                        <div class="carousel-card absolute w-[340px] sm:w-[400px] cursor-pointer" data-index="0"
+                            data-gallery="inno-tech">
                             <div
-                                class="category-card w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 flex flex-col justify-between hover:border-ytac-blue/40 transition-all duration-300 min-h-[420px]">
+                                class="category-card w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 flex flex-col justify-between hover:border-ytac-blue/40 transition-colors duration-300 min-h-[420px]">
                                 <div>
                                     <h3
                                         class="font-heading font-black text-2xl sm:text-3xl text-ytac-blue mb-4 tracking-tight text-center">
-                                        INNO-TECH CHALLENGE
+                                        INNO-TECH<br>CHALLENGE
                                     </h3>
                                     <p
-                                        class="card-desc font-sans text-gray-600 text-base sm:text-lg leading-relaxed mb-6 text-left">
+                                        class="card-desc font-sans text-gray-600 text-base sm:text-lg leading-relaxed mt-[40px] mb-6 text-center">
                                         A coding-based innovation competition where participants design and develop
                                         functional projects using programming languages.
                                     </p>
                                 </div>
-                                <a href="inno-tech.html"
+                                <div
                                     class="text-sm font-extrabold text-ytac-purple uppercase tracking-wider flex items-center justify-center gap-2 mt-auto hover:text-ytac-blue transition-colors cursor-pointer">
                                     <span>Learn More</span>
                                     <i class="fa-solid fa-arrow-right ml-1"></i>
-                                </a>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="carousel-card absolute w-[340px] sm:w-[400px] transition-all duration-700 ease-out cursor-pointer"
-                            data-index="1">
+                        <!-- 2. Inno-Maker Challenge -->
+                        <div class="carousel-card absolute w-[340px] sm:w-[400px] cursor-pointer" data-index="1"
+                            data-gallery="inno-maker">
                             <div
-                                class="category-card w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 flex flex-col justify-between hover:border-ytac-blue/40 transition-all duration-300 min-h-[420px]">
+                                class="category-card w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 flex flex-col justify-between hover:border-ytac-blue/40 transition-colors duration-300 min-h-[420px]">
                                 <div>
                                     <h3
                                         class="font-heading font-black text-2xl sm:text-3xl text-ytac-blue mb-4 tracking-tight text-center">
                                         INNO-MAKER CHALLENGE
                                     </h3>
                                     <p
-                                        class="card-desc font-sans text-gray-600 text-base sm:text-lg leading-relaxed mb-6 text-left">
-                                        A non-coding innovation competition where participants design and present
+                                        class="card-desc font-sans text-gray-600 text-base sm:text-lg leading-relaxed mt-[55px] mb-6 text-center">
+                                        A non-coding innovation<br>competition where participants design and present
                                         creative product concepts or physical prototypes.
                                     </p>
                                 </div>
-                                <a href="inno-maker.html"
+                                <div
                                     class="text-sm font-extrabold text-ytac-purple uppercase tracking-wider flex items-center justify-center gap-2 mt-auto hover:text-ytac-blue transition-colors cursor-pointer">
                                     <span>Learn More</span>
                                     <i class="fa-solid fa-arrow-right ml-1"></i>
-                                </a>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="carousel-card absolute w-[340px] sm:w-[400px] transition-all duration-700 ease-out cursor-pointer"
-                            data-index="2">
+                        <!-- 3. Tech-Hackathon -->
+                        <div class="carousel-card absolute w-[340px] sm:w-[400px] cursor-pointer" data-index="2"
+                            data-gallery="hackathon">
                             <div
-                                class="category-card w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 flex flex-col justify-between hover:border-ytac-blue/40 transition-all duration-300 min-h-[420px]">
+                                class="category-card w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 flex flex-col justify-between hover:border-ytac-blue/40 transition-colors duration-300 min-h-[420px]">
                                 <div>
                                     <h3
                                         class="font-heading font-black text-2xl sm:text-3xl text-ytac-blue mb-4 tracking-tight text-center">
-                                        INNO-JUNIOR CHALLENGE
+                                        TECH-HACKATHON
                                     </h3>
                                     <p
-                                        class="card-desc font-sans text-gray-600 text-base sm:text-lg leading-relaxed mb-6 text-left">
-                                        An introductory tech challenge tailored for primary school innovators to ignite
-                                        creativity and problem solving.
+                                        class="card-desc font-sans text-gray-600 text-base sm:text-lg leading-relaxed mt-[40px] mb-6 text-center">
+                                        A fast-paced coding sprint where participants collaborate under pressure to
+                                        solve real-world challenges, build rapid software prototypes, and pitch
+                                        functional tech solutions.
                                     </p>
                                 </div>
-                                <a href="inno-junior.html"
+                                <div
                                     class="text-sm font-extrabold text-ytac-purple uppercase tracking-wider flex items-center justify-center gap-2 mt-auto hover:text-ytac-blue transition-colors cursor-pointer">
                                     <span>Learn More</span>
                                     <i class="fa-solid fa-arrow-right ml-1"></i>
-                                </a>
+                                </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!--Expanded Gallery-->
+
+                    <!-- =========================================
+                                    EXPANDED GALLERY
+                         ========================================= -->
+
+                    <div id="challengeDetail"
+                        class="absolute left-[calc(50%+20px)] top-1/2 -translate-y-1/2 w-[340px] h-[420px] sm:w-[400px] sm:h-[420px] bg-white rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.22)] border border-gray-100 overflow-hidden opacity-0 pointer-events-none z-30 [transform-style:preserve-3d]">
+
+                        <!-- CLOSE BUTTON -->
+                        <button id="closeDetail" type="button"
+                            class="absolute top-4 right-4 z-[60] w-9 h-9 rounded-full bg-white shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-100 hover:scale-110 transition-all duration-200">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+
+                        <!-- PHOTO GALLERY -->
+                        <div class="relative w-full h-full">
+
+                            <!-- PHOTO 1 -->
+                            <div
+                                class="detail-photo absolute w-[160px] h-[95px] left-8 top-6 rounded-lg border-4 border-white shadow-xl overflow-hidden z-10">
+                                <img class="gallery-img w-full h-full object-cover" src="" alt="">
+                            </div>
+
+                            <!-- PHOTO 2 -->
+                            <div
+                                class="detail-photo absolute w-[180px] h-[105px] right-5 top-20 rounded-lg border-4 border-white shadow-xl overflow-hidden z-20">
+                                <img class="gallery-img w-full h-full object-cover" src="" alt="">
+                            </div>
+
+                            <!-- PHOTO 3 -->
+                            <div
+                                class="detail-photo absolute w-[165px] h-[100px] left-10 top-40 rounded-lg border-4 border-white shadow-xl overflow-hidden z-30">
+                                <img class="gallery-img w-full h-full object-cover" src="" alt="">
+                            </div>
+
+                            <!-- PHOTO 4 -->
+                            <div
+                                class="detail-photo absolute w-[180px] h-[105px] right-5 top-[235px] rounded-lg border-4 border-white shadow-xl overflow-hidden z-40">
+                                <img class="gallery-img w-full h-full object-cover" src="" alt="">
+                            </div>
+
+                            <!-- PHOTO 5 -->
+                            <div
+                                class="detail-photo absolute w-[165px] h-[100px] left-12 bottom-4 rounded-lg border-4 border-white shadow-xl overflow-hidden z-50">
+                                <img class="gallery-img w-full h-full object-cover" src="" alt="">
+                            </div>
+
                         </div>
 
                     </div>
@@ -1047,6 +1101,15 @@
             const previousButton = $('#prevBtn');
 
             nextButton?.addEventListener('click', () => {
+
+                if (detailOpen) {
+                    return;
+                }
+
+                if (detailOpen) {
+                    return;
+                }
+
                 currentAngle -= 120;
                 updateCarouselPositions();
             });
@@ -1081,6 +1144,272 @@
 
                 updateCarouselPositions();
             }
+
+            // =========================================================
+            // CAROUSEL EXPAND BOOK EFFECT
+            // =========================================================
+            const detailPanel = document.getElementById("challengeDetail");
+            const closeDetail = document.getElementById("closeDetail");
+
+            const carouselCards = document.querySelectorAll(".carousel-card");
+            const detailPhotos = document.querySelectorAll(".detail-photo");
+            const galleryImages = document.querySelectorAll(".gallery-img");
+
+            let activeCard = null;
+            let detailOpen = false;
+
+            const galleries = {
+
+                "inno-tech": [
+                    "img/inno-tech-1.jpg",
+                    "img/inno-tech-2.jpg",
+                    "img/inno-tech-3.jpg",
+                    "img/inno-tech-4.jpg",
+                    "img/inno-tech-5.jpg"
+                ],
+
+                "inno-maker": [
+                    "img/inno-maker-1.jpg",
+                    "img/inno-maker-2.jpg",
+                    "img/inno-maker-3.jpg",
+                    "img/inno-maker-4.jpg",
+                    "img/inno-maker-5.jpg"
+                ],
+
+                "hackathon": [
+                    "img/hackathon-1.jpg",
+                    "img/hackathon-2.jpg",
+                    "img/hackathon-3.jpg",
+                    "img/hackathon-4.jpg",
+                    "img/hackathon-5.jpg"
+                ]
+
+            };
+
+            gsap.set(detailPanel, {
+                opacity: 0,
+                rotationY: -90,
+                transformOrigin: "left center"
+            });
+
+            gsap.set(detailPhotos, {
+                opacity: 0,
+                scale: 0.8,
+                y: 20
+            });
+
+            carouselCards.forEach(card => {
+
+                card.addEventListener("click", (event) => {
+
+                    // Don't trigger expansion when Learn More is clicked
+                    if (event.target.closest("a")) {
+                        return;
+                    }
+
+                    // Don't open twice
+                    if (detailOpen) {
+                        return;
+                    }
+
+                    detailOpen = true;
+                    activeCard = card;
+
+                    const galleryName = card.dataset.gallery;
+
+                    const images = galleries[galleryName];
+
+                    // Safety check
+                    if (!images) {
+                        console.error("Gallery not found:", galleryName);
+                        return;
+                    }
+
+
+                    // ======================================
+                    // LOAD THE 5 IMAGES
+                    // ======================================
+
+                    galleryImages.forEach((img, index) => {
+
+                        img.src = images[index];
+
+                        img.alt = `${galleryName} photo ${index + 1}`;
+
+                    });
+
+
+                    // ======================================
+                    // GET THE ACTUAL CARD
+                    // ======================================
+
+                    const categoryCard =
+                        card.querySelector(".category-card");
+
+
+                    // ======================================
+                    // ENABLE PANEL
+                    // ======================================
+
+                    detailPanel.style.pointerEvents = "auto";
+
+
+                    // ======================================
+                    // HIDE OTHER CARDS
+                    // ======================================
+
+                    carouselCards.forEach(otherCard => {
+
+                        if (otherCard !== card) {
+
+                            gsap.to(otherCard, {
+                                opacity: 0,
+                                duration: 0.3,
+                                ease: "power2.out"
+                            });
+
+                        }
+
+                    });
+
+
+                    // ======================================
+                    // ANIMATION
+                    // ======================================
+
+                    const tl = gsap.timeline();
+
+
+                    // 1. Selected card moves slightly left
+
+                    tl.to(categoryCard, {
+                        x: -183,
+                        duration: 0.55,
+                        ease: "power3.out"
+                    });
+
+
+                    // 2. Gallery unfolds
+
+                    tl.to(detailPanel, {
+                        opacity: 1,
+                        rotationY: 0,
+                        duration: 0.8,
+                        ease: "power3.out"
+                    }, "-=0.1");
+
+
+                    // 3. Photos appear
+
+                    tl.to(detailPhotos, {
+                        opacity: 1,
+                        scale: 1,
+                        y: 0,
+                        duration: 0.45,
+                        stagger: 0.08,
+                        ease: "back.out(1.3)"
+                    }, "-=0.25");
+
+                });
+
+            });
+
+            closeDetail.addEventListener("click", (event) => {
+
+                event.stopPropagation();
+
+                if (!detailOpen) {
+                    return;
+                }
+
+
+                const tl = gsap.timeline({
+
+                    onComplete: () => {
+
+                        detailOpen = false;
+                        activeCard = null;
+
+                        detailPanel.style.pointerEvents = "none";
+
+                    }
+
+                });
+
+
+                // ======================================
+                // 1. PHOTOS DISAPPEAR
+                // ======================================
+
+                tl.to(detailPhotos, {
+
+                    opacity: 0,
+                    scale: 0.8,
+                    y: 20,
+
+                    duration: 0.3,
+
+                    stagger: 0.05,
+
+                    ease: "power2.in"
+
+                });
+
+
+                // ======================================
+                // 2. PANEL CLOSES
+                // ======================================
+
+                tl.to(detailPanel, {
+
+                    opacity: 0,
+                    rotationY: 90,
+
+                    duration: 0.6,
+
+                    ease: "power3.in"
+
+                }, "-=0.1");
+
+
+                // ======================================
+                // 3. CARD RETURNS
+                // ======================================
+
+                if (activeCard) {
+
+                    const categoryCard =
+                        activeCard.querySelector(".category-card");
+
+                    tl.to(categoryCard, {
+
+                        x: 0,
+
+                        duration: 0.5,
+
+                        ease: "power3.out"
+
+                    }, "-=0.25");
+
+                }
+
+
+                // ======================================
+                // 4. OTHER CARDS RETURN
+                // ======================================
+
+                tl.to(carouselCards, {
+
+                    opacity: 1,
+
+                    duration: 0.3,
+
+                    ease: "power2.out"
+
+                }, "-=0.3");
+
+            });
+
 
             // =========================================================
             // PATHWAY LIGHTENED & HIGH-LEGIBILITY THEMES
