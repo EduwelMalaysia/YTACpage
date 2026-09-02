@@ -55,6 +55,16 @@
         .pathway-node.expanded .expand-icon {
             transform: rotate(180deg);
         }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge, and Firefox */
+        html, body {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
     </style>
 </head>
 
@@ -142,7 +152,7 @@
         <section class="home min-h-[120vh] w-full pt-5 py-12 flex items-center justify-center" id="home">
             <div class="w-full max-w-[90%] mx-auto flex flex-col lg:flex-row items-center justify-between gap-10">
 
-                <div id="heroTextContainer" class="flex-1 flex flex-col items-start text-left">
+                <div id="heroTextContainer" class="flex-1 flex flex-col items-start text-left select-none">
                     <!-- Shifted down 1 size: text-sm md:text-base -->
                     <span
                         class="hero-anim hero-tag-anim font-heading text-ytac-purple text-base md:text-lg font-extrabold tracking-wide mb-6 inline-block bg-ytac-purple/10 px-6 py-2.5 rounded-lg uppercase">
@@ -160,7 +170,7 @@
                     <!-- Shifted down 1 size: text-7xl sm:text-8xl xl:text-9xl -->
                     <span
                         class="hero-anim hero-year-anim font-heading font-black text-7xl sm:text-8xl xl:text-9xl text-ytac-purple leading-none block mb-8">
-                        2026
+                        2027
                     </span>
 
                     <!-- Shifted down 1 size: text-lg md:text-xl (Icon: text-2xl) -->
@@ -212,7 +222,7 @@
                         </h2>
                         <p id="s2Subheading"
                             class="font-sans text-sm sm:text-lg text-white max-w-xl mx-auto font-medium opacity-0 translate-y-16">
-                            Registrations are open now for YTAC 2026 — don't miss your spot on the launchpad.
+                            Registrations are open now for YTAC 2027 — don't miss your spot on the launchpad.
                         </p>
                     </div>
 
@@ -682,7 +692,7 @@
         <section class="gallery" id="gallery">
         </section>
 
-         <!-- Added `group` class to the wrapper div below -->
+        <!-- Added `group` class to the wrapper div below -->
         <div class="floating-contact-container group fixed bottom-8 right-8 z-[150] flex flex-col items-end">
 
             <!-- Hover Menu -->
@@ -714,7 +724,7 @@
         </div>
 
         <!-- Contact / Footer Section -->
-        <footer class="contact relative px-[5%] bg-white pt-12 pb-16 mt-7 w-full" id="contact">
+        <section class="contact relative px-[5%] bg-white pt-12 pb-10 mt-7 w-full" id="contact">
             <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-stretch justify-between gap-12">
 
                 <div class="contact-container-1 flex-1 flex flex-col justify-between">
@@ -783,660 +793,673 @@
                 </div>
 
             </div>
+        </section>
+
+        <footer class="w-full bg-white backdrop-blur-sm pt-3 pb-4">
+            <div class="max-w-6xl mx-auto px-4 flex flex-col items-center">
+
+                <!-- Divider Line -->
+                <div class="w-full h-[1px] bg-gray-200/80 mb-3"></div>
+
+                <!-- Centered Copyright Text -->
+                <div class="flex flex-col items-center text-center gap-0.5 font-sans text-sm sm:text-sm text-gray-500">
+                    <p>Copyright © 2026 CodeKidz. All rights reserved.</p>
+                    <p class="font-bold text-xs">EDUWELD SDN. BHD. (1439286P / 202101038986)</p>
+                </div>
+
+            </div>
         </footer>
 
-    </main>
+        <script>
+            const $ = (selector) => document.querySelector(selector);
+            const $$ = (selector) => document.querySelectorAll(selector);
 
-    <script>
-        const $ = (selector) => document.querySelector(selector);
-        const $$ = (selector) => document.querySelectorAll(selector);
+            gsap.registerPlugin(ScrollTrigger);
 
-        gsap.registerPlugin(ScrollTrigger);
+            // =========================================================
+            // LENIS SMOOTH SCROLL
+            // =========================================================
 
-        // =========================================================
-        // LENIS SMOOTH SCROLL
-        // =========================================================
+            const lenis = new Lenis({
+                duration: 1.35,
+                easing: (t) => 1 - Math.pow(1 - t, 4), // quart-out, softer settle than the default
+                smoothWheel: true,
+                wheelMultiplier: 1,
+                touchMultiplier: 1.6,
+                normalizeWheel: true
+            });
 
-        const lenis = new Lenis({
-            duration: 1.35,
-            easing: (t) => 1 - Math.pow(1 - t, 4), // quart-out, softer settle than the default
-            smoothWheel: true,
-            wheelMultiplier: 1,
-            touchMultiplier: 1.6,
-            normalizeWheel: true
-        });
+            lenis.on('scroll', ScrollTrigger.update);
 
-        lenis.on('scroll', ScrollTrigger.update);
+            gsap.ticker.add((time) => {
+                lenis.raf(time * 1000);
+            });
 
-        gsap.ticker.add((time) => {
-            lenis.raf(time * 1000);
-        });
+            gsap.ticker.lagSmoothing(0);
 
-        gsap.ticker.lagSmoothing(0);
+            // =========================================================
+            // NAV BAR SECTION
+            // =========================================================
+            const navbar = document.getElementById("navbar");
+            const navLinks = document.querySelectorAll("#navbar .nav-link");
 
-        // =========================================================
-        // NAV BAR SECTION
-        // =========================================================
-        const navbar = document.getElementById("navbar");
-        const navLinks = document.querySelectorAll("#navbar .nav-link");
+            function setNavTheme(isDarkSection) {
+                if (!navbar) return;
 
-        function setNavTheme(isDarkSection) {
-            if (!navbar) return;
+                if (isDarkSection) {
+                    navbar.classList.add("bg-transparent", "border-b", "border-white/20", "backdrop-blur-sm");
+                    navbar.classList.remove("bg-white");
 
-            if (isDarkSection) {
-                navbar.classList.add("bg-transparent", "border-b", "border-white/20", "backdrop-blur-sm");
-                navbar.classList.remove("bg-white");
+                    navLinks.forEach(link => {
+                        link.classList.add("text-white");
+                        link.classList.remove("text-ytac-blue");
+                    });
+                } else {
+                    navbar.classList.add("bg-white");
+                    navbar.classList.remove("bg-transparent", "border-b", "border-white/20", "backdrop-blur-sm");
 
-                navLinks.forEach(link => {
-                    link.classList.add("text-white");
-                    link.classList.remove("text-ytac-blue");
-                });
-            } else {
-                navbar.classList.add("bg-white");
-                navbar.classList.remove("bg-transparent", "border-b", "border-white/20", "backdrop-blur-sm");
-
-                navLinks.forEach(link => {
-                    link.classList.add("text-ytac-blue");
-                    link.classList.remove("text-white");
-                });
+                    navLinks.forEach(link => {
+                        link.classList.add("text-ytac-blue");
+                        link.classList.remove("text-white");
+                    });
+                }
             }
-        }
 
-        // =========================================================
-        // VIDEO CONTROLS SECTION
-        // =========================================================
-        const video = document.getElementById("video");
-        const playToggleBtn = document.getElementById("videoPlayToggle");
-        const playIcon = document.getElementById("vcPlayIcon");
-        const pauseIcon = document.getElementById("vcPauseIcon");
+            // =========================================================
+            // VIDEO CONTROLS SECTION
+            // =========================================================
+            const video = document.getElementById("video");
+            const playToggleBtn = document.getElementById("videoPlayToggle");
+            const playIcon = document.getElementById("vcPlayIcon");
+            const pauseIcon = document.getElementById("vcPauseIcon");
 
-        const muteToggleBtn = document.getElementById("videoMuteToggle");
-        const muteIcon = document.getElementById("vcMuteIcon");
-        const unmuteIcon = document.getElementById("vcUnmuteIcon");
+            const muteToggleBtn = document.getElementById("videoMuteToggle");
+            const muteIcon = document.getElementById("vcMuteIcon");
+            const unmuteIcon = document.getElementById("vcUnmuteIcon");
 
-        const progressTrack = document.getElementById("vcProgressTrack");
-        const progressFill = document.getElementById("vcProgressFill");
-        const timeDisplay = document.getElementById("vcTime");
+            const progressTrack = document.getElementById("vcProgressTrack");
+            const progressFill = document.getElementById("vcProgressFill");
+            const timeDisplay = document.getElementById("vcTime");
 
-        let isDraggingProgress = false;
+            let isDraggingProgress = false;
 
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            }
 
-        if (video) {
-            playToggleBtn?.addEventListener("click", () => {
-                if (video.paused) {
-                    video.play();
-                    playIcon.style.display = "none";
-                    pauseIcon.style.display = "block";
-                } else {
-                    video.pause();
-                    playIcon.style.display = "block";
-                    pauseIcon.style.display = "none";
-                }
-            });
+            if (video) {
+                playToggleBtn?.addEventListener("click", () => {
+                    if (video.paused) {
+                        video.play();
+                        playIcon.style.display = "none";
+                        pauseIcon.style.display = "block";
+                    } else {
+                        video.pause();
+                        playIcon.style.display = "block";
+                        pauseIcon.style.display = "none";
+                    }
+                });
 
-            muteToggleBtn?.addEventListener("click", () => {
-                video.muted = !video.muted;
-                if (video.muted) {
-                    muteIcon.style.display = "block";
-                    unmuteIcon.style.display = "none";
-                } else {
-                    muteIcon.style.display = "none";
-                    unmuteIcon.style.display = "block";
-                }
-            });
+                muteToggleBtn?.addEventListener("click", () => {
+                    video.muted = !video.muted;
+                    if (video.muted) {
+                        muteIcon.style.display = "block";
+                        unmuteIcon.style.display = "none";
+                    } else {
+                        muteIcon.style.display = "none";
+                        unmuteIcon.style.display = "block";
+                    }
+                });
 
-            video.addEventListener("timeupdate", () => {
-                if (!isNaN(video.duration) && !isDraggingProgress) {
-                    const percentage = (video.currentTime / video.duration) * 100;
-                    progressFill.style.width = `${percentage}%`;
+                video.addEventListener("timeupdate", () => {
+                    if (!isNaN(video.duration) && !isDraggingProgress) {
+                        const percentage = (video.currentTime / video.duration) * 100;
+                        progressFill.style.width = `${percentage}%`;
+                        timeDisplay.textContent = formatTime(video.currentTime);
+                    }
+                });
+
+                function scrubVideo(e) {
+                    if (!progressTrack || isNaN(video.duration)) return;
+                    const rect = progressTrack.getBoundingClientRect();
+                    let clickPosition = (e.clientX - rect.left) / rect.width;
+                    clickPosition = Math.max(0, Math.min(1, clickPosition));
+
+                    progressFill.style.width = `${clickPosition * 100}%`;
+                    video.currentTime = clickPosition * video.duration;
                     timeDisplay.textContent = formatTime(video.currentTime);
                 }
-            });
 
-            function scrubVideo(e) {
-                if (!progressTrack || isNaN(video.duration)) return;
-                const rect = progressTrack.getBoundingClientRect();
-                let clickPosition = (e.clientX - rect.left) / rect.width;
-                clickPosition = Math.max(0, Math.min(1, clickPosition));
-
-                progressFill.style.width = `${clickPosition * 100}%`;
-                video.currentTime = clickPosition * video.duration;
-                timeDisplay.textContent = formatTime(video.currentTime);
-            }
-
-            progressTrack?.addEventListener("mousedown", (e) => {
-                isDraggingProgress = true;
-                scrubVideo(e);
-            });
-
-            window.addEventListener("mousemove", (e) => {
-                if (isDraggingProgress) {
+                progressTrack?.addEventListener("mousedown", (e) => {
+                    isDraggingProgress = true;
                     scrubVideo(e);
-                }
-            });
+                });
 
-            window.addEventListener("mouseup", () => {
-                if (isDraggingProgress) {
-                    isDraggingProgress = false;
-                }
-            });
-        }
+                window.addEventListener("mousemove", (e) => {
+                    if (isDraggingProgress) {
+                        scrubVideo(e);
+                    }
+                });
 
-        // =========================================================
-        // HOME SECTION
-        // =========================================================
-
-        ScrollTrigger.create({
-            trigger: '#home',
-            start: 'top 80%',
-
-            onEnter: () => {
-                $('.tagline')?.classList.add('visible');
-            },
-
-            onLeaveBack: () => {
-                $('.tagline')?.classList.remove('visible');
+                window.addEventListener("mouseup", () => {
+                    if (isDraggingProgress) {
+                        isDraggingProgress = false;
+                    }
+                });
             }
-        });
 
-        const heroTl = gsap.timeline({
-            scrollTrigger: {
+            // =========================================================
+            // HOME SECTION
+            // =========================================================
+
+            ScrollTrigger.create({
                 trigger: '#home',
-                start: 'top 75%',
-                toggleActions: 'play reverse play reverse'
+                start: 'top 80%',
+
+                onEnter: () => {
+                    $('.tagline')?.classList.add('visible');
+                },
+
+                onLeaveBack: () => {
+                    $('.tagline')?.classList.remove('visible');
+                }
+            });
+
+            const heroTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: '#home',
+                    start: 'top 75%',
+                    toggleActions: 'play reverse play reverse'
+                }
+            });
+
+            heroTl
+                .set('.hero-anim, .hero-card-anim', { y: 90, scale: 0.94, opacity: 0 })
+                .to('.hero-tag-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.1)
+                .to('.hero-line1-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.3)
+                .to('.hero-line2-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.45)
+                .to('.hero-line3-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.6)
+                .to('.hero-year-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.8)
+                .to('.hero-btn-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 1.0)
+                .to('.hero-card-anim', { y: 0, scale: 1, opacity: 1, duration: 1.2, ease: 'expo.out' }, 1.1);
+
+            // =========================================================
+            // EXPERIENCE SECTION
+            // =========================================================
+
+            ScrollTrigger.create({
+                trigger: '#home',
+                start: 'top 50%',
+                end: 'bottom 50%',
+                onEnter: () => setNavTheme(false),
+                onEnterBack: () => setNavTheme(false)
+            });
+
+            const expTimeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: '#experience',
+                    start: 'top top',
+                    end: '+=200%',
+                    scrub: 0.5,
+                    pin: true,
+                    anticipatePin: 1,
+                    onEnter: () => setNavTheme(true),
+                    onLeave: () => setNavTheme(false),
+                    onEnterBack: () => setNavTheme(true),
+                    onLeaveBack: () => setNavTheme(false)
+                }
+            });
+            expTimeline
+                .to('#s1Line1', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' })
+                .to('#s1Line2', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '+=0.2')
+                .to('#s1Line3', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '+=0.2')
+                .to('#expScene1', { y: '-60px', opacity: 0, duration: 1.2, ease: 'power1.in' }, '+=0.5')
+                .to('#s2Heading, #s2Subheading, #s2Timer, #s2Button', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '-=0.2');
+
+            // =========================================================
+            // CATEGORY CAROUSEL LOGIC
+            // =========================================================
+
+            let currentAngle = 0;
+
+            function updateCarouselPositions(extraSwirl = 0) {
+                const cards = document.querySelectorAll('.carousel-card');
+                const radius = window.innerWidth < 640 ? 180 : 320;
+
+                cards.forEach((card, i) => {
+                    const baseAngle = i * 120;
+                    const totalAngle = (baseAngle + currentAngle + extraSwirl) * (Math.PI / 180);
+
+                    const x = Math.sin(totalAngle) * radius;
+                    const z = Math.cos(totalAngle) * radius;
+                    const scale = (z + radius * 1.5) / (radius * 2.5);
+                    const opacity = Math.max(0.35, (z + radius) / (radius * 2));
+
+                    card.style.transform = `translate3d(${x}px, 0, ${z}px) scale(${scale})`;
+                    card.style.zIndex = Math.round(z + radius);
+                    card.style.opacity = opacity;
+                });
             }
-        });
 
-        heroTl
-            .set('.hero-anim, .hero-card-anim', { y: 90, scale: 0.94, opacity: 0 })
-            .to('.hero-tag-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.1)
-            .to('.hero-line1-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.3)
-            .to('.hero-line2-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.45)
-            .to('.hero-line3-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.6)
-            .to('.hero-year-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.8)
-            .to('.hero-btn-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 1.0)
-            .to('.hero-card-anim', { y: 0, scale: 1, opacity: 1, duration: 1.2, ease: 'expo.out' }, 1.1);
+            const nextButton = $('#nextBtn');
+            const previousButton = $('#prevBtn');
 
-        // =========================================================
-        // EXPERIENCE SECTION
-        // =========================================================
+            nextButton?.addEventListener('click', () => {
+                currentAngle -= 120;
+                updateCarouselPositions();
+            });
 
-        ScrollTrigger.create({
-            trigger: '#home',
-            start: 'top 50%',
-            end: 'bottom 50%',
-            onEnter: () => setNavTheme(false),
-            onEnterBack: () => setNavTheme(false)
-        });
+            previousButton?.addEventListener('click', () => {
+                currentAngle += 120;
+                updateCarouselPositions();
+            });
 
-        const expTimeline = gsap.timeline({
-            scrollTrigger: {
-                trigger: '#experience',
-                start: 'top top',
-                end: '+=200%',
-                scrub: 0.5,
-                pin: true,
-                anticipatePin: 1,
+            nextButton?.addEventListener('mouseenter', () => updateCarouselPositions(-20));
+            nextButton?.addEventListener('mouseleave', () => updateCarouselPositions(0));
+            previousButton?.addEventListener('mouseenter', () => updateCarouselPositions(20));
+            previousButton?.addEventListener('mouseleave', () => updateCarouselPositions(0));
+
+            function initializeCarousel() {
+                const carouselContainer = $('#carouselContainer');
+
+                if (carouselContainer) {
+                    carouselContainer.className =
+                        'relative w-full max-w-5xl min-h-[460px] py-4 ' +
+                        'flex items-center justify-center ' +
+                        'perspective-[1200px]';
+                }
+
+                $$('.carousel-card').forEach((card) => {
+                    card.className =
+                        'carousel-card absolute ' +
+                        'w-[340px] sm:w-[400px] ' +
+                        'transition-all duration-700 ' +
+                        'ease-out cursor-pointer [transform-style:preserve-3d]';
+                });
+
+                updateCarouselPositions();
+            }
+
+            // =========================================================
+            // PATHWAY LIGHTENED & HIGH-LEGIBILITY THEMES
+            // =========================================================
+            const pathwaySection = $('#pathway');
+            const pathwayTag = $('#pathwayTag');
+            const pathwayTitle = $('#pathwayTitle');
+            const stageButtons = $$('.stage-btn');
+            const pathwayNodes = $$('.pathway-node');
+            const pathwayConnectors = $$('.pathway-connector');
+            const pathwayTree = $('.pathway-tree');
+            const pathwayBgA = $('#pathwayBgA');
+            const pathwayBgB = $('#pathwayBgB');
+            let pathwayBgToggle = false;
+
+            // Smooth crossfade between pathway gradients instead of an instant
+            // background swap — two stacked layers, fade the incoming one in.
+            function transitionPathwayBackground(gradient) {
+                if (!pathwayBgA || !pathwayBgB) return;
+
+                const incoming = pathwayBgToggle ? pathwayBgA : pathwayBgB;
+                const outgoing = pathwayBgToggle ? pathwayBgB : pathwayBgA;
+
+                incoming.style.background = gradient;
+
+                // Keep background behind the content
+                gsap.set(incoming, {
+                    opacity: 0,
+                    zIndex: -10
+                });
+
+                gsap.set(outgoing, {
+                    zIndex: -10
+                });
+
+                gsap.to(incoming, {
+                    opacity: 1,
+                    duration: 0.9,
+                    ease: 'power2.inOut'
+                });
+
+                pathwayBgToggle = !pathwayBgToggle;
+            }
+
+            // Gentle one-time entrance for the pathway nodes as the section
+            // scrolls in. `once: true` + an early trigger point so it can't get
+            // stuck mid-animation; connectors only fade (no transform) so the
+            // arrows never render offset from their card.
+            gsap.from('.pathway-node', {
+                scrollTrigger: { trigger: '#pathway', start: 'top bottom', once: true },
+                opacity: 0,
+                y: 40,
+                duration: 0.9,
+                ease: 'power3.out',
+                stagger: 0.12,
+                clearProps: 'opacity,transform'
+            });
+            gsap.from('.pathway-connector', {
+                scrollTrigger: { trigger: '#pathway', start: 'top bottom', once: true },
+                opacity: 0,
+                duration: 0.9,
+                ease: 'power3.out',
+                stagger: 0.12,
+                clearProps: 'opacity'
+            });
+
+            ScrollTrigger.create({
+                trigger: '#pathway',
+                start: 'top 10%',
+                end: 'bottom 10%',
                 onEnter: () => setNavTheme(true),
                 onLeave: () => setNavTheme(false),
                 onEnterBack: () => setNavTheme(true),
                 onLeaveBack: () => setNavTheme(false)
-            }
-        });
-        expTimeline
-            .to('#s1Line1', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' })
-            .to('#s1Line2', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '+=0.2')
-            .to('#s1Line3', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '+=0.2')
-            .to('#expScene1', { y: '-60px', opacity: 0, duration: 1.2, ease: 'power1.in' }, '+=0.5')
-            .to('#s2Heading, #s2Subheading, #s2Timer, #s2Button', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '-=0.2');
+            })
 
-        // =========================================================
-        // CATEGORY CAROUSEL LOGIC
-        // =========================================================
+            // All four gradients now share one formula — dark navy anchor (0%) →
+            // brand-tinted midtone (45%) → saturated accent (100%) on the same
+            // 135deg diagonal — so the palette reads as one family even as each
+            // pathway keeps its own identity color.
+            const pathwayThemes = {
+                all: {
+                    background: 'linear-gradient(135deg, #0f172a 0%, #3b3e80 10%, #a89ee8 100%)', // Custom Periwinkle Blue
+                    isDark: true
+                },
+                malaysia: {
+                    background: 'linear-gradient(135deg, #0f172a 0%, #00607A 45%, #14A39A 100%)', // YTAC Brand Blue
+                    isDark: true
+                },
+                asean: {
+                    background: 'linear-gradient(135deg, #1f1410 0%, #8a4a1f 45%, #f0932b 100%)', // ASEAN Orange
+                    isDark: true
+                },
+                international: {
+                    background: 'linear-gradient(135deg, #1a0f14 0%, #7a1f3d 45%, #e2434f 100%)', // Chinese Red
+                    isDark: true
+                }
+            };
 
-        let currentAngle = 0;
+            // Click a node to expand/collapse its detail content — set up once,
+            // not re-attached on every filter click.
+            stageButtons.forEach(btn => {
+                btn.addEventListener('click', function () {
 
-        function updateCarouselPositions(extraSwirl = 0) {
-            const cards = document.querySelectorAll('.carousel-card');
-            const radius = window.innerWidth < 640 ? 180 : 320;
+                    const filter = this.dataset.stageFilter;
 
-            cards.forEach((card, i) => {
-                const baseAngle = i * 120;
-                const totalAngle = (baseAngle + currentAngle + extraSwirl) * (Math.PI / 180);
+                    console.log("Clicked:", filter);
 
-                const x = Math.sin(totalAngle) * radius;
-                const z = Math.cos(totalAngle) * radius;
-                const scale = (z + radius * 1.5) / (radius * 2.5);
-                const opacity = Math.max(0.35, (z + radius) / (radius * 2));
+                    // =========================
+                    // BUTTON ACTIVE STATE
+                    // =========================
+                    stageButtons.forEach(b => {
+                        b.classList.remove(
+                            'active',
+                            'bg-white',
+                            'text-ytac-blue'
+                        );
 
-                card.style.transform = `translate3d(${x}px, 0, ${z}px) scale(${scale})`;
-                card.style.zIndex = Math.round(z + radius);
-                card.style.opacity = opacity;
-            });
-        }
+                        b.classList.add(
+                            'text-white',
+                            'border-white/30'
+                        );
+                    });
 
-        const nextButton = $('#nextBtn');
-        const previousButton = $('#prevBtn');
-
-        nextButton?.addEventListener('click', () => {
-            currentAngle -= 120;
-            updateCarouselPositions();
-        });
-
-        previousButton?.addEventListener('click', () => {
-            currentAngle += 120;
-            updateCarouselPositions();
-        });
-
-        nextButton?.addEventListener('mouseenter', () => updateCarouselPositions(-20));
-        nextButton?.addEventListener('mouseleave', () => updateCarouselPositions(0));
-        previousButton?.addEventListener('mouseenter', () => updateCarouselPositions(20));
-        previousButton?.addEventListener('mouseleave', () => updateCarouselPositions(0));
-
-        function initializeCarousel() {
-            const carouselContainer = $('#carouselContainer');
-
-            if (carouselContainer) {
-                carouselContainer.className =
-                    'relative w-full max-w-5xl min-h-[460px] py-4 ' +
-                    'flex items-center justify-center ' +
-                    'perspective-[1200px]';
-            }
-
-            $$('.carousel-card').forEach((card) => {
-                card.className =
-                    'carousel-card absolute ' +
-                    'w-[340px] sm:w-[400px] ' +
-                    'transition-all duration-700 ' +
-                    'ease-out cursor-pointer [transform-style:preserve-3d]';
-            });
-
-            updateCarouselPositions();
-        }
-
-        // =========================================================
-        // PATHWAY LIGHTENED & HIGH-LEGIBILITY THEMES
-        // =========================================================
-        const pathwaySection = $('#pathway');
-        const pathwayTag = $('#pathwayTag');
-        const pathwayTitle = $('#pathwayTitle');
-        const stageButtons = $$('.stage-btn');
-        const pathwayNodes = $$('.pathway-node');
-        const pathwayConnectors = $$('.pathway-connector');
-        const pathwayTree = $('.pathway-tree');
-        const pathwayBgA = $('#pathwayBgA');
-        const pathwayBgB = $('#pathwayBgB');
-        let pathwayBgToggle = false;
-
-        // Smooth crossfade between pathway gradients instead of an instant
-        // background swap — two stacked layers, fade the incoming one in.
-        function transitionPathwayBackground(gradient) {
-            if (!pathwayBgA || !pathwayBgB) return;
-
-            const incoming = pathwayBgToggle ? pathwayBgA : pathwayBgB;
-            const outgoing = pathwayBgToggle ? pathwayBgB : pathwayBgA;
-
-            incoming.style.background = gradient;
-
-            // Keep background behind the content
-            gsap.set(incoming, {
-                opacity: 0,
-                zIndex: -10
-            });
-
-            gsap.set(outgoing, {
-                zIndex: -10
-            });
-
-            gsap.to(incoming, {
-                opacity: 1,
-                duration: 0.9,
-                ease: 'power2.inOut'
-            });
-
-            pathwayBgToggle = !pathwayBgToggle;
-        }
-
-        // Gentle one-time entrance for the pathway nodes as the section
-        // scrolls in. `once: true` + an early trigger point so it can't get
-        // stuck mid-animation; connectors only fade (no transform) so the
-        // arrows never render offset from their card.
-        gsap.from('.pathway-node', {
-            scrollTrigger: { trigger: '#pathway', start: 'top bottom', once: true },
-            opacity: 0,
-            y: 40,
-            duration: 0.9,
-            ease: 'power3.out',
-            stagger: 0.12,
-            clearProps: 'opacity,transform'
-        });
-        gsap.from('.pathway-connector', {
-            scrollTrigger: { trigger: '#pathway', start: 'top bottom', once: true },
-            opacity: 0,
-            duration: 0.9,
-            ease: 'power3.out',
-            stagger: 0.12,
-            clearProps: 'opacity'
-        });
-
-        ScrollTrigger.create({
-            trigger: '#pathway',
-            start: 'top 10%',
-            end: 'bottom 10%',
-            onEnter: () => setNavTheme(true),
-            onLeave: () => setNavTheme(false),
-            onEnterBack: () => setNavTheme(true),
-            onLeaveBack: () => setNavTheme(false)
-        })
-
-        // All four gradients now share one formula — dark navy anchor (0%) →
-        // brand-tinted midtone (45%) → saturated accent (100%) on the same
-        // 135deg diagonal — so the palette reads as one family even as each
-        // pathway keeps its own identity color.
-        const pathwayThemes = {
-            all: {
-                background: 'linear-gradient(135deg, #0f172a 0%, #3b3e80 10%, #a89ee8 100%)', // Custom Periwinkle Blue
-                isDark: true
-            },
-            malaysia: {
-                background: 'linear-gradient(135deg, #0f172a 0%, #00607A 45%, #14A39A 100%)', // YTAC Brand Blue
-                isDark: true
-            },
-            asean: {
-                background: 'linear-gradient(135deg, #1f1410 0%, #8a4a1f 45%, #f0932b 100%)', // ASEAN Orange
-                isDark: true
-            },
-            international: {
-                background: 'linear-gradient(135deg, #1a0f14 0%, #7a1f3d 45%, #e2434f 100%)', // Chinese Red
-                isDark: true
-            }
-        };
-
-        // Click a node to expand/collapse its detail content — set up once,
-        // not re-attached on every filter click.
-        stageButtons.forEach(btn => {
-            btn.addEventListener('click', function () {
-
-                const filter = this.dataset.stageFilter;
-
-                console.log("Clicked:", filter);
-
-                // =========================
-                // BUTTON ACTIVE STATE
-                // =========================
-                stageButtons.forEach(b => {
-                    b.classList.remove(
+                    this.classList.add(
                         'active',
                         'bg-white',
                         'text-ytac-blue'
                     );
 
-                    b.classList.add(
+                    this.classList.remove(
                         'text-white',
                         'border-white/30'
                     );
-                });
-
-                this.classList.add(
-                    'active',
-                    'bg-white',
-                    'text-ytac-blue'
-                );
-
-                this.classList.remove(
-                    'text-white',
-                    'border-white/30'
-                );
 
 
-                // =========================
-                // SHOW / HIDE PATHWAY NODES
-                // =========================
-                pathwayNodes.forEach(node => {
+                    // =========================
+                    // SHOW / HIDE PATHWAY NODES
+                    // =========================
+                    pathwayNodes.forEach(node => {
 
-                    const nodeStage = node.dataset.stage;
+                        const nodeStage = node.dataset.stage;
 
-                    if (filter === 'all' || nodeStage === filter) {
+                        if (filter === 'all' || nodeStage === filter) {
 
-                        node.classList.remove('hidden');
+                            node.classList.remove('hidden');
 
-                        // Selected pathway opens automatically
-                        if (filter !== 'all') {
-                            node.classList.add('expanded');
+                            // Selected pathway opens automatically
+                            if (filter !== 'all') {
+                                node.classList.add('expanded');
+                            }
+
+                        } else {
+
+                            node.classList.add('hidden');
+                            node.classList.remove('expanded');
+
+                        }
+                    });
+
+
+                    // =========================
+                    // SHOW / HIDE CONNECTORS
+                    // =========================
+                    pathwayConnectors.forEach(connector => {
+
+                        if (filter === 'all') {
+                            connector.classList.remove('hidden');
+                            gsap.set(connector, { opacity: 1 });
+                        } else {
+                            connector.classList.add('hidden');
+                            gsap.set(connector, { opacity: 0 });
                         }
 
-                    } else {
+                    });
 
-                        node.classList.add('hidden');
-                        node.classList.remove('expanded');
 
+                    // =========================
+                    // CHANGE BACKGROUND
+                    // =========================
+                    const theme = pathwayThemes[filter];
+
+                    if (theme && pathwaySection) {
+                        transitionPathwayBackground(theme.background);
                     }
+
+
+                    // =========================
+                    // REFRESH SCROLLTRIGGER
+                    // =========================
+                    setTimeout(() => {
+                        if (typeof ScrollTrigger !== 'undefined') {
+                            ScrollTrigger.refresh();
+                        }
+
+                        if (typeof lenis !== 'undefined') {
+                            lenis.resize();
+                        }
+                    }, 100);
+
                 });
-
-
-                // =========================
-                // SHOW / HIDE CONNECTORS
-                // =========================
-                pathwayConnectors.forEach(connector => {
-
-                    if (filter === 'all') {
-                        connector.classList.remove('hidden');
-                        gsap.set(connector, { opacity: 1 });
-                    } else {
-                        connector.classList.add('hidden');
-                        gsap.set(connector, { opacity: 0 });
-                    }
-
-                });
-
-
-                // =========================
-                // CHANGE BACKGROUND
-                // =========================
-                const theme = pathwayThemes[filter];
-
-                if (theme && pathwaySection) {
-                    transitionPathwayBackground(theme.background);
-                }
-
-
-                // =========================
-                // REFRESH SCROLLTRIGGER
-                // =========================
-                setTimeout(() => {
-                    if (typeof ScrollTrigger !== 'undefined') {
-                        ScrollTrigger.refresh();
-                    }
-
-                    if (typeof lenis !== 'undefined') {
-                        lenis.resize();
-                    }
-                }, 100);
-
             });
-        });
-        stageButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const filter = btn.getAttribute('data-stage-filter');
-                const theme = pathwayThemes[filter];
+            stageButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const filter = btn.getAttribute('data-stage-filter');
+                    const theme = pathwayThemes[filter];
 
-                // Remove browser focus outline on click
-                btn.blur();
+                    // Remove browser focus outline on click
+                    btn.blur();
 
-                // Active Button UI Updates
-                stageButtons.forEach(b => {
-                    b.classList.remove('active', 'bg-ytac-blue', 'bg-white', 'text-white', 'text-ytac-blue');
-                    if (theme.isDark) {
-                        b.classList.add('text-white', 'border-white/30');
-                    } else {
-                        b.classList.add('text-ytac-blue', 'border-ytac-blue/30');
-                    }
-                });
-
-                if (theme.isDark) {
-                    btn.classList.add('active', 'bg-white', 'text-ytac-blue');
-                    btn.classList.remove('text-white', 'border-white/30');
-                } else {
-                    btn.classList.add('active', 'bg-ytac-blue', 'text-white');
-                    btn.classList.remove('text-ytac-blue', 'border-ytac-blue/30');
-                }
-
-                // Dynamic Section Theme Switching
-                if (pathwaySection && theme) {
-                    transitionPathwayBackground(theme.background);
+                    // Active Button UI Updates
+                    stageButtons.forEach(b => {
+                        b.classList.remove('active', 'bg-ytac-blue', 'bg-white', 'text-white', 'text-ytac-blue');
+                        if (theme.isDark) {
+                            b.classList.add('text-white', 'border-white/30');
+                        } else {
+                            b.classList.add('text-ytac-blue', 'border-ytac-blue/30');
+                        }
+                    });
 
                     if (theme.isDark) {
-                        pathwayTitle.classList.remove('text-ytac-blue');
-                        pathwayTitle.classList.add('text-white');
-
-                        pathwayTag.classList.remove('text-ytac-purple', 'bg-ytac-purple/10');
-                        pathwayTag.classList.add('text-white', 'bg-white/20');
+                        btn.classList.add('active', 'bg-white', 'text-ytac-blue');
+                        btn.classList.remove('text-white', 'border-white/30');
                     } else {
-                        pathwayTitle.classList.remove('text-white');
-                        pathwayTitle.classList.add('text-ytac-blue');
-
-                        pathwayTag.classList.remove('text-white', 'bg-white/20');
-                        pathwayTag.classList.add('text-ytac-purple', 'bg-ytac-purple/10');
+                        btn.classList.add('active', 'bg-ytac-blue', 'text-white');
+                        btn.classList.remove('text-ytac-blue', 'border-ytac-blue/30');
                     }
-                }
 
-                // Node Filtering Behavior — show only the node matching the
-                // clicked stage, hide the rest; "ALL" shows every node.
-                pathwayNodes.forEach(node => {
-                    const nodeStage = node.getAttribute('data-stage');
-                    if (filter === 'all') {
-                        node.classList.remove('hidden', 'ring-4', 'ring-white/50', 'expanded');
-                        gsap.set(node, { clearProps: 'opacity,transform' });
-                    } else if (nodeStage === filter) {
-                        node.classList.remove('hidden');
-                        node.classList.add('expanded');
-                        node.classList.remove('ring-4', 'ring-white/50');
-                        gsap.set(node, { clearProps: 'opacity,transform' });
-                    } else {
-                        node.classList.add('hidden');
-                        node.classList.remove('ring-4', 'ring-white/50', 'expanded');
+                    // Dynamic Section Theme Switching
+                    if (pathwaySection && theme) {
+                        transitionPathwayBackground(theme.background);
+
+                        if (theme.isDark) {
+                            pathwayTitle.classList.remove('text-ytac-blue');
+                            pathwayTitle.classList.add('text-white');
+
+                            pathwayTag.classList.remove('text-ytac-purple', 'bg-ytac-purple/10');
+                            pathwayTag.classList.add('text-white', 'bg-white/20');
+                        } else {
+                            pathwayTitle.classList.remove('text-white');
+                            pathwayTitle.classList.add('text-ytac-blue');
+
+                            pathwayTag.classList.remove('text-white', 'bg-white/20');
+                            pathwayTag.classList.add('text-ytac-purple', 'bg-ytac-purple/10');
+                        }
+                    }
+
+                    // Node Filtering Behavior — show only the node matching the
+                    // clicked stage, hide the rest; "ALL" shows every node.
+                    pathwayNodes.forEach(node => {
+                        const nodeStage = node.getAttribute('data-stage');
+                        if (filter === 'all') {
+                            node.classList.remove('hidden', 'ring-4', 'ring-white/50', 'expanded');
+                            gsap.set(node, { clearProps: 'opacity,transform' });
+                        } else if (nodeStage === filter) {
+                            node.classList.remove('hidden');
+                            node.classList.add('expanded');
+                            node.classList.remove('ring-4', 'ring-white/50');
+                            gsap.set(node, { clearProps: 'opacity,transform' });
+                        } else {
+                            node.classList.add('hidden');
+                            node.classList.remove('ring-4', 'ring-white/50', 'expanded');
+                        }
+                    });
+
+                    // Hide connecting arrows when filtered
+                    pathwayConnectors.forEach(connector => {
+                        gsap.killTweensOf(connector);
+                        if (filter === 'all') {
+                            connector.classList.remove('hidden');
+                            gsap.to(connector, { opacity: 1, duration: 0.3 });
+                        } else {
+                            connector.classList.add('hidden');
+                            gsap.set(connector, { opacity: 0 });
+                        }
+                    });
+
+                    // Section Height Adjustment — fit to screen when a single
+                    // stage is selected, restore the taller layout for "ALL"
+                    // =========================================================
+                    // DIRECT MIN-HEIGHT APPLY (PREVENTS COLLAPSE & BREAKS)
+                    // =========================================================
+                    if (pathwaySection) {
+                        if (filter === 'all') {
+                            pathwaySection.style.minHeight = '120vh';
+                            pathwaySection.style.paddingBottom = '11rem';
+                        } else {
+                            pathwaySection.style.minHeight = '160vh';
+                            pathwaySection.style.paddingBottom = '16rem';
+                        }
+                    }
+
+                    if (pathwayTree) {
+                        pathwayTree.style.minHeight = '500px';
+                    }
+
+                    // Force GSAP ScrollTrigger & Lenis to immediately recalculate page markers
+                    setTimeout(() => {
+                        ScrollTrigger.refresh(true);
+                        if (typeof lenis !== 'undefined') lenis.resize();
+                    }, 150);
+                });
+            });
+
+            // =========================================================
+            // DROPDOWN MENU
+            // =========================================================
+
+            function toggleDropdown(dropdownId) {
+                $$('.dropdown-menu').forEach((menu) => {
+                    if (menu.id !== dropdownId) {
+                        menu.classList.remove('show');
                     }
                 });
 
-                // Hide connecting arrows when filtered
-                pathwayConnectors.forEach(connector => {
-                    gsap.killTweensOf(connector);
-                    if (filter === 'all') {
-                        connector.classList.remove('hidden');
-                        gsap.to(connector, { opacity: 1, duration: 0.3 });
-                    } else {
-                        connector.classList.add('hidden');
-                        gsap.set(connector, { opacity: 0 });
-                    }
-                });
-
-                // Section Height Adjustment — fit to screen when a single
-                // stage is selected, restore the taller layout for "ALL"
-                // =========================================================
-                // DIRECT MIN-HEIGHT APPLY (PREVENTS COLLAPSE & BREAKS)
-                // =========================================================
-                if (pathwaySection) {
-                    if (filter === 'all') {
-                        pathwaySection.style.minHeight = '120vh';
-                        pathwaySection.style.paddingBottom = '11rem';
-                    } else {
-                        pathwaySection.style.minHeight = '160vh';
-                        pathwaySection.style.paddingBottom = '16rem';
-                    }
-                }
-
-                if (pathwayTree) {
-                    pathwayTree.style.minHeight = '500px';
-                }
-
-                // Force GSAP ScrollTrigger & Lenis to immediately recalculate page markers
-                setTimeout(() => {
-                    ScrollTrigger.refresh(true);
-                    if (typeof lenis !== 'undefined') lenis.resize();
-                }, 150);
-            });
-        });
-
-        // =========================================================
-        // DROPDOWN MENU
-        // =========================================================
-
-        function toggleDropdown(dropdownId) {
-            $$('.dropdown-menu').forEach((menu) => {
-                if (menu.id !== dropdownId) {
-                    menu.classList.remove('show');
-                }
-            });
-
-            $(`#${dropdownId}`)?.classList.toggle('show');
-        }
-
-        // =========================================================
-        // DOCUMENT VIEWER
-        // =========================================================
-
-        function openDocument(viewerId, filePath, title) {
-            const viewer = $(`#${viewerId}`);
-            if (!viewer) return;
-
-            // Ensure parent pathway-node has the expanded class
-            const parentNode = viewer.closest('.pathway-node');
-            if (parentNode) {
-                parentNode.classList.add('expanded');
+                $(`#${dropdownId}`)?.classList.toggle('show');
             }
 
-            const iframe = viewer.querySelector('iframe');
-            const heading = viewer.querySelector('.viewer-title');
+            // =========================================================
+            // DOCUMENT VIEWER
+            // =========================================================
 
-            if (iframe) iframe.src = filePath;
-            if (heading) heading.textContent = title;
+            function openDocument(viewerId, filePath, title) {
+                const viewer = $(`#${viewerId}`);
+                if (!viewer) return;
 
-            $$('.dropdown-menu').forEach((menu) => menu.classList.remove('show'));
+                // Ensure parent pathway-node has the expanded class
+                const parentNode = viewer.closest('.pathway-node');
+                if (parentNode) {
+                    parentNode.classList.add('expanded');
+                }
 
-            setTimeout(() => {
-                ScrollTrigger.refresh();
-                if (typeof lenis !== 'undefined') lenis.resize();
-            }, 400);
-        }
+                const iframe = viewer.querySelector('iframe');
+                const heading = viewer.querySelector('.viewer-title');
 
-        function closeDocument(viewerId) {
-            const viewer = $(`#${viewerId}`);
-            if (!viewer) return;
+                if (iframe) iframe.src = filePath;
+                if (heading) heading.textContent = title;
 
-            const iframe = viewer.querySelector('iframe');
-            viewer.classList.remove('open');
-            if (iframe) iframe.src = '';
+                $$('.dropdown-menu').forEach((menu) => menu.classList.remove('show'));
 
-            setTimeout(() => {
-                ScrollTrigger.refresh();
-            }, 400);
-        }
+                setTimeout(() => {
+                    ScrollTrigger.refresh();
+                    if (typeof lenis !== 'undefined') lenis.resize();
+                }, 400);
+            }
 
-        // =========================================================
-        // ENDORSEMENT SECTION
-        // =========================================================
+            function closeDocument(viewerId) {
+                const viewer = $(`#${viewerId}`);
+                if (!viewer) return;
 
-        ScrollTrigger.create({
-            trigger: '#recognition',
-            start: 'top 80px',
-            end: 'bottom 80px',
-            onEnter: () => setNavTheme(false),
-            onLeave: () => setNavTheme(false),
-            onEnterBack: () => setNavTheme(false),
-            onLeaveBack: () => setNavTheme(true)
-        });
+                const iframe = viewer.querySelector('iframe');
+                viewer.classList.remove('open');
+                if (iframe) iframe.src = '';
 
-        // =========================================================
-        // INITIALIZE
-        // =========================================================
+                setTimeout(() => {
+                    ScrollTrigger.refresh();
+                }, 400);
+            }
 
-        initializeCarousel();
-    </script>
+            // =========================================================
+            // ENDORSEMENT SECTION
+            // =========================================================
+
+            ScrollTrigger.create({
+                trigger: '#recognition',
+                start: 'top 80px',
+                end: 'bottom 80px',
+                onEnter: () => setNavTheme(false),
+                onLeave: () => setNavTheme(false),
+                onEnterBack: () => setNavTheme(false),
+                onLeaveBack: () => setNavTheme(true)
+            });
+
+            // =========================================================
+            // INITIALIZE
+            // =========================================================
+
+            initializeCarousel();
+        </script>
 </body>
 
 </html>
