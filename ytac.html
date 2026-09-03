@@ -65,6 +65,25 @@
             -ms-overflow-style: none;  /* IE and Edge */
             scrollbar-width: none;  /* Firefox */
         }
+
+        .dropdown-menu.show {
+            display: flex !important;
+        }
+
+        /* Ensure expanded node doesn't clip the dropdown menu */
+        .pathway-node.expanded .node-expanded-content {
+            max-height: 1200px;
+            overflow: visible;
+        }
+
+        .expand-card.open {
+            display: block !important;
+        }
+
+        /* Ensure node container wraps around the viewer side-by-side */
+        .pathway-node.expanded {
+            max-width: 100% !important;
+        }
     </style>
 </head>
 
@@ -96,7 +115,7 @@
             </nav>
 
             <!-- Visible Gray Track Line -->
-            <div class="video-controls group absolute bottom-6 left-1/2 -translate-x-1/2
+            <div class="video-controls group absolute bottom-6 left-[53%] -translate-x-1/2
     w-[70%] max-w-4xl h-2.5 hover:h-14
     flex items-center gap-4 px-5 py-0 hover:py-3
     bg-transparent hover:bg-ytac-blue/80 backdrop-blur-none hover:backdrop-blur-md
@@ -362,12 +381,13 @@
 
                     <!--Expanded Gallery-->
 
-                    <!-- =========================================
-                                    EXPANDED GALLERY
-                         ========================================= -->
-
-                    <div id="challengeDetail"
-                        class="absolute left-[calc(50%+20px)] top-1/2 -translate-y-1/2 w-[340px] h-[420px] sm:w-[400px] sm:h-[420px] bg-white rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.22)] border border-gray-100 overflow-hidden opacity-0 pointer-events-none z-30 [transform-style:preserve-3d]">
+                    <div id="challengeDetail" class="absolute left-[calc(50%+20px)] top-1/2 -translate-y-1/2
+    w-[340px] h-[420px] sm:w-[400px] sm:h-[420px]
+    bg-white rounded-3xl
+    shadow-[0_12px_25px_rgba(0,0,0,0.12),0_4px_8px_rgba(0,0,0,0.08)]
+    border border-gray-100
+    overflow-hidden opacity-0 pointer-events-none z-30
+    [transform-style:preserve-3d] [perspective:1200px]">
 
                         <!-- CLOSE BUTTON -->
                         <button id="closeDetail" type="button"
@@ -431,266 +451,393 @@
             class="pathway relative min-h-[120vh] py-32 pb-44 px-[5%] text-center transition-all duration-700 ease-in-out overflow-hidden flex flex-col items-center"
             id="pathway">
 
-            <div id="pathwayBgA"
-                class="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none transition-opacity duration-700"
+            <div id="pathwayBgA" class="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none"
                 style="background: linear-gradient(135deg, #0f172a 0%, #3b3e80 10%, #a89ee8 100%);"></div>
-            <div id="pathwayBgB"
-                class="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none opacity-0 transition-opacity duration-700"
+            <div id="pathwayBgB" class="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none opacity-0"
                 style="background: linear-gradient(135deg, #0f172a 0%, #3b3e80 10%, #a89ee8 100%);"></div>
 
-            <span id="pathwayTag"
-                class="inline-block bg-[#ffffff33] text-white text-sm font-heading font-bold text-base tracking-widest uppercase px-4 py-2 rounded-xl mb-5">
-                PATHWAY</span>
-            <h2 id="pathwayTitle"
-                class="font-heading font-black text-4xl sm:text-5xl text-white uppercase tracking-tight mb-10 transition-colors duration-500">
-                PROGRESSION AND GROWTH</h2>
 
-            <div class="filter-button flex flex-wrap justify-center gap-3 mb-12 sm:mb-16">
-                <button type="button"
-                    class="stage-btn active px-6 py-2.5 rounded-full font-heading font-bold text-sm tracking-wider uppercase border border-ytac-blue/30 bg-white text-[#4b4f9e] shadow-sm transition-all duration-300 cursor-pointer"
-                    data-stage-filter="all">ALL</button>
-                <button type="button"
-                    class="stage-btn px-6 py-2.5 rounded-full font-heading font-bold text-sm tracking-wider uppercase border border-white text-white shadow-sm transition-all duration-300 cursor-pointer"
-                    data-stage-filter="malaysia">MALAYSIA</button>
-                <button type="button"
-                    class="stage-btn px-6 py-2.5 rounded-full font-heading font-bold text-sm tracking-wider uppercase border border-white text-white shadow-sm transition-all duration-300 cursor-pointer"
-                    data-stage-filter="asean">ASEAN</button>
-                <button type="button"
-                    class="stage-btn px-6 py-2.5 rounded-full font-heading font-bold text-sm tracking-wider uppercase border border-white text-white shadow-sm transition-all duration-300 cursor-pointer"
-                    data-stage-filter="international">INTERNATIONAL</button>
-            </div>
+            <div id="pathwayTransition" class="absolute w-8 h-8 rounded-full pointer-events-none z-0 scale-0"></div>
 
-            <div class="pathway-tree max-w-3xl w-full mx-auto flex flex-col items-center gap-2 min-h-[500px]">
+            <div class="relative z-10 w-full">
+                <span id="pathwayTag"
+                    class="inline-block bg-[#ffffff33] text-white text-sm font-heading font-bold text-base tracking-widest uppercase px-4 py-2 rounded-xl mb-5">
+                    PATHWAY</span>
+                <h2 id="pathwayTitle"
+                    class="font-heading font-black text-4xl sm:text-5xl text-white uppercase tracking-tight mb-10 transition-colors duration-500">
+                    PROGRESSION AND GROWTH</h2>
 
-                <!-- YTAC Node -->
-                <div class="pathway-node w-full bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-4 hover:border-white text-left cursor-pointer transition-transform duration-300"
-                    data-stage="malaysia">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <img src="img/logo.jpeg" alt="YTAC logo"
-                                class="h-14 w-14 object-contain rounded-xl bg-ytac-gray p-2 border border-gray-100 shadow-sm">
-                            <div>
+                <div class="filter-button relative z-10 flex flex-wrap justify-center gap-3 mb-12 sm:mb-16">
+                    <button type="button"
+                        class="stage-btn active px-6 py-2.5 rounded-full font-heading font-bold text-sm tracking-wider uppercase border border-ytac-blue/30 bg-white text-[#4b4f9e] shadow-sm transition-all duration-300 cursor-pointer hover:scale-110"
+                        data-stage-filter="all">ALL</button>
+                    <button type="button"
+                        class="stage-btn px-6 py-2.5 rounded-full font-heading font-bold text-sm tracking-wider uppercase border border-white text-white shadow-sm transition-all duration-300 cursor-pointer hover:scale-110"
+                        data-stage-filter="malaysia">MALAYSIA</button>
+                    <button type="button"
+                        class="stage-btn px-6 py-2.5 rounded-full font-heading font-bold text-sm tracking-wider uppercase border border-white text-white shadow-sm transition-all duration-300 cursor-pointer hover:scale-110"
+                        data-stage-filter="asean">ASEAN</button>
+                    <button type="button"
+                        class="stage-btn px-6 py-2.5 rounded-full font-heading font-bold text-sm tracking-wider uppercase border border-white text-white shadow-sm transition-all duration-300 cursor-pointer hover:scale-110"
+                        data-stage-filter="international">INTERNATIONAL</button>
+                </div>
+
+                <div class="pathway-tree max-w-6xl w-full mx-auto flex flex-col items-center gap-2 min-h-[500px]">
+
+                    <!-- YTAC Node -->
+                    <!-- YTAC Node -->
+                    <div class="pathway-node w-full max-w-2xl bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-2 hover:border-white text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
+                        data-stage="malaysia">
+
+                        <!-- Left Column: Main Node Content -->
+                        <div class="pathway-main w-full flex flex-col justify-between">
+
+                            <!-- Top Bar -->
+                            <div class="flex items-center justify-between w-full mb-1">
                                 <span
-                                    class="bg-ytac-purple/10 text-ytac-purple text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">NATIONAL
-                                    LEVEL</span>
-                                <h3 class="font-heading font-extrabold text-xl sm:text-2xl text-ytac-blue mt-1">YTAC —
-                                    Youth Tech Asia Challenge</h3>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="font-heading font-extrabold text-ytac-purple/40 text-xl">01</span>
-                            <i
-                                class="fa-solid fa-chevron-down text-ytac-blue expand-icon transition-transform duration-300"></i>
-                        </div>
-                    </div>
-                    <p class="font-sans text-gray-600 text-sm sm:text-base mt-3 leading-relaxed">The initial launchpad
-                        for Malaysian students to showcase local innovation.</p>
-
-                    <div class="node-expanded-content border-t border-gray-100">
-                        <p class="font-sans text-gray-500 text-sm leading-relaxed mb-4">Annual technology competition
-                            uniting young innovators from across Malaysia. Offers workshop training, mentorship, and
-                            national accreditation.</p>
-                        <div class="resource-buttons flex flex-wrap gap-2">
-                            <div class="dropdown-container relative">
-                                <button type="button"
-                                    class="res-btn dropdown-toggle bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
-                                    onclick="event.stopPropagation(); toggleDropdown('ytacDropdown')">Handbook
-                                    ▾</button>
-                                <div class="dropdown-menu hidden absolute top-full mt-2 left-0 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-50 flex flex-col gap-1 min-w-[100px]"
-                                    id="ytacDropdown">
-                                    <button type="button"
-                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
-                                        onclick="event.stopPropagation(); openDocument('ytacViewer', 'docs/ytac2026_handbook.pdf', 'YTAC 2026 Handbook')">2026</button>
-                                    <button type="button"
-                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
-                                        onclick="event.stopPropagation(); openDocument('ytacViewer', 'docs/ytac2025_handbook.pdf', 'YTAC 2025 Handbook')">2025</button>
-                                    <button type="button"
-                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
-                                        onclick="event.stopPropagation(); openDocument('ytacViewer', 'docs/ytac2024_handbook.pdf', 'YTAC 2024 Handbook')">2024</button>
+                                    class="bg-ytac-purple/10 text-ytac-purple text-xs font-bold px-4 py-2 rounded-lg uppercase tracking-wider">
+                                    NATIONAL LEVEL
+                                </span>
+                                <div class="flex items-center gap-3">
+                                    <span class="font-heading font-extrabold text-ytac-purple/40 text-xl">01</span>
+                                    <i
+                                        class="fa-solid fa-chevron-down text-ytac-blue expand-icon transition-transform duration-300"></i>
                                 </div>
                             </div>
-                            <button type="button"
-                                class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
-                                onclick="event.stopPropagation(); openDocument('ytacViewer', 'https://example.com/ytac', 'YTAC Webpage')">Webpage</button>
-                            <button type="button"
-                                class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
-                                onclick="event.stopPropagation(); openDocument('ytacViewer', 'docs/ytac_surat.pdf', 'YTAC Recognition Letter')">Letter
-                                of Recognition</button>
-                        </div>
-                        <div class="expand-card hidden mt-4 w-full" id="ytacViewer">
-                            <div class="expand-header flex justify-between items-center mb-2">
-                                <h3 class="viewer-title font-heading font-bold text-sm text-ytac-blue">Document View
-                                </h3>
-                                <button type="button"
-                                    class="close-expand text-gray-400 hover:text-ytac-purple font-bold text-sm"
-                                    onclick="event.stopPropagation(); closeDocument('ytacViewer')">✕</button>
-                            </div>
-                            <div class="expand-body">
-                                <iframe id="ytacDocument" src=""
-                                    class="w-full h-[300px] rounded-xl border border-gray-200"
-                                    title="YTAC Document Viewer"></iframe>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Directional Arrow Connector 1 -->
-                <div class="pathway-connector flex flex-col items-center my-2 text-white/80">
-                    <div class="w-0.5 h-8 bg-current"></div>
-                    <i class="fa-solid fa-chevron-down text-lg -mt-1"></i>
-                </div>
-
-                <!-- ICIA Node -->
-                <div class="pathway-node w-full bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-4 hover:border-white text-left cursor-pointer transition-transform duration-300"
-                    data-stage="asean">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <img src="img/icia_logo.jpeg" alt="ICIA logo"
-                                class="h-14 w-14 object-contain rounded-xl bg-ytac-gray p-2 border border-gray-100 shadow-sm">
-                            <div>
-                                <span
-                                    class="bg-ytac-purple/10 text-ytac-purple text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">REGIONAL
-                                    LEVEL</span>
-                                <h3 class="font-heading font-extrabold text-xl sm:text-2xl text-ytac-blue mt-1">ICIA —
-                                    International Cultural & Innovation Competition</h3>
+                            <!-- Centered Logo -->
+                            <div class="flex justify-center my-3">
+                                <img src="img/logo.jpeg" alt="YTAC logo"
+                                    class="h-16 w-60 object-contain rounded-xl bg-ytac-gray p-2 border border-gray-100 shadow-sm">
                             </div>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="font-heading font-extrabold text-ytac-purple/40 text-xl">02</span>
-                            <i
-                                class="fa-solid fa-chevron-down text-ytac-blue expand-icon transition-transform duration-300"></i>
-                        </div>
-                    </div>
-                    <p class="font-sans text-gray-600 text-sm sm:text-base mt-3 leading-relaxed">Regional ASEAN stage
-                        connecting cross-border technological solutions.</p>
 
-                    <div class="node-expanded-content border-t border-gray-100">
-                        <p class="font-sans text-gray-500 text-sm leading-relaxed mb-4">Top teams from YTAC advance to
-                            compete against regional ASEAN counterparts, focusing on cross-cultural tech integration and
-                            sustainability.</p>
-                        <div class="resource-buttons flex flex-wrap gap-2">
-                            <div class="dropdown-container relative">
-                                <button type="button"
-                                    class="res-btn dropdown-toggle bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
-                                    onclick="event.stopPropagation(); toggleDropdown('iciaDropdown')">Handbook
-                                    ▾</button>
-                                <div class="dropdown-menu hidden absolute top-full mt-2 left-0 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-50 flex flex-col gap-1 min-w-[100px]"
-                                    id="iciaDropdown">
-                                    <button type="button"
-                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
-                                        onclick="event.stopPropagation(); openDocument('iciaViewer', 'docs/icia2026_handbook.pdf', 'ICIA 2026 Handbook')">2026</button>
-                                    <button type="button"
-                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
-                                        onclick="event.stopPropagation(); openDocument('iciaViewer', 'docs/icia2025_handbook.pdf', 'ICIA 2025 Handbook')">2025</button>
-                                    <button type="button"
-                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
-                                        onclick="event.stopPropagation(); openDocument('iciaViewer', 'docs/icia2024_handbook.pdf', 'ICIA 2024 Handbook')">2024</button>
+                            <!-- Centered Title -->
+                            <h3 class="font-heading font-extrabold text-xl sm:text-2xl text-ytac-blue text-center mb-3">
+                                YTAC — Youth Tech Asia Challenge
+                            </h3>
+
+                            <!-- Description -->
+                            <p class="font-sans text-gray-600 text-sm sm:text-base text-center leading-relaxed">
+                                The initial launchpad for Malaysian students to showcase local innovation.
+                            </p>
+
+                            <!-- Expanded Content -->
+                            <div
+                                class="node-expanded-content max-h-0 overflow-hidden transition-all duration-400 ease-in-out border-t border-gray-100 mt-4">
+                                <p class="font-sans text-gray-500 text-base leading-relaxed mb-4 pt-4">
+                                    Annual technology competition uniting young innovators from across Malaysia. Offers
+                                    workshop training, mentorship, and national accreditation.
+                                </p>
+
+                                <div class="resource-buttons flex flex-col gap-3">
+                                    <!-- Buttons Row -->
+                                    <div class="flex flex-wrap items-center gap-3">
+                                        <button type="button"
+                                            class="res-btn dropdown-toggle bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); toggleDropdown('ytacDropdown')">
+                                            Handbook ▾
+                                        </button>
+
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); openDocument('ytacViewer', 'https://example.com/ytac', 'YTAC Webpage')">
+                                            Webpage
+                                        </button>
+
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); openDocument('ytacViewer', 'docs/ytac_surat.pdf', 'YTAC Recognition Letter')">
+                                            Letter of Recognition
+                                        </button>
+                                    </div>
+
+                                    <!-- Horizontal Dropdown Menu -->
+                                    <div class="dropdown-menu hidden items-center gap-1.5 bg-ytac-gray/60 p-1.5 rounded-xl w-fit transition-all duration-300"
+                                        id="ytacDropdown">
+                                        <button type="button"
+                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openDocument('ytacViewer', 'docs/ytac2026_handbook.pdf', 'YTAC 2026 Handbook')">
+                                            2026
+                                        </button>
+                                        <button type="button"
+                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openDocument('ytacViewer', 'docs/ytac2025_handbook.pdf', 'YTAC 2025 Handbook')">
+                                            2025
+                                        </button>
+                                        <button type="button"
+                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openDocument('ytacViewer', 'docs/ytac2024_handbook.pdf', 'YTAC 2024 Handbook')">
+                                            2024
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                            <button type="button"
-                                class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
-                                onclick="event.stopPropagation(); openDocument('iciaViewer', 'https://example.com/icia', 'ICIA Webpage')">Webpage</button>
-                            <button type="button"
-                                class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
-                                onclick="event.stopPropagation(); openDocument('iciaViewer', 'docs/icia_surat.pdf', 'ICIA Recognition Letter')">Letter
-                                of Recognition
-                            </button>
-                        </div>
-                        <div class="expand-card hidden mt-4 w-full" id="iciaViewer">
-                            <div class="expand-header flex justify-between items-center mb-2">
-                                <h3 class="viewer-title font-heading font-bold text-sm text-ytac-blue">Document View
-                                </h3>
-                                <button type="button"
-                                    class="close-expand text-gray-400 hover:text-ytac-purple font-bold text-sm"
-                                    onclick="event.stopPropagation(); closeDocument('iciaViewer')">✕</button>
-                            </div>
-                            <div class="expand-body">
-                                <iframe id="iciaDocument" src=""
-                                    class="w-full h-[300px] rounded-xl border border-gray-200"
-                                    title="ICIA Document Viewer"></iframe>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Directional Arrow Connector 2 -->
-                <div class="pathway-connector flex flex-col items-center my-2 text-white/80">
-                    <div class="w-0.5 h-8 bg-current"></div>
-                    <i class="fa-solid fa-chevron-down text-lg -mt-1"></i>
-                </div>
-
-                <!-- IITS Node -->
-                <div class="pathway-node w-full bg-white p-8 sm:p-10 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-4 hover:border-white text-left cursor-pointer transition-transform duration-300"
-                    data-stage="international">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <img src="img/iits_logo.jpeg" alt="IITS logo"
-                                class="h-14 w-14 object-contain rounded-xl bg-ytac-gray p-2 border border-gray-100 shadow-sm">
-                            <div>
-                                <span
-                                    class="bg-ytac-purple/10 text-ytac-purple text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">GLOBAL
-                                    LEVEL</span>
-                                <h3 class="font-heading font-extrabold text-xl sm:text-2xl text-ytac-blue mt-1">IITS —
-                                    International Innovation Tech Summit</h3>
-                            </div>
                         </div>
-                        <div class="flex items-center gap-3">
-                            <span class="font-heading font-extrabold text-ytac-purple/40 text-xl">03</span>
-                            <i
-                                class="fa-solid fa-chevron-down text-ytac-blue expand-icon transition-transform duration-300"></i>
-                        </div>
-                    </div>
-                    <p class="font-sans text-gray-600 text-sm sm:text-base mt-3 leading-relaxed">The apex global event
-                        for world-class youth technological achievements.</p>
 
-                    <div class="node-expanded-content border-t border-gray-100">
-                        <p class="font-sans text-gray-500 text-sm leading-relaxed mb-4">The global final stage bringing
-                            together top youth innovators from Asia, Europe, and America to present market-ready
-                            prototypes.</p>
-                        <div class="resource-buttons flex flex-wrap gap-2">
-                            <div class="dropdown-container relative">
-                                <button type="button"
-                                    class="res-btn dropdown-toggle bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
-                                    onclick="event.stopPropagation(); toggleDropdown('iitsDropdown')">Handbook
-                                    ▾</button>
-                                <div class="dropdown-menu hidden absolute top-full mt-2 left-0 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-50 flex flex-col gap-1 min-w-[100px]"
-                                    id="iitsDropdown">
+                        <!-- Right Column: Document Viewer (Side Panel) -->
+                        <div class="expand-card hidden flex-col lg:w-[60%] flex-1 w-full shrink-0 border-t lg:border-t-0 lg:border-l border-gray-200 pt-4 lg:pt-0 lg:pl-6"
+                            id="ytacViewer" id="ytacViewer">
+                            <div class="bg-white rounded-2xl p-2 h-full flex flex-col justify-between">
+                                <div class="expand-header flex justify-between items-center mb-3 px-2 pt-1">
+                                    <h3 class="viewer-title font-heading font-bold text-base text-ytac-blue">
+                                        Document View
+                                    </h3>
                                     <button type="button"
-                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
-                                        onclick="event.stopPropagation(); openDocument('iitsViewer', 'docs/iits2026_handbook.pdf', 'IITS 2026 Handbook')">2026</button>
-                                    <button type="button"
-                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
-                                        onclick="event.stopPropagation(); openDocument('iitsViewer', 'docs/iits2025_handbook.pdf', 'IITS 2025 Handbook')">2025</button>
-                                    <button type="button"
-                                        class="sub-res-btn text-xs font-bold text-ytac-blue hover:bg-ytac-purple/10 px-3 py-1.5 rounded-lg text-left"
-                                        onclick="event.stopPropagation(); openDocument('iitsViewer', 'docs/iits2024_handbook.pdf', 'IITS 2024 Handbook')">2024</button>
+                                        class="close-expand text-gray-400 hover:text-ytac-purple font-bold text-lg px-2"
+                                        onclick="event.stopPropagation(); closeDocument('ytacViewer')">
+                                        ✕
+                                    </button>
+                                </div>
+                                <div class="expand-body flex-1">
+                                    <iframe id="ytacDocument" src=""
+                                        class="w-full h-[450px] rounded-xl border border-gray-200"
+                                        title="YTAC Document Viewer">
+                                    </iframe>
                                 </div>
                             </div>
-                            <button type="button"
-                                class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
-                                onclick="event.stopPropagation(); openDocument('iitsViewer', 'https://example.com/iits', 'IITS Webpage')">Webpage</button>
-                            <button type="button"
-                                class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-xs px-4 py-2 rounded-xl transition-colors duration-200"
-                                onclick="event.stopPropagation(); openDocument('iitsViewer', 'docs/iits_surat.pdf', 'IITS Recognition Letter')">Letter
-                                of Recognition</button>
                         </div>
-                        <div class="expand-card hidden mt-4 w-full" id="iitsViewer">
-                            <div class="expand-header flex justify-between items-center mb-2">
-                                <h3 class="viewer-title font-heading font-bold text-sm text-ytac-blue">Document View
-                                </h3>
-                                <button type="button"
-                                    class="close-expand text-gray-400 hover:text-ytac-purple font-bold text-sm"
-                                    onclick="event.stopPropagation(); closeDocument('iitsViewer')">✕</button>
+
+                    </div>
+
+                    <!-- Directional Arrow Connector 1 -->
+                    <div class="pathway-connector flex flex-col items-center my-2 text-white/80">
+                        <div class="w-0.5 h-8 bg-current"></div>
+                        <i class="fa-solid fa-chevron-down text-lg -mt-1"></i>
+                    </div>
+
+                    <!-- ICIA Node -->
+                    <div class="pathway-node w-full max-w-2xl bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-2 hover:border-white text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
+                        data-stage="asean">
+
+                        <!-- Left Column: Main Node Content -->
+                        <div class="pathway-main w-full flex flex-col justify-between">
+
+                            <!-- Top Bar -->
+                            <div class="flex items-center justify-between w-full mb-1">
+                                <span
+                                    class="bg-ytac-purple/10 text-ytac-purple text-xs font-bold px-4 py-2 rounded-lg uppercase tracking-wider">
+                                    REGIONAL LEVEL
+                                </span>
+                                <div class="flex items-center gap-3">
+                                    <span class="font-heading font-extrabold text-ytac-purple/40 text-xl">02</span>
+                                    <i
+                                        class="fa-solid fa-chevron-down text-ytac-blue expand-icon transition-transform duration-300"></i>
+                                </div>
                             </div>
-                            <div class="expand-body">
-                                <iframe id="iitsDocument" src=""
-                                    class="w-full h-[300px] rounded-xl border border-gray-200"
-                                    title="IITS Document Viewer"></iframe>
+
+                            <!-- Centered Logo -->
+                            <div class="flex justify-center my-3">
+                                <img src="img/logo.jpeg" alt="YTAC logo"
+                                    class="h-16 w-60 object-contain rounded-xl bg-ytac-gray p-2 border border-gray-100 shadow-sm">
+                            </div>
+
+                            <!-- Centered Title -->
+                            <h3 class="font-heading font-extrabold text-xl sm:text-2xl text-ytac-blue text-center mb-3">
+                                ICIA — International Cultural & Innovation Competition
+                            </h3>
+
+                            <!-- Description -->
+                            <p class="font-sans text-gray-600 text-sm sm:text-base text-center leading-relaxed">
+                                Regional ASEAN stage connecting cross-border technological solutions.
+                            </p>
+
+                            <!-- Expanded Content -->
+                            <div
+                                class="node-expanded-content max-h-0 overflow-hidden transition-all duration-400 ease-in-out border-t border-gray-100 mt-4">
+                                <p class="font-sans text-gray-500 text-sm leading-relaxed mb-4 pt-4">
+                                    Top teams from YTAC advance to compete against regional ASEAN counterparts, focusing
+                                    on cross-cultural tech integration and sustainability.
+                                </p>
+
+                                <div class="resource-buttons flex flex-col gap-3">
+                                    <div class="flex flex-wrap items-center gap-3">
+                                        <button type="button"
+                                            class="res-btn dropdown-toggle bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); toggleDropdown('iciaDropdown')">
+                                            Handbook ▾
+                                        </button>
+
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); openDocument('iciaViewer', 'https://example.com/icia', 'ICIA Webpage')">
+                                            Webpage
+                                        </button>
+
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); openDocument('iciaViewer', 'docs/icia_surat.pdf', 'ICIA Recognition Letter')">
+                                            Letter of Recognition
+                                        </button>
+                                    </div>
+
+                                    <div class="dropdown-menu hidden items-center gap-1.5 bg-ytac-gray/60 p-1.5 rounded-xl w-fit transition-all duration-300"
+                                        id="iciaDropdown">
+                                        <button type="button"
+                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openDocument('iciaViewer', 'docs/icia2026_handbook.pdf', 'ICIA 2026 Handbook')">
+                                            2026
+                                        </button>
+                                        <button type="button"
+                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openDocument('iciaViewer', 'docs/icia2025_handbook.pdf', 'ICIA 2025 Handbook')">
+                                            2025
+                                        </button>
+                                        <button type="button"
+                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openDocument('iciaViewer', 'docs/icia2024_handbook.pdf', 'ICIA 2024 Handbook')">
+                                            2024
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Right Column: Document Viewer Panel -->
+                        <div class="expand-card hidden flex-col lg:w-[60%] flex-1 w-full shrink-0 border-t lg:border-t-0 lg:border-l border-gray-200 pt-4 lg:pt-0 lg:pl-6"
+                            id="iciaViewer">
+                            <div class="bg-white rounded-2xl p-2 h-full flex flex-col justify-between">
+                                <div class="expand-header flex justify-between items-center mb-3 px-2 pt-1">
+                                    <h3 class="viewer-title font-heading font-bold text-base text-ytac-blue">
+                                        Document View
+                                    </h3>
+                                    <button type="button"
+                                        class="close-expand text-gray-400 hover:text-ytac-purple font-bold text-lg px-2"
+                                        onclick="event.stopPropagation(); closeDocument('iciaViewer')">
+                                        ✕
+                                    </button>
+                                </div>
+                                <div class="expand-body flex-1">
+                                    <iframe id="iciaDocument" src=""
+                                        class="w-full h-[450px] rounded-xl border border-gray-200"
+                                        title="ICIA Document Viewer">
+                                    </iframe>
+                                </div>
                             </div>
                         </div>
+
+                    </div>
+
+                    <!-- Directional Arrow Connector 2 -->
+                    <div class="pathway-connector flex flex-col items-center my-2 text-white/80">
+                        <div class="w-0.5 h-8 bg-current"></div>
+                        <i class="fa-solid fa-chevron-down text-lg -mt-1"></i>
+                    </div>
+
+                    <!-- IITS Node -->
+                    <div class="pathway-node w-full max-w-2xl bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-2 hover:border-white text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
+                        data-stage="international">
+
+                        <!-- Left Column: Main Node Content -->
+                        <div class="pathway-main w-full flex flex-col justify-between">
+
+                            <!-- Top Bar -->
+                            <div class="flex items-center justify-between w-full mb-1">
+                                <span
+                                    class="bg-ytac-purple/10 text-ytac-purple text-xs font-bold px-4 py-2 rounded-lg uppercase tracking-wider">
+                                    GLOBAL LEVEL
+                                </span>
+                                <div class="flex items-center gap-3">
+                                    <span class="font-heading font-extrabold text-ytac-purple/40 text-xl">03</span>
+                                    <i
+                                        class="fa-solid fa-chevron-down text-ytac-blue expand-icon transition-transform duration-300"></i>
+                                </div>
+                            </div>
+
+                            <!-- Centered Logo -->
+                            <div class="flex justify-center my-3">
+                                <img src="img/logo.jpeg" alt="YTAC logo"
+                                    class="h-16 w-60 object-contain rounded-xl bg-ytac-gray p-2 border border-gray-100 shadow-sm">
+                            </div>
+
+                            <!-- Centered Title -->
+                            <h3 class="font-heading font-extrabold text-xl sm:text-2xl text-ytac-blue text-center mb-3">
+                                IITS — International Innovation Tech Summit
+                            </h3>
+
+                            <!-- Description -->
+                            <p class="font-sans text-gray-600 text-sm sm:text-base text-center leading-relaxed">
+                                The apex global event for world-class youth technological achievements.
+                            </p>
+
+                            <!-- Expanded Content -->
+                            <div
+                                class="node-expanded-content max-h-0 overflow-hidden transition-all duration-400 ease-in-out border-t border-gray-100 mt-4">
+                                <p class="font-sans text-gray-500 text-sm leading-relaxed mb-4 pt-4">
+                                    The global final stage bringing together top youth innovators from Asia, Europe, and
+                                    America to present market-ready prototypes.
+                                </p>
+
+                                <div class="resource-buttons flex flex-col gap-3">
+                                    <div class="flex flex-wrap items-center gap-3">
+                                        <button type="button"
+                                            class="res-btn dropdown-toggle bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); toggleDropdown('iitsDropdown')">
+                                            Handbook ▾
+                                        </button>
+
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); openDocument('iitsViewer', 'https://example.com/iits', 'IITS Webpage')">
+                                            Webpage
+                                        </button>
+
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); openDocument('iitsViewer', 'docs/iits_surat.pdf', 'IITS Recognition Letter')">
+                                            Letter of Recognition
+                                        </button>
+                                    </div>
+
+                                    <div class="dropdown-menu hidden items-center gap-1.5 bg-ytac-gray/60 p-1.5 rounded-xl w-fit transition-all duration-300"
+                                        id="iitsDropdown">
+                                        <button type="button"
+                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openDocument('iitsViewer', 'docs/iits2026_handbook.pdf', 'IITS 2026 Handbook')">
+                                            2026
+                                        </button>
+                                        <button type="button"
+                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openDocument('iitsViewer', 'docs/iits2025_handbook.pdf', 'IITS 2025 Handbook')">
+                                            2025
+                                        </button>
+                                        <button type="button"
+                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openDocument('iitsViewer', 'docs/iits2024_handbook.pdf', 'IITS 2024 Handbook')">
+                                            2024
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Right Column: Document Viewer Panel -->
+                        <div class="expand-card hidden flex-col lg:w-[60%] flex-1 w-full shrink-0 border-t lg:border-t-0 lg:border-l border-gray-200 pt-4 lg:pt-0 lg:pl-6"
+                            id="iitsViewer">
+                            <div class="bg-white rounded-2xl p-2 h-full flex flex-col justify-between">
+                                <div class="expand-header flex justify-between items-center mb-3 px-2 pt-1">
+                                    <h3 class="viewer-title font-heading font-bold text-base text-ytac-blue">
+                                        Document View
+                                    </h3>
+                                    <button type="button"
+                                        class="close-expand text-gray-400 hover:text-ytac-purple font-bold text-lg px-2"
+                                        onclick="event.stopPropagation(); closeDocument('iitsViewer')">
+                                        ✕
+                                    </button>
+                                </div>
+                                <div class="expand-body flex-1">
+                                    <iframe id="iitsDocument" src=""
+                                        class="w-full h-[450px] rounded-xl border border-gray-200"
+                                        title="IITS Document Viewer">
+                                    </iframe>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-
             </div>
         </section>
 
@@ -1103,10 +1250,13 @@
             nextButton?.addEventListener('click', () => {
 
                 if (detailOpen) {
-                    return;
-                }
+                    closeDetail.click();
 
-                if (detailOpen) {
+                    setTimeout(() => {
+                        currentAngle -= 120;
+                        updateCarouselPositions();
+                    }, 1000);
+
                     return;
                 }
 
@@ -1115,14 +1265,20 @@
             });
 
             previousButton?.addEventListener('click', () => {
+                if (detailOpen) {
+                    closeDetail.click();
+
+                    setTimeout(() => {
+                        currentAngle -= 120;
+                        updateCarouselPositions();
+                    }, 1000);
+
+                    return;
+                }
+
                 currentAngle += 120;
                 updateCarouselPositions();
             });
-
-            nextButton?.addEventListener('mouseenter', () => updateCarouselPositions(-20));
-            nextButton?.addEventListener('mouseleave', () => updateCarouselPositions(0));
-            previousButton?.addEventListener('mouseenter', () => updateCarouselPositions(20));
-            previousButton?.addEventListener('mouseleave', () => updateCarouselPositions(0));
 
             function initializeCarousel() {
                 const carouselContainer = $('#carouselContainer');
@@ -1284,7 +1440,7 @@
 
                     tl.to(categoryCard, {
                         x: -183,
-                        duration: 0.55,
+                        duration: 0.50,
                         ease: "power3.out"
                     });
 
@@ -1294,7 +1450,7 @@
                     tl.to(detailPanel, {
                         opacity: 1,
                         rotationY: 0,
-                        duration: 0.8,
+                        duration: 0.6,
                         ease: "power3.out"
                     }, "-=0.1");
 
@@ -1361,14 +1517,10 @@
                 // ======================================
 
                 tl.to(detailPanel, {
-
                     opacity: 0,
-                    rotationY: 90,
-
+                    rotationY: -90,
                     duration: 0.6,
-
                     ease: "power3.in"
-
                 }, "-=0.1");
 
 
@@ -1428,27 +1580,28 @@
             // Smooth crossfade between pathway gradients instead of an instant
             // background swap — two stacked layers, fade the incoming one in.
             function transitionPathwayBackground(gradient) {
+
                 if (!pathwayBgA || !pathwayBgB) return;
 
                 const incoming = pathwayBgToggle ? pathwayBgA : pathwayBgB;
                 const outgoing = pathwayBgToggle ? pathwayBgB : pathwayBgA;
 
+                // Stop previous animations
+                gsap.killTweensOf([pathwayBgA, pathwayBgB]);
+
+                // Set the new gradient
                 incoming.style.background = gradient;
 
-                // Keep background behind the content
-                gsap.set(incoming, {
+                // Hide old background
+                gsap.set(outgoing, {
                     opacity: 0,
                     zIndex: -10
                 });
 
-                gsap.set(outgoing, {
-                    zIndex: -10
-                });
-
-                gsap.to(incoming, {
+                // Show new background IMMEDIATELY
+                gsap.set(incoming, {
                     opacity: 1,
-                    duration: 0.9,
-                    ease: 'power2.inOut'
+                    zIndex: -10
                 });
 
                 pathwayBgToggle = !pathwayBgToggle;
@@ -1509,22 +1662,115 @@
                 }
             };
 
-            // Click a node to expand/collapse its detail content — set up once,
-            // not re-attached on every filter click.
+            // =========================================================
+            // PATHWAY BUTTON COLOR EXPANSION
+            // =========================================================
+
+            const pathwayTransition = $('#pathwayTransition');
+
+            const pathwayTransitionGradients = {
+                all: 'linear-gradient(135deg, #0f172a 0%, #3b3e80 10%, #a89ee8 100%)',
+
+                malaysia: 'linear-gradient(135deg, #0f172a 0%, #00607A 45%, #14A39A 100%)',
+
+                asean: 'linear-gradient(135deg, #1f1410 0%, #8a4a1f 45%, #f0932b 100%)',
+
+                international: 'linear-gradient(135deg, #1a0f14 0%, #7a1f3d 45%, #e2434f 100%)'
+            };
+
+            let pathwayTransitioning = false;
+
             stageButtons.forEach(btn => {
-                btn.addEventListener('click', function () {
 
-                    const filter = this.dataset.stageFilter;
+                btn.addEventListener('click', () => {
 
-                    console.log("Clicked:", filter);
+                    if (pathwayTransitioning) {
+                        return;
+                    }
 
-                    // =========================
-                    // BUTTON ACTIVE STATE
-                    // =========================
+                    const filter = btn.dataset.stageFilter;
+                    const theme = pathwayThemes[filter];
+
+                    // Prevent clicking the same button repeatedly
+                    if (btn.classList.contains('active')) {
+                        return;
+                    }
+
+                    // Lock the buttons
+                    pathwayTransitioning = true;
+
+
+                    // =====================================================
+                    // 1. GET BUTTON POSITION
+                    // =====================================================
+
+                    const buttonRect = btn.getBoundingClientRect();
+                    const sectionRect = pathwaySection.getBoundingClientRect();
+
+                    const x =
+                        buttonRect.left +
+                        buttonRect.width / 2 -
+                        sectionRect.left;
+
+                    const y =
+                        buttonRect.top +
+                        buttonRect.height / 2 -
+                        sectionRect.top;
+
+
+                    // =====================================================
+                    // 2. POSITION THE TRANSITION CIRCLE
+                    // =====================================================
+
+                    pathwayTransition.style.left = `${x}px`;
+                    pathwayTransition.style.top = `${y}px`;
+
+                    pathwayTransition.style.background =
+                        pathwayTransitionGradients[filter];
+
+
+                    // =====================================================
+                    // 3. CALCULATE CIRCLE SIZE
+                    // =====================================================
+
+                    const maxX = Math.max(
+                        x,
+                        sectionRect.width - x
+                    );
+
+                    const maxY = Math.max(
+                        y,
+                        sectionRect.height - y
+                    );
+
+                    const distance = Math.hypot(maxX, maxY);
+
+                    const finalScale = (distance * 2) / 32;
+
+
+                    // =====================================================
+                    // 4. RESET CIRCLE
+                    // =====================================================
+
+                    gsap.killTweensOf(pathwayTransition);
+
+                    gsap.set(pathwayTransition, {
+                        scale: 0,
+                        opacity: 1
+                    });
+
+
+                    // =====================================================
+                    // 5. CHANGE BUTTON IMMEDIATELY
+                    // =====================================================
+
                     stageButtons.forEach(b => {
+
                         b.classList.remove(
                             'active',
+                            'bg-ytac-blue',
                             'bg-white',
+                            'text-white',
                             'text-ytac-blue'
                         );
 
@@ -1532,32 +1778,69 @@
                             'text-white',
                             'border-white/30'
                         );
+
                     });
 
-                    this.classList.add(
+
+                    btn.classList.add(
                         'active',
                         'bg-white',
                         'text-ytac-blue'
                     );
 
-                    this.classList.remove(
+                    btn.classList.remove(
                         'text-white',
                         'border-white/30'
                     );
 
 
-                    // =========================
-                    // SHOW / HIDE PATHWAY NODES
-                    // =========================
+                    // =====================================================
+                    // 6. CHANGE BACKGROUND IMMEDIATELY
+                    // =====================================================
+
+                    if (theme && pathwaySection) {
+
+                        transitionPathwayBackground(
+                            theme.background
+                        );
+
+                        pathwayTitle.classList.remove(
+                            'text-ytac-blue'
+                        );
+
+                        pathwayTitle.classList.add(
+                            'text-white'
+                        );
+
+                        pathwayTag.classList.remove(
+                            'text-ytac-purple',
+                            'bg-ytac-purple/10'
+                        );
+
+                        pathwayTag.classList.add(
+                            'text-white',
+                            'bg-white/20'
+                        );
+
+                    }
+
+
+                    // =====================================================
+                    // 7. SHOW / HIDE NODES IMMEDIATELY
+                    // =====================================================
+
                     pathwayNodes.forEach(node => {
 
-                        const nodeStage = node.dataset.stage;
+                        const nodeStage =
+                            node.dataset.stage;
 
-                        if (filter === 'all' || nodeStage === filter) {
+                        if (
+                            filter === 'all' ||
+                            nodeStage === filter
+                        ) {
 
                             node.classList.remove('hidden');
 
-                            // Selected pathway opens automatically
                             if (filter !== 'all') {
                                 node.classList.add('expanded');
                             }
@@ -1565,152 +1848,146 @@
                         } else {
 
                             node.classList.add('hidden');
+
                             node.classList.remove('expanded');
 
                         }
+
                     });
 
 
-                    // =========================
-                    // SHOW / HIDE CONNECTORS
-                    // =========================
+                    // =====================================================
+                    // 8. SHOW / HIDE CONNECTORS IMMEDIATELY
+                    // =====================================================
+
                     pathwayConnectors.forEach(connector => {
 
                         if (filter === 'all') {
+
                             connector.classList.remove('hidden');
-                            gsap.set(connector, { opacity: 1 });
+
+                            gsap.set(connector, {
+                                opacity: 1
+                            });
+
                         } else {
+
                             connector.classList.add('hidden');
-                            gsap.set(connector, { opacity: 0 });
+
+                            gsap.set(connector, {
+                                opacity: 0
+                            });
+
                         }
 
                     });
 
 
-                    // =========================
-                    // CHANGE BACKGROUND
-                    // =========================
-                    const theme = pathwayThemes[filter];
+                    // =====================================================
+                    // 9. CHANGE SECTION HEIGHT
+                    // =====================================================
 
-                    if (theme && pathwaySection) {
-                        transitionPathwayBackground(theme.background);
+                    if (pathwaySection) {
+
+                        if (filter === 'all') {
+
+                            pathwaySection.style.minHeight =
+                                '120vh';
+
+                            pathwaySection.style.paddingBottom =
+                                '11rem';
+
+                        } else {
+
+                            pathwaySection.style.minHeight =
+                                '160vh';
+
+                            pathwaySection.style.paddingBottom =
+                                '16rem';
+
+                        }
+
                     }
 
 
-                    // =========================
-                    // REFRESH SCROLLTRIGGER
-                    // =========================
-                    setTimeout(() => {
-                        if (typeof ScrollTrigger !== 'undefined') {
-                            ScrollTrigger.refresh();
+                    // =====================================================
+                    // 10. EXPAND CIRCLE
+                    // =====================================================
+
+                    gsap.to(pathwayTransition, {
+
+                        scale: finalScale,
+
+                        duration: 0.7,
+
+                        ease: "power3.inOut",
+
+                        onComplete: () => {
+
+                            // =================================================
+                            // 11. FADE CIRCLE AWAY
+                            // =================================================
+
+                            gsap.to(pathwayTransition, {
+
+                                opacity: 0,
+
+                                duration: 0.25,
+
+                                ease: "power2.out",
+
+                                onComplete: () => {
+
+                                    gsap.set(pathwayTransition, {
+                                        scale: 0,
+                                        opacity: 1
+                                    });
+
+                                    // Allow another button click
+                                    pathwayTransitioning = false;
+
+                                }
+
+                            });
+
+
+                            // =================================================
+                            // 12. REFRESH SCROLL
+                            // =================================================
+
+                            setTimeout(() => {
+
+                                ScrollTrigger.refresh(true);
+
+                                if (typeof lenis !== 'undefined') {
+                                    lenis.resize();
+                                }
+
+                            }, 150);
+
                         }
 
-                        if (typeof lenis !== 'undefined') {
-                            lenis.resize();
-                        }
-                    }, 100);
+                    });
 
                 });
+
             });
-            stageButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const filter = btn.getAttribute('data-stage-filter');
-                    const theme = pathwayThemes[filter];
 
-                    // Remove browser focus outline on click
-                    btn.blur();
-
-                    // Active Button UI Updates
-                    stageButtons.forEach(b => {
-                        b.classList.remove('active', 'bg-ytac-blue', 'bg-white', 'text-white', 'text-ytac-blue');
-                        if (theme.isDark) {
-                            b.classList.add('text-white', 'border-white/30');
-                        } else {
-                            b.classList.add('text-ytac-blue', 'border-ytac-blue/30');
-                        }
-                    });
-
-                    if (theme.isDark) {
-                        btn.classList.add('active', 'bg-white', 'text-ytac-blue');
-                        btn.classList.remove('text-white', 'border-white/30');
-                    } else {
-                        btn.classList.add('active', 'bg-ytac-blue', 'text-white');
-                        btn.classList.remove('text-ytac-blue', 'border-ytac-blue/30');
+            pathwayNodes.forEach(node => {
+                node.addEventListener('click', (e) => {
+                    // Prevent toggling when clicking dropdowns or document buttons
+                    if (e.target.closest('.resource-buttons') || e.target.closest('.expand-card')) {
+                        return;
                     }
 
-                    // Dynamic Section Theme Switching
-                    if (pathwaySection && theme) {
-                        transitionPathwayBackground(theme.background);
+                    // Toggle expanded class
+                    node.classList.toggle('expanded');
 
-                        if (theme.isDark) {
-                            pathwayTitle.classList.remove('text-ytac-blue');
-                            pathwayTitle.classList.add('text-white');
-
-                            pathwayTag.classList.remove('text-ytac-purple', 'bg-ytac-purple/10');
-                            pathwayTag.classList.add('text-white', 'bg-white/20');
-                        } else {
-                            pathwayTitle.classList.remove('text-white');
-                            pathwayTitle.classList.add('text-ytac-blue');
-
-                            pathwayTag.classList.remove('text-white', 'bg-white/20');
-                            pathwayTag.classList.add('text-ytac-purple', 'bg-ytac-purple/10');
-                        }
-                    }
-
-                    // Node Filtering Behavior — show only the node matching the
-                    // clicked stage, hide the rest; "ALL" shows every node.
-                    pathwayNodes.forEach(node => {
-                        const nodeStage = node.getAttribute('data-stage');
-                        if (filter === 'all') {
-                            node.classList.remove('hidden', 'ring-4', 'ring-white/50', 'expanded');
-                            gsap.set(node, { clearProps: 'opacity,transform' });
-                        } else if (nodeStage === filter) {
-                            node.classList.remove('hidden');
-                            node.classList.add('expanded');
-                            node.classList.remove('ring-4', 'ring-white/50');
-                            gsap.set(node, { clearProps: 'opacity,transform' });
-                        } else {
-                            node.classList.add('hidden');
-                            node.classList.remove('ring-4', 'ring-white/50', 'expanded');
-                        }
-                    });
-
-                    // Hide connecting arrows when filtered
-                    pathwayConnectors.forEach(connector => {
-                        gsap.killTweensOf(connector);
-                        if (filter === 'all') {
-                            connector.classList.remove('hidden');
-                            gsap.to(connector, { opacity: 1, duration: 0.3 });
-                        } else {
-                            connector.classList.add('hidden');
-                            gsap.set(connector, { opacity: 0 });
-                        }
-                    });
-
-                    // Section Height Adjustment — fit to screen when a single
-                    // stage is selected, restore the taller layout for "ALL"
-                    // =========================================================
-                    // DIRECT MIN-HEIGHT APPLY (PREVENTS COLLAPSE & BREAKS)
-                    // =========================================================
-                    if (pathwaySection) {
-                        if (filter === 'all') {
-                            pathwaySection.style.minHeight = '120vh';
-                            pathwaySection.style.paddingBottom = '11rem';
-                        } else {
-                            pathwaySection.style.minHeight = '160vh';
-                            pathwaySection.style.paddingBottom = '16rem';
-                        }
-                    }
-
-                    if (pathwayTree) {
-                        pathwayTree.style.minHeight = '500px';
-                    }
-
-                    // Force GSAP ScrollTrigger & Lenis to immediately recalculate page markers
+                    // Recalculate layout heights for Lenis and ScrollTrigger
                     setTimeout(() => {
                         ScrollTrigger.refresh(true);
                         if (typeof lenis !== 'undefined') lenis.resize();
-                    }, 150);
+                    }, 400);
                 });
             });
 
@@ -1719,27 +1996,54 @@
             // =========================================================
 
             function toggleDropdown(dropdownId) {
-                $$('.dropdown-menu').forEach((menu) => {
+                const target = document.getElementById(dropdownId);
+                if (!target) return;
+
+                document.querySelectorAll('.dropdown-menu').forEach((menu) => {
                     if (menu.id !== dropdownId) {
-                        menu.classList.remove('show');
+                        menu.classList.add('hidden');
+                        menu.classList.remove('flex');
                     }
                 });
 
-                $(`#${dropdownId}`)?.classList.toggle('show');
+                target.classList.toggle('hidden');
+                target.classList.toggle('flex');
             }
+
+            window.addEventListener('click', (e) => {
+                if (!e.target.closest('.resource-buttons')) {
+                    document.querySelectorAll('.dropdown-menu').forEach((menu) => {
+                        menu.classList.add('hidden');
+                        menu.classList.remove('flex');
+                    });
+                }
+            });
 
             // =========================================================
             // DOCUMENT VIEWER
             // =========================================================
-
             function openDocument(viewerId, filePath, title) {
-                const viewer = $(`#${viewerId}`);
+                const viewer = document.getElementById(viewerId);
                 if (!viewer) return;
 
-                // Ensure parent pathway-node has the expanded class
                 const parentNode = viewer.closest('.pathway-node');
                 if (parentNode) {
-                    parentNode.classList.add('expanded');
+                    // 1. Expand parent card to wide mode
+                    parentNode.classList.remove('max-w-2xl');
+                    parentNode.classList.add('max-w-6xl', 'expanded');
+
+                    // 2. Expand content panel height
+                    const expandedContent = parentNode.querySelector('.node-expanded-content');
+                    if (expandedContent) {
+                        expandedContent.classList.remove('max-h-0');
+                        expandedContent.classList.add('max-h-[1200px]');
+                    }
+
+                    // 3. Shift left content to 38% width
+                    const mainContent = parentNode.querySelector('.pathway-main');
+                    if (mainContent) {
+                        mainContent.classList.add('lg:w-[38%]', 'shrink-0');
+                    }
                 }
 
                 const iframe = viewer.querySelector('iframe');
@@ -1748,27 +2052,49 @@
                 if (iframe) iframe.src = filePath;
                 if (heading) heading.textContent = title;
 
-                $$('.dropdown-menu').forEach((menu) => menu.classList.remove('show'));
+                // Show side panel viewer
+                viewer.classList.remove('hidden');
+                viewer.classList.add('flex');
+
+                // Hide active dropdown menus
+                document.querySelectorAll('.dropdown-menu').forEach((menu) => {
+                    menu.classList.add('hidden');
+                    menu.classList.remove('flex');
+                });
 
                 setTimeout(() => {
                     ScrollTrigger.refresh();
                     if (typeof lenis !== 'undefined') lenis.resize();
-                }, 400);
+                }, 300);
             }
 
             function closeDocument(viewerId) {
-                const viewer = $(`#${viewerId}`);
+                const viewer = document.getElementById(viewerId);
                 if (!viewer) return;
 
+                const parentNode = viewer.closest('.pathway-node');
+                if (parentNode) {
+                    // 1. Return parent card to centered narrow mode
+                    parentNode.classList.remove('max-w-6xl');
+                    parentNode.classList.add('max-w-2xl');
+
+                    // 2. Return left content back to full width
+                    const mainContent = parentNode.querySelector('.pathway-main');
+                    if (mainContent) {
+                        mainContent.classList.remove('lg:w-[38%]', 'shrink-0');
+                    }
+                }
+
                 const iframe = viewer.querySelector('iframe');
-                viewer.classList.remove('open');
+                viewer.classList.add('hidden');
+                viewer.classList.remove('flex');
                 if (iframe) iframe.src = '';
 
                 setTimeout(() => {
                     ScrollTrigger.refresh();
-                }, 400);
+                    if (typeof lenis !== 'undefined') lenis.resize();
+                }, 300);
             }
-
             // =========================================================
             // ENDORSEMENT SECTION
             // =========================================================
