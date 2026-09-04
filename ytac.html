@@ -56,16 +56,6 @@
             transform: rotate(180deg);
         }
 
-        ::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Hide scrollbar for IE, Edge, and Firefox */
-        html, body {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-
         .dropdown-menu.show {
             display: flex !important;
         }
@@ -83,6 +73,67 @@
         /* Ensure node container wraps around the viewer side-by-side */
         .pathway-node.expanded {
             max-width: 100% !important;
+        }
+
+        /* --- YTAC BRANDED SCROLLBAR STYLES --- */
+
+        /* Firefox */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: #00607A #F9FBFC; /* YTAC Blue thumb / Light Track */
+        }
+
+        /* WebKit Browsers (Chrome, Safari, Edge) */
+        ::-webkit-scrollbar {
+            width: 10px !important;
+            height: 10px !important;
+        }
+
+        /* Scrollbar Track (Gutter background) */
+        ::-webkit-scrollbar-track {
+            background-color: #F9FBFC !important; /* Matches main site background */
+        }
+
+        /* Scrollbar Thumb (Draggable Bar) */
+        ::-webkit-scrollbar-thumb {
+            background-color: #00607A !important; /* YTAC Blue */
+            border-radius: 9999px !important;
+            border: 2px solid #F9FBFC !important; /* Gives a smooth padded pill effect */
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #14A39A !important; /* YTAC Green on hover */
+        }
+
+        /* --- LAYOUT OVERFLOW & GSAP PINNING FIXES --- */
+
+        html, body {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+        }
+
+        html.lenis, html.lenis-scrolling {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+
+        .pin-spacer {
+            padding-right: 0px !important;
+            margin-right: 0px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        #gallery, #gallery-sticky {
+            background-color: #1A1A1A !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
         }
     </style>
 </head>
@@ -890,10 +941,118 @@
             </div>
         </section>
 
-        <section class="gallery" id="gallery">
+        <!-- Gallery -->
+        <section class="gallery relative h-210 overflow-hidden bg-[#1A1A1A]" id="gallery">
+
+            <div class="absolute inset-0 pointer-events-none
+        bg-[linear-gradient(rgba(156,163,175,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(156,163,175,0.12)_1px,transparent_1px)]
+        bg-[size:10px_10px]">
+            </div>
+
+            <!-- TITLE OVERLAY -->
+            <div class="absolute top-10 left-0 w-full z-20 text-center pointer-events-none">
+
+                <span
+                    class="font-heading text-purple-300 text-sm font-extrabold tracking-widest uppercase bg-purple-900/60 border border-purple-500/30 px-4 py-1.5 rounded-lg inline-block mb-2 shadow-lg backdrop-blur-sm">
+                    YTAC HIGHLIGHTS
+                </span>
+
+                <h2
+                    class="font-heading font-black text-4xl sm:text-5xl text-ytac-mint uppercase tracking-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
+                    OUR STORIES
+                </h2>
+
+            </div>
+
+            <!-- FULL SCREEN GALLERY -->
+            <div class="gallery-sticky sticky top-40 h-[calc(100vh-10rem)] w-full flex items-center overflow-hidden">
+
+                <div class="gallery-track flex items-center gap-12 px-[10vw]">
+
+                    <!-- IMAGE 1 -->
+                    <div class="shrink-0 w-[26vw] h-[43vh] flex flex-col gap-2 translate-y-30">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2026
+                        </span>
+
+                        <img src="img/2026 pic 2.jpg" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+
+                    <!-- IMAGE 2 -->
+                    <div class="shrink-0 w-[45vw] h-[60vh] flex flex-col gap-2 -translate-y-10">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2026
+                        </span>
+
+                        <img src="img/2026 pic 1.jpg" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+
+                    <!-- IMAGE 3 -->
+                    <div class="shrink-0 w-[28vw] h-[48vh] flex flex-col gap-2 translate-y-12">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2026
+                        </span>
+
+                        <img src="img/2026 pic 3.jpg" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+
+                    <!-- IMAGE 4 -->
+                    <div class="shrink-0 w-[30vw] h-[60vh] flex flex-col gap-2 translate-y-8">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2026
+                        </span>
+
+                        <img src="img/2026 pic 4.jpg" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+
+                    <!-- IMAGE 5 -->
+                    <div class="shrink-0 w-[25vw] h-[40vh] flex flex-col gap-2 translate-y-15">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2025
+                        </span>
+
+                        <img src="img/2025 pic 1.jpg" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+
+                    <!-- IMAGE 6 -->
+                    <div class="shrink-0 w-[45vw] h-[70vh] flex flex-col gap-2 -translate-y-4">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2025
+                        </span>
+
+                        <img src="img/2025 pic 4.jpg" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+
+                    <!-- IMAGE 7 -->
+                    <div class="shrink-0 w-[30vw] h-[50vh] flex flex-col gap-2 translate-y-20">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2025
+                        </span>
+
+                        <img src="img/2025 pic 2.jpg" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+
+                    <!-- IMAGE 8 -->
+                    <div class="shrink-0 w-[48vw] h-[68vh] flex flex-col gap-2">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2025
+                        </span>
+
+                        <img src="img/2025 pic 3.jpg" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+                </div>
+            </div>
+
         </section>
 
-        <!-- Added `group` class to the wrapper div below -->
         <div class="floating-contact-container group fixed bottom-8 right-8 z-[150] flex flex-col items-end">
 
             <!-- Hover Menu -->
@@ -925,7 +1084,7 @@
         </div>
 
         <!-- Contact / Footer Section -->
-        <section class="contact relative px-[5%] bg-white pt-12 pb-10 mt-7 w-full" id="contact">
+        <section class="contact relative px-[5%] bg-white pt-12 pb-10 w-full" id="contact">
             <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-stretch justify-between gap-12">
 
                 <div class="contact-container-1 flex-1 flex flex-col justify-between">
@@ -1023,11 +1182,12 @@
 
             const lenis = new Lenis({
                 duration: 1.35,
-                easing: (t) => 1 - Math.pow(1 - t, 4), // quart-out, softer settle than the default
+                easing: (t) => 1 - Math.pow(1 - t, 4),
                 smoothWheel: true,
                 wheelMultiplier: 1,
                 touchMultiplier: 1.6,
-                normalizeWheel: true
+                normalizeWheel: true,
+                prevent: (node) => node.classList.contains('pin-spacer') // Prevents Lenis from calculating pin padding
             });
 
             lenis.on('scroll', ScrollTrigger.update);
@@ -1205,6 +1365,8 @@
                     end: '+=200%',
                     scrub: 0.5,
                     pin: true,
+                    pinReparent: false,
+                    padding: false, // Prevents GSAP from injecting right-side padding
                     anticipatePin: 1,
                     onEnter: () => setNavTheme(true),
                     onLeave: () => setNavTheme(false),
@@ -1212,6 +1374,7 @@
                     onLeaveBack: () => setNavTheme(false)
                 }
             });
+
             expTimeline
                 .to('#s1Line1', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' })
                 .to('#s1Line2', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '+=0.2')
@@ -2107,6 +2270,29 @@
                 onLeave: () => setNavTheme(false),
                 onEnterBack: () => setNavTheme(false),
                 onLeaveBack: () => setNavTheme(true)
+            });
+
+            // =========================================================
+            // GALLERY
+            // =========================================================
+
+            gsap.registerPlugin(ScrollTrigger);
+
+            const galleryTrack = document.querySelector(".gallery-track");
+
+            gsap.to(galleryTrack, {
+                x: () => -(galleryTrack.scrollWidth - window.innerWidth),
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "#gallery",
+                    start: "top -60px",
+                    end: () => `+=${galleryTrack.scrollWidth - window.innerWidth}`,
+                    scrub: 1,
+                    pin: true,
+                    padding: false, // Disables GSAP's scrollbar compensation padding
+                    anticipatePin: 1,
+                    invalidateOnRefresh: true
+                }
             });
 
             // =========================================================
