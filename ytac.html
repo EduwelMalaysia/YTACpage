@@ -105,8 +105,6 @@
             background-color: #14A39A !important; /* YTAC Green on hover */
         }
 
-        /* --- LAYOUT OVERFLOW & GSAP PINNING FIXES --- */
-
         html, body {
             width: 100% !important;
             max-width: 100% !important;
@@ -184,7 +182,7 @@
                     </svg>
                 </button>
 
-                <!-- Progress Track (Increased height: h-2.5) -->
+                <!-- Progress -->
                 <div class="vc-progress-track flex-1 h-2.5 bg-black/50 group-hover:bg-white/30 rounded-full cursor-pointer overflow-hidden transition-colors"
                     id="vcProgressTrack">
                     <!-- Solid White Played Line -->
@@ -221,13 +219,12 @@
             <div class="w-full max-w-[90%] mx-auto flex flex-col lg:flex-row items-center justify-between gap-10">
 
                 <div id="heroTextContainer" class="flex-1 flex flex-col items-start text-left select-none">
-                    <!-- Shifted down 1 size: text-sm md:text-base -->
+
                     <span
                         class="hero-anim hero-tag-anim font-heading text-ytac-purple text-base md:text-lg font-extrabold tracking-wide mb-6 inline-block bg-ytac-purple/10 px-6 py-2.5 rounded-lg uppercase">
                         A TECH COMPETITION THAT BELONGS TO MALAYSIA.
                     </span>
 
-                    <!-- Shifted down 1 size: text-6xl sm:text-7xl xl:text-8xl -->
                     <h1
                         class="font-heading font-black text-7xl sm:text-8xl xl:text-9xl text-ytac-blue leading-[0.9] tracking-tight uppercase mb-2">
                         <span class="hero-anim hero-line1-anim block">YOUTH TECH</span>
@@ -235,13 +232,11 @@
                         <span class="hero-anim hero-line3-anim block">CHALLENGE</span>
                     </h1>
 
-                    <!-- Shifted down 1 size: text-7xl sm:text-8xl xl:text-9xl -->
                     <span
                         class="hero-anim hero-year-anim font-heading font-black text-7xl sm:text-8xl xl:text-9xl text-ytac-purple leading-none block mb-8">
                         2027
                     </span>
 
-                    <!-- Shifted down 1 size: text-lg md:text-xl (Icon: text-2xl) -->
                     <a href="#category"
                         class="hero-anim hero-btn-anim inline-flex items-center gap-3 font-heading font-bold text-lg md:text-xl text-ytac-blue hover:text-ytac-green transition-colors duration-200 group">
                         <span class="text-3xl group-hover:translate-y-1 transition-transform duration-200">↓</span>
@@ -336,7 +331,7 @@
             </div>
         </section>
 
-        <!-- Categories Section — Unconstrained Dynamic Flow -->
+        <!-- Categories Section -->
         <section class="category-section bg-[#F9FBFC] relative py-20 sm:py-28 bg-[#F9FBFC]" id="category">
             <div class="max-w-6xl mx-auto px-4 flex flex-col items-center">
 
@@ -497,7 +492,7 @@
             </div>
         </section>
 
-        <!-- Pathway Section — Dynamic Natural Height & Adjusted Gradients -->
+        <!-- Pathway Section -->
         <section
             class="pathway relative min-h-[120vh] py-32 pb-44 px-[5%] text-center transition-all duration-700 ease-in-out overflow-hidden flex flex-col items-center"
             id="pathway">
@@ -535,7 +530,6 @@
 
                 <div class="pathway-tree max-w-6xl w-full mx-auto flex flex-col items-center gap-2 min-h-[500px]">
 
-                    <!-- YTAC Node -->
                     <!-- YTAC Node -->
                     <div class="pathway-node w-full max-w-2xl bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-2 hover:border-white text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
                         data-stage="malaysia">
@@ -581,43 +575,43 @@
                                 </p>
 
                                 <div class="resource-buttons flex flex-col gap-3">
-                                    <!-- Buttons Row -->
+                                    <!-- Main Resource Buttons -->
                                     <div class="flex flex-wrap items-center gap-3">
                                         <button type="button"
-                                            class="res-btn dropdown-toggle bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
-                                            onclick="event.stopPropagation(); toggleDropdown('ytacDropdown')">
-                                            Handbook ▾
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); selectResourceType('ytac', 'handbook', this)">
+                                            Handbook
                                         </button>
 
                                         <button type="button"
                                             class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
-                                            onclick="event.stopPropagation(); openDocument('ytacViewer', 'https://example.com/ytac', 'YTAC Webpage')">
+                                            onclick="event.stopPropagation(); selectResourceType('ytac', 'webpage', this)">
                                             Webpage
                                         </button>
 
                                         <button type="button"
                                             class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
-                                            onclick="event.stopPropagation(); openDocument('ytacViewer', 'docs/ytac_surat.pdf', 'YTAC Recognition Letter')">
+                                            onclick="event.stopPropagation(); selectResourceType('ytac', 'letter', this)">
                                             Letter of Recognition
                                         </button>
                                     </div>
 
-                                    <!-- Horizontal Dropdown Menu -->
-                                    <div class="dropdown-menu hidden items-center gap-1.5 bg-ytac-gray/60 p-1.5 rounded-xl w-fit transition-all duration-300"
-                                        id="ytacDropdown">
-                                        <button type="button"
-                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
-                                            onclick="event.stopPropagation(); openDocument('ytacViewer', 'docs/ytac2026_handbook.pdf', 'YTAC 2026 Handbook')">
+                                    <!-- Year Selector Row (Disabled by default) -->
+                                    <div class="year-selector flex items-center gap-1.5 bg-ytac-gray/60 p-1.5 rounded-xl w-fit transition-all duration-300"
+                                        id="ytacYears">
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('ytac', '2026')">
                                             2026
                                         </button>
-                                        <button type="button"
-                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
-                                            onclick="event.stopPropagation(); openDocument('ytacViewer', 'docs/ytac2025_handbook.pdf', 'YTAC 2025 Handbook')">
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('ytac', '2025')">
                                             2025
                                         </button>
-                                        <button type="button"
-                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
-                                            onclick="event.stopPropagation(); openDocument('ytacViewer', 'docs/ytac2024_handbook.pdf', 'YTAC 2024 Handbook')">
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('ytac', '2024')">
                                             2024
                                         </button>
                                     </div>
@@ -628,7 +622,7 @@
 
                         <!-- Right Column: Document Viewer (Side Panel) -->
                         <div class="expand-card hidden flex-col lg:w-[60%] flex-1 w-full shrink-0 border-t lg:border-t-0 lg:border-l border-gray-200 pt-4 lg:pt-0 lg:pl-6"
-                            id="ytacViewer" id="ytacViewer">
+                            id="ytacViewer">
                             <div class="bg-white rounded-2xl p-2 h-full flex flex-col justify-between">
                                 <div class="expand-header flex justify-between items-center mb-3 px-2 pt-1">
                                     <h3 class="viewer-title font-heading font-bold text-base text-ytac-blue">
@@ -702,41 +696,43 @@
                                 </p>
 
                                 <div class="resource-buttons flex flex-col gap-3">
+                                    <!-- Main Resource Buttons -->
                                     <div class="flex flex-wrap items-center gap-3">
                                         <button type="button"
-                                            class="res-btn dropdown-toggle bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
-                                            onclick="event.stopPropagation(); toggleDropdown('iciaDropdown')">
-                                            Handbook ▾
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); selectResourceType('icia', 'handbook', this)">
+                                            Handbook
                                         </button>
 
                                         <button type="button"
                                             class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
-                                            onclick="event.stopPropagation(); openDocument('iciaViewer', 'https://example.com/icia', 'ICIA Webpage')">
+                                            onclick="event.stopPropagation(); selectResourceType('icia', 'webpage', this)">
                                             Webpage
                                         </button>
 
                                         <button type="button"
                                             class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
-                                            onclick="event.stopPropagation(); openDocument('iciaViewer', 'docs/icia_surat.pdf', 'ICIA Recognition Letter')">
+                                            onclick="event.stopPropagation(); selectResourceType('icia', 'letter', this)">
                                             Letter of Recognition
                                         </button>
                                     </div>
 
-                                    <div class="dropdown-menu hidden items-center gap-1.5 bg-ytac-gray/60 p-1.5 rounded-xl w-fit transition-all duration-300"
-                                        id="iciaDropdown">
-                                        <button type="button"
-                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
-                                            onclick="event.stopPropagation(); openDocument('iciaViewer', 'docs/icia2026_handbook.pdf', 'ICIA 2026 Handbook')">
+                                    <!-- Year Selector Row (Disabled by default) -->
+                                    <div class="year-selector flex items-center gap-1.5 bg-ytac-gray/60 p-1.5 rounded-xl w-fit transition-all duration-300"
+                                        id="iciaYears">
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('icia', '2026')">
                                             2026
                                         </button>
-                                        <button type="button"
-                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
-                                            onclick="event.stopPropagation(); openDocument('iciaViewer', 'docs/icia2025_handbook.pdf', 'ICIA 2025 Handbook')">
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('icia', '2025')">
                                             2025
                                         </button>
-                                        <button type="button"
-                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
-                                            onclick="event.stopPropagation(); openDocument('iciaViewer', 'docs/icia2024_handbook.pdf', 'ICIA 2024 Handbook')">
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('icia', '2024')">
                                             2024
                                         </button>
                                     </div>
@@ -821,41 +817,43 @@
                                 </p>
 
                                 <div class="resource-buttons flex flex-col gap-3">
+                                    <!-- Main Resource Buttons -->
                                     <div class="flex flex-wrap items-center gap-3">
                                         <button type="button"
-                                            class="res-btn dropdown-toggle bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
-                                            onclick="event.stopPropagation(); toggleDropdown('iitsDropdown')">
-                                            Handbook ▾
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); selectResourceType('iits', 'handbook', this)">
+                                            Handbook
                                         </button>
 
                                         <button type="button"
                                             class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
-                                            onclick="event.stopPropagation(); openDocument('iitsViewer', 'https://example.com/iits', 'IITS Webpage')">
+                                            onclick="event.stopPropagation(); selectResourceType('iits', 'webpage', this)">
                                             Webpage
                                         </button>
 
                                         <button type="button"
                                             class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
-                                            onclick="event.stopPropagation(); openDocument('iitsViewer', 'docs/iits_surat.pdf', 'IITS Recognition Letter')">
+                                            onclick="event.stopPropagation(); selectResourceType('iits', 'letter', this)">
                                             Letter of Recognition
                                         </button>
                                     </div>
 
-                                    <div class="dropdown-menu hidden items-center gap-1.5 bg-ytac-gray/60 p-1.5 rounded-xl w-fit transition-all duration-300"
-                                        id="iitsDropdown">
-                                        <button type="button"
-                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
-                                            onclick="event.stopPropagation(); openDocument('iitsViewer', 'docs/iits2026_handbook.pdf', 'IITS 2026 Handbook')">
+                                    <!-- Year Selector Row (Disabled by default) -->
+                                    <div class="year-selector flex items-center gap-1.5 bg-ytac-gray/60 p-1.5 rounded-xl w-fit transition-all duration-300"
+                                        id="iitsYears">
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('iits', '2026')">
                                             2026
                                         </button>
-                                        <button type="button"
-                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
-                                            onclick="event.stopPropagation(); openDocument('iitsViewer', 'docs/iits2025_handbook.pdf', 'IITS 2025 Handbook')">
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('iits', '2025')">
                                             2025
                                         </button>
-                                        <button type="button"
-                                            class="sub-res-btn text-sm font-bold text-ytac-blue hover:bg-ytac-purple hover:text-white px-6 py-3 rounded-lg transition-colors"
-                                            onclick="event.stopPropagation(); openDocument('iitsViewer', 'docs/iits2024_handbook.pdf', 'IITS 2024 Handbook')">
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('iits', '2024')">
                                             2024
                                         </button>
                                     </div>
@@ -886,7 +884,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -1124,7 +1121,7 @@
                                     (Ms Yivonn)</a>
                             </p>
                             <p class="leading-relaxed">
-                                <strong class="text-ytac-purple font-bold">Venue Host:</strong>
+                                <strong class="text-ytac-purple font-bold">Address:</strong>
                                 <span>A-3-6 Block A, Kuchai Exchange, 58200 Kuala Lumpur, Wilayah Persekutuan Kuala
                                     Lumpur</span>
                             </p>
@@ -1383,7 +1380,7 @@
                 .to('#s2Heading, #s2Subheading, #s2Timer, #s2Button', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '-=0.2');
 
             // =========================================================
-            // CATEGORY CAROUSEL LOGIC
+            // CATEGORY CAROUSEL SECTION
             // =========================================================
 
             let currentAngle = 0;
@@ -1802,10 +1799,6 @@
                 onLeaveBack: () => setNavTheme(false)
             })
 
-            // All four gradients now share one formula — dark navy anchor (0%) →
-            // brand-tinted midtone (45%) → saturated accent (100%) on the same
-            // 135deg diagonal — so the palette reads as one family even as each
-            // pathway keeps its own identity color.
             const pathwayThemes = {
                 all: {
                     background: 'linear-gradient(135deg, #0f172a 0%, #3b3e80 10%, #a89ee8 100%)', // Custom Periwinkle Blue
@@ -2155,22 +2148,106 @@
             });
 
             // =========================================================
-            // DROPDOWN MENU
+            // PATHWAY SECTION
             // =========================================================
 
-            function toggleDropdown(dropdownId) {
-                const target = document.getElementById(dropdownId);
-                if (!target) return;
+            const activeResourceType = {
+                ytac: null,
+                icia: null,
+                iits: null
+            };
 
-                document.querySelectorAll('.dropdown-menu').forEach((menu) => {
-                    if (menu.id !== dropdownId) {
-                        menu.classList.add('hidden');
-                        menu.classList.remove('flex');
+            const documentMap = {
+                ytac: {
+                    handbook: {
+                        '2026': 'docs/ytac2026_handbook.pdf',
+                        '2025': 'docs/ytac2025_handbook.pdf',
+                        '2024': 'docs/ytac2024_handbook.pdf'
+                    },
+                    webpage: {
+                        '2026': 'https://example.com/ytac2026',
+                        '2025': 'https://example.com/ytac2025',
+                        '2024': 'https://example.com/ytac2024'
+                    },
+                    letter: {
+                        '2026': 'docs/ytac2026_surat.pdf',
+                        '2025': 'docs/ytac2025_surat.pdf',
+                        '2024': 'docs/ytac2024_surat.pdf'
                     }
-                });
+                },
+                icia: {
+                    handbook: {
+                        '2026': 'docs/icia2026_handbook.pdf',
+                        '2025': 'docs/icia2025_handbook.pdf',
+                        '2024': 'docs/icia2024_handbook.pdf'
+                    },
+                    webpage: {
+                        '2026': 'https://example.com/icia2026',
+                        '2025': 'https://example.com/icia2025',
+                        '2024': 'https://example.com/icia2024'
+                    },
+                    letter: {
+                        '2026': 'docs/icia2026_surat.pdf',
+                        '2025': 'docs/icia2025_surat.pdf',
+                        '2024': 'docs/icia2024_surat.pdf'
+                    }
+                },
+                iits: {
+                    handbook: {
+                        '2026': 'docs/iits2026_handbook.pdf',
+                        '2025': 'docs/iits2025_handbook.pdf',
+                        '2024': 'docs/iits2024_handbook.pdf'
+                    },
+                    webpage: {
+                        '2026': 'https://example.com/iits2026',
+                        '2025': 'https://example.com/iits2025',
+                        '2024': 'https://example.com/iits2024'
+                    },
+                    letter: {
+                        '2026': 'docs/iits2026_surat.pdf',
+                        '2025': 'docs/iits2025_surat.pdf',
+                        '2024': 'docs/iits2024_surat.pdf'
+                    }
+                }
+            };
 
-                target.classList.toggle('hidden');
-                target.classList.toggle('flex');
+            function selectResourceType(nodeId, resourceType, button) {
+                activeResourceType[nodeId] = resourceType;
+
+                // Highlight active resource button within this node
+                const parent = button.closest('.resource-buttons');
+                parent.querySelectorAll('.res-btn').forEach(btn => {
+                    btn.classList.remove('bg-ytac-purple', 'text-white');
+                    btn.classList.add('bg-ytac-gray', 'text-ytac-blue');
+                });
+                button.classList.remove('bg-ytac-gray', 'text-ytac-blue');
+                button.classList.add('bg-ytac-purple', 'text-white');
+
+                // Enable year buttons for this node
+                const yearContainer = document.getElementById(`${nodeId}Years`);
+                if (!yearContainer) return;
+
+                const yearBtns = yearContainer.querySelectorAll('.year-btn');
+                yearBtns.forEach(btn => {
+                    btn.removeAttribute('disabled');
+                    btn.classList.remove('text-gray-400', 'bg-gray-200/60', 'cursor-not-allowed');
+                    btn.classList.add('text-ytac-blue', 'hover:bg-ytac-purple', 'hover:text-white', 'cursor-pointer');
+                });
+            }
+
+            function openSelectedDocument(nodeId, year) {
+                const type = activeResourceType[nodeId];
+                if (!type) return;
+
+                const fileUrl = documentMap[nodeId]?.[type]?.[year] || '';
+                const labelMap = {
+                    handbook: 'Handbook',
+                    webpage: 'Webpage',
+                    letter: 'Recognition Letter'
+                };
+                const title = `${nodeId.toUpperCase()} ${year} ${labelMap[type]}`;
+
+                openDocument(`${nodeId}Viewer`, fileUrl, title);
             }
 
             window.addEventListener('click', (e) => {
