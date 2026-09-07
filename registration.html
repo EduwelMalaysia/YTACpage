@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register — Youth Tech Asia Challenge (YTAC) 2026</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+
+    <!--Font Awesome-->
+    <script src="https://kit.fontawesome.com/6629857a22.js" crossorigin="anonymous"></script>
+
+    <!--Tailwind CSS-->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {
+            --color-ytac-blue: #00607A;
+            --color-ytac-green: #14A39A;
+            --color-ytac-purple: #822384;
+            --color-ytac-mint: #84D4C7;
+            --color-ytac-gray: #F4F4F4;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --font-heading: 'Space Grotesk', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-sans);
+        }
+
+        .field-label {
+            font-family: var(--font-heading);
+        }
+
+        .field-input {
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .field-input:focus {
+            outline: none;
+            border-color: var(--color-ytac-blue);
+            box-shadow: 0 0 0 3px rgba(0, 96, 122, 0.12);
+        }
+
+        .category-option input:checked+.category-option-card {
+            border-color: var(--color-ytac-blue);
+            background: rgba(0, 96, 122, 0.05);
+            box-shadow: 0 0 0 2px var(--color-ytac-blue);
+        }
+
+        .section-index {
+            font-variant-numeric: tabular-nums;
+        }
+
+        #confirmationPanel {
+            display: none;
+        }
+
+        #registrationForm.hidden-after-submit {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bg-[#F9FBFC] text-gray-800">
+
+    <!-- Simple top bar -->
+    <header class="w-full bg-white border-b border-gray-100">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2">
+                <img src="img/logo_nobg.png" alt="YTAC logo" class="h-10">
+            </a>
+            <a href="ytac.html"
+                class="font-heading font-bold text-sm text-ytac-blue hover:text-ytac-purple transition-colors flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero banner -->
+    <section class="bg-gradient-to-br from-ytac-blue via-[#0d7a97] to-ytac-green py-16 sm:py-20 px-6">
+        <div class="max-w-3xl mx-auto text-center">
+            <span
+                class="font-heading font-extrabold text-sm tracking-wide uppercase bg-white/15 text-white px-4 py-1.5 rounded-lg inline-block mb-5">
+                YTAC 2026 · Registration
+            </span>
+            <h1 class="font-heading font-black text-4xl sm:text-5xl text-white leading-tight mb-4">
+                Register your team
+            </h1>
+            <p class="font-sans text-white/85 text-base sm:text-lg max-w-xl mx-auto">
+                Fill in the form below to register for the Youth Tech Asia Challenge. It takes about 5 minutes —
+                have your team's details ready before you start.
+            </p>
+        </div>
+    </section>
+
+    <main class="max-w-3xl mx-auto px-6 py-14 sm:py-20">
+
+        <form id="registrationForm" class="space-y-14">
+
+            <!-- SECTION 1: Team Leader -->
+            <section>
+                <div class="flex items-baseline gap-3 mb-6">
+                    <span class="section-index font-heading font-black text-3xl text-ytac-mint">01</span>
+                    <h2 class="font-heading font-bold text-2xl text-ytac-blue">Team leader details</h2>
+                </div>
+                <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 sm:p-8 space-y-5">
+                    <div class="grid sm:grid-cols-2 gap-5">
+                        <div>
+                            <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Full
+                                name</label>
+                            <input required type="text" name="leaderName" placeholder="As per IC / passport"
+                                class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                        </div>
+                        <div>
+                            <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">IC / passport
+                                no.</label>
+                            <input required type="text" name="leaderIc" placeholder="e.g. 070101-14-1234"
+                                class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                        </div>
+                        <div>
+                            <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Email
+                                address</label>
+                            <input required type="email" name="leaderEmail" placeholder="you@example.com"
+                                class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                        </div>
+                        <div>
+                            <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Phone / WhatsApp
+                                no.</label>
+                            <input required type="tel" name="leaderPhone" placeholder="e.g. 012-3456789"
+                                class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">School /
+                                institution</label>
+                            <input required type="text" name="leaderSchool" placeholder="Full school name"
+                                class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                        </div>
+                        <div>
+                            <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">State</label>
+                            <input required type="text" name="leaderState" placeholder="e.g. Selangor"
+                                class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                        </div>
+                        <div>
+                            <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Age</label>
+                            <input required type="number" min="10" max="19" name="leaderAge" placeholder="e.g. 16"
+                                class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: Challenge Category -->
+            <section>
+                <div class="flex items-baseline gap-3 mb-6">
+                    <span class="section-index font-heading font-black text-3xl text-ytac-mint">02</span>
+                    <h2 class="font-heading font-bold text-2xl text-ytac-blue">Choose your challenge category</h2>
+                </div>
+                <div class="grid sm:grid-cols-3 gap-4">
+                    <label class="category-option cursor-pointer">
+                        <input required type="radio" name="category" value="inno-tech" class="sr-only peer">
+                        <div
+                            class="category-option-card h-full bg-white rounded-2xl border-2 border-gray-200 p-5 text-center transition-all">
+                            <h3 class="font-heading font-bold text-ytac-blue text-base mb-2">Inno-Tech Challenge</h3>
+                            <p class="text-xs text-gray-500 leading-relaxed">Coding-based innovation projects.</p>
+                        </div>
+                    </label>
+                    <label class="category-option cursor-pointer">
+                        <input type="radio" name="category" value="inno-maker" class="sr-only peer">
+                        <div
+                            class="category-option-card h-full bg-white rounded-2xl border-2 border-gray-200 p-5 text-center transition-all">
+                            <h3 class="font-heading font-bold text-ytac-blue text-base mb-2">Inno-Maker Challenge</h3>
+                            <p class="text-xs text-gray-500 leading-relaxed">Non-coding product / prototype
+                                concepts.</p>
+                        </div>
+                    </label>
+                    <label class="category-option cursor-pointer">
+                        <input type="radio" name="category" value="hackathon" class="sr-only peer">
+                        <div
+                            class="category-option-card h-full bg-white rounded-2xl border-2 border-gray-200 p-5 text-center transition-all">
+                            <h3 class="font-heading font-bold text-ytac-blue text-base mb-2">Tech-Hackathon</h3>
+                            <p class="text-xs text-gray-500 leading-relaxed">Fast-paced software sprint.</p>
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+            <!-- SECTION 3: Team Members -->
+            <section>
+                <div class="flex items-baseline gap-3 mb-6">
+                    <span class="section-index font-heading font-black text-3xl text-ytac-mint">03</span>
+                    <h2 class="font-heading font-bold text-2xl text-ytac-blue">Team members</h2>
+                    <span class="text-sm text-gray-400 font-medium">(optional, max 3)</span>
+                </div>
+                <div id="membersList" class="space-y-4"></div>
+                <button type="button" id="addMemberBtn"
+                    class="mt-4 font-heading font-bold text-sm text-ytac-purple hover:text-ytac-blue transition-colors inline-flex items-center gap-2">
+                    <i class="fa-solid fa-circle-plus"></i> Add team member
+                </button>
+            </section>
+
+            <!-- SECTION 4: Project Idea -->
+            <section>
+                <div class="flex items-baseline gap-3 mb-6">
+                    <span class="section-index font-heading font-black text-3xl text-ytac-mint">04</span>
+                    <h2 class="font-heading font-bold text-2xl text-ytac-blue">Your project idea</h2>
+                    <span class="text-sm text-gray-400 font-medium">(optional at this stage)</span>
+                </div>
+                <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 sm:p-8">
+                    <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Brief description</label>
+                    <textarea name="projectIdea" rows="4" placeholder="A few sentences about what you plan to build"
+                        class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm resize-none"></textarea>
+                    <p class="text-xs text-gray-400 mt-2">You'll upload your full project file later on the
+                        <a href="submission.html" class="text-ytac-blue font-bold hover:underline">submission
+                            page</a>.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SECTION 5: Consent -->
+            <section>
+                <label class="flex items-start gap-3 cursor-pointer">
+                    <input required type="checkbox" name="consent" class="mt-1 h-4 w-4 accent-ytac-blue">
+                    <span class="text-sm text-gray-600">
+                        I confirm the information above is accurate and I agree to YTAC's terms of participation and
+                        the collection of my personal data for competition purposes.
+                    </span>
+                </label>
+            </section>
+
+            <button type="submit"
+                class="w-full sm:w-auto bg-ytac-blue text-white font-heading font-extrabold text-lg px-10 py-4 rounded-full shadow-xl hover:bg-ytac-purple hover:scale-[1.02] transition-all duration-200">
+                Complete registration →
+            </button>
+
+        </form>
+
+        <!-- Confirmation state -->
+        <div id="confirmationPanel" class="text-center bg-white rounded-3xl shadow-lg border border-gray-100 p-10">
+            <div
+                class="w-16 h-16 rounded-full bg-ytac-mint/20 text-ytac-green flex items-center justify-center mx-auto mb-5">
+                <i class="fa-solid fa-check text-2xl"></i>
+            </div>
+            <h2 class="font-heading font-bold text-2xl text-ytac-blue mb-2">You're registered!</h2>
+            <p class="text-gray-500 max-w-md mx-auto mb-8">
+                We've sent a confirmation to your email. Next, submit your project file before the deadline.
+            </p>
+            <a href="submission.html"
+                class="inline-flex items-center gap-2 bg-ytac-blue text-white font-heading font-extrabold px-8 py-3.5 rounded-full shadow-lg hover:bg-ytac-purple transition-colors">
+                Go to submission page →
+            </a>
+        </div>
+
+    </main>
+
+    <footer class="w-full bg-white border-t border-gray-100 pt-3 pb-4">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col items-center text-center gap-0.5 font-sans text-sm text-gray-500">
+            <p>Copyright © 2026 CodeKidz. All rights reserved.</p>
+            <p class="font-bold text-xs">EDUWELD SDN. BHD. (1439286P / 202101038986)</p>
+        </div>
+    </footer>
+
+    <script>
+        // ---- Team member rows (add / remove) ----
+        const membersList = document.getElementById('membersList');
+        const addMemberBtn = document.getElementById('addMemberBtn');
+        let memberCount = 0;
+        const MAX_MEMBERS = 3;
+
+        function addMemberRow() {
+            if (memberCount >= MAX_MEMBERS) return;
+            memberCount++;
+            const row = document.createElement('div');
+            row.className = 'bg-white rounded-2xl border border-gray-200 p-5 grid sm:grid-cols-3 gap-4 relative';
+            row.innerHTML = `
+                <input type="text" name="memberName[]" placeholder="Member full name"
+                    class="field-input border border-gray-200 rounded-xl px-4 py-2.5 text-sm sm:col-span-1">
+                <input type="text" name="memberIc[]" placeholder="IC / passport no."
+                    class="field-input border border-gray-200 rounded-xl px-4 py-2.5 text-sm sm:col-span-1">
+                <input type="text" name="memberSchool[]" placeholder="School / institution"
+                    class="field-input border border-gray-200 rounded-xl px-4 py-2.5 text-sm sm:col-span-1">
+                <button type="button" aria-label="Remove member"
+                    class="remove-member-btn absolute -top-2.5 -right-2.5 w-6 h-6 rounded-full bg-white border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-300 text-xs flex items-center justify-center shadow-sm">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            `;
+            row.querySelector('.remove-member-btn').addEventListener('click', () => {
+                row.remove();
+                memberCount--;
+                addMemberBtn.classList.remove('opacity-40', 'pointer-events-none');
+            });
+            membersList.appendChild(row);
+            if (memberCount >= MAX_MEMBERS) {
+                addMemberBtn.classList.add('opacity-40', 'pointer-events-none');
+            }
+        }
+        addMemberBtn.addEventListener('click', addMemberRow);
+        addMemberRow(); // start with one member row visible
+
+        // ---- Form submission ----
+        // TODO: replace this handler with a real call to your backend, e.g.:
+        //
+        // const res = await fetch('https://your-api.example.com/api/register', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(payload)
+        // });
+        // if (!res.ok) { /* show an error state instead of the confirmation panel */ }
+        //
+        const form = document.getElementById('registrationForm');
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const payload = Object.fromEntries(formData.entries());
+            console.log('Registration payload (wire this to your backend):', payload);
+
+            form.classList.add('hidden-after-submit');
+            document.getElementById('confirmationPanel').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+
+</body>
+
+</html>
