@@ -237,10 +237,10 @@
                         2027
                     </span>
 
-                    <a href="#category"
+                    <a href="#experience"
                         class="hero-anim hero-btn-anim inline-flex items-center gap-3 font-heading font-bold text-lg md:text-xl text-ytac-blue hover:text-ytac-green transition-colors duration-200 group">
                         <span class="text-3xl group-hover:translate-y-1 transition-transform duration-200">↓</span>
-                        <span>EXPLORE YTAC</span>
+                        <span>REGISTER NOW</span>
                     </a>
                 </div>
 
@@ -321,11 +321,17 @@
                         </div>
                     </div>
 
-                    <a id="s2Button" href="https://wa.me/message/CS2SJFC4EELDP1"
-                        class="primary-register-button pointer-events-auto inline-flex items-center gap-2 bg-white text-ytac-blue font-heading font-extrabold text-lg sm:text-xl px-10 py-4 rounded-full shadow-2xl hover:bg-ytac-mint hover:text-white hover:scale-105 opacity-0 translate-y-16">
-                        Register Now →
-                    </a>
+                    <div class="flex flex-row items-center justify-center gap-8 mt-8" id="register">
+                        <a id="s2Button" href="registration.html"
+                            class="primary-register-button pointer-events-auto inline-flex items-center gap-2 bg-white text-ytac-blue font-heading font-extrabold text-lg sm:text-xl px-10 py-4 rounded-full shadow-2xl hover:bg-ytac-mint hover:text-white hover:scale-105 opacity-0 translate-y-16">
+                            Register Now →
+                        </a>
 
+                        <a id="s2SubmitButton" href="submission.html"
+                            class="primary-submit-button pointer-events-auto inline-flex items-center gap-2 bg-white text-ytac-blue font-heading font-extrabold text-lg sm:text-xl px-10 py-4 rounded-full shadow-2xl hover:bg-ytac-mint hover:text-white hover:scale-105 opacity-0 translate-y-16">
+                            Submit Project →
+                        </a>
+                    </div>
                 </div>
 
             </div>
@@ -1201,21 +1207,22 @@
             const navbar = document.getElementById("navbar");
             const navLinks = document.querySelectorAll("#navbar .nav-link");
 
-            function setNavTheme(isDarkSection) {
+            function setNavTheme(mode) {
                 if (!navbar) return;
 
-                if (isDarkSection) {
-                    navbar.classList.add("bg-transparent", "border-b", "border-white/20", "backdrop-blur-sm");
-                    navbar.classList.remove("bg-white");
+                // Reset background and border utility classes
+                navbar.classList.remove("bg-white", "bg-transparent", "bg-[#1A1A1A]", "border-b", "border-white/20", "backdrop-blur-sm");
 
+                if (mode === "dark" || mode === true) {
+                    // Dark theme: translucent navbar with white text (matches Pathway & Experience)
+                    navbar.classList.add("bg-transparent", "border-b", "border-white/20", "backdrop-blur-sm");
                     navLinks.forEach(link => {
                         link.classList.add("text-white");
                         link.classList.remove("text-ytac-blue");
                     });
                 } else {
+                    // Light theme: solid white navbar with blue text (matches Home, Contact, Categories)
                     navbar.classList.add("bg-white");
-                    navbar.classList.remove("bg-transparent", "border-b", "border-white/20", "backdrop-blur-sm");
-
                     navLinks.forEach(link => {
                         link.classList.add("text-ytac-blue");
                         link.classList.remove("text-white");
@@ -1325,6 +1332,30 @@
                 }
             });
 
+            // =========================================================
+            // GALLERY SECTION NAV THEME (Transparent)
+            // =========================================================
+            ScrollTrigger.create({
+                trigger: '#gallery',
+                start: 'top 80px',
+                end: 'bottom 80px',
+                onEnter: () => setNavTheme("transparent"),
+                onLeave: () => setNavTheme("light"),
+                onEnterBack: () => setNavTheme("transparent"),
+                onLeaveBack: () => setNavTheme("light")
+            });
+
+            // =========================================================
+            // CONTACT SECTION NAV THEME (White)
+            // =========================================================
+            ScrollTrigger.create({
+                trigger: '#contact',
+                start: 'top 100px',
+                end: 'bottom bottom',
+                onEnter: () => setNavTheme("light"),
+                onLeaveBack: () => setNavTheme("transparent")
+            });
+
             const heroTl = gsap.timeline({
                 scrollTrigger: {
                     trigger: '#home',
@@ -1365,10 +1396,10 @@
                     pinReparent: false,
                     padding: false, // Prevents GSAP from injecting right-side padding
                     anticipatePin: 1,
-                    onEnter: () => setNavTheme(true),
-                    onLeave: () => setNavTheme(false),
-                    onEnterBack: () => setNavTheme(true),
-                    onLeaveBack: () => setNavTheme(false)
+                    onEnter: () => setNavTheme("dark"),
+                    onLeave: () => setNavTheme("light"),
+                    onEnterBack: () => setNavTheme("dark"),
+                    onLeaveBack: () => setNavTheme("light")
                 }
             });
 
@@ -1377,7 +1408,7 @@
                 .to('#s1Line2', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '+=0.2')
                 .to('#s1Line3', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '+=0.2')
                 .to('#expScene1', { y: '-60px', opacity: 0, duration: 1.2, ease: 'power1.in' }, '+=0.5')
-                .to('#s2Heading, #s2Subheading, #s2Timer, #s2Button', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '-=0.2');
+                .to('#s2Heading, #s2Subheading, #s2Timer, #s2Button, #s2SubmitButton', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '-=0.2');
 
             // =========================================================
             // CATEGORY CAROUSEL SECTION
@@ -1793,11 +1824,11 @@
                 trigger: '#pathway',
                 start: 'top 10%',
                 end: 'bottom 10%',
-                onEnter: () => setNavTheme(true),
-                onLeave: () => setNavTheme(false),
-                onEnterBack: () => setNavTheme(true),
-                onLeaveBack: () => setNavTheme(false)
-            })
+                onEnter: () => setNavTheme("dark"),
+                onLeave: () => setNavTheme("light"),
+                onEnterBack: () => setNavTheme("dark"),
+                onLeaveBack: () => setNavTheme("light")
+            });
 
             const pathwayThemes = {
                 all: {
@@ -2362,13 +2393,17 @@
                 ease: "none",
                 scrollTrigger: {
                     trigger: "#gallery",
-                    start: "top -60px",
+                    start: "top -10%",
                     end: () => `+=${galleryTrack.scrollWidth - window.innerWidth}`,
                     scrub: 1,
                     pin: true,
-                    padding: false, // Disables GSAP's scrollbar compensation padding
+                    padding: false,
                     anticipatePin: 1,
-                    invalidateOnRefresh: true
+                    invalidateOnRefresh: true,
+                    onEnter: () => setNavTheme("dark"),
+                    onLeave: () => setNavTheme("light"),
+                    onEnterBack: () => setNavTheme("dark"),
+                    onLeaveBack: () => setNavTheme("light")
                 }
             });
 
