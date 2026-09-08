@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Project — Youth Tech Asia Challenge (YTAC) 2026</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+
+    <!--Font Awesome-->
+    <script src="https://kit.fontawesome.com/6629857a22.js" crossorigin="anonymous"></script>
+
+    <!--Tailwind CSS-->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {
+            --color-ytac-blue: #00607A;
+            --color-ytac-green: #14A39A;
+            --color-ytac-purple: #822384;
+            --color-ytac-mint: #84D4C7;
+            --color-ytac-gray: #F4F4F4;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --font-heading: 'Space Grotesk', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-sans);
+        }
+
+        .field-label {
+            font-family: var(--font-heading);
+        }
+
+        .field-input {
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .field-input:focus {
+            outline: none;
+            border-color: var(--color-ytac-blue);
+            box-shadow: 0 0 0 3px rgba(0, 96, 122, 0.12);
+        }
+
+        .dropzone {
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .dropzone.drag-over {
+            border-color: var(--color-ytac-blue);
+            background-color: rgba(0, 96, 122, 0.05);
+        }
+
+        #confirmationPanel {
+            display: none;
+        }
+
+        #submissionForm.hidden-after-submit {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bg-[#F9FBFC] text-gray-800">
+
+    <!-- Simple top bar -->
+    <header class="w-full bg-white border-b border-gray-100">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2">
+                <img src="{{ url_for('static', filename='img/logonobg.png') }}" alt="YTAC logo" class="h-10">
+            </a>
+            <a href="ytac.html"
+                class="font-heading font-bold text-sm text-ytac-blue hover:text-ytac-purple transition-colors flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero banner with countdown -->
+    <section class="bg-gradient-to-br from-ytac-purple via-[#5c2270] to-ytac-blue py-16 sm:py-20 px-6">
+        <div class="max-w-3xl mx-auto text-center">
+            <span
+                class="font-heading font-extrabold text-sm tracking-wide uppercase bg-white/15 text-white px-4 py-1.5 rounded-lg inline-block mb-5">
+                YTAC 2026 · Project Submission
+            </span>
+            <h1 class="font-heading font-black text-4xl sm:text-5xl text-white leading-tight mb-6">
+                Submit your project
+            </h1>
+
+            <!-- Countdown -->
+            <div class="flex justify-center gap-3 sm:gap-4 mb-2" id="countdown">
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-3 sm:px-6 sm:py-4 min-w-[70px]">
+                    <span id="cdDays" class="block font-heading font-bold text-2xl sm:text-4xl text-ytac-mint">--</span>
+                    <span class="block font-heading text-[10px] sm:text-xs uppercase tracking-widest text-white/70 mt-1">Days</span>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-3 sm:px-6 sm:py-4 min-w-[70px]">
+                    <span id="cdHours" class="block font-heading font-bold text-2xl sm:text-4xl text-ytac-mint">--</span>
+                    <span class="block font-heading text-[10px] sm:text-xs uppercase tracking-widest text-white/70 mt-1">Hours</span>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-3 sm:px-6 sm:py-4 min-w-[70px]">
+                    <span id="cdMinutes" class="block font-heading font-bold text-2xl sm:text-4xl text-ytac-mint">--</span>
+                    <span class="block font-heading text-[10px] sm:text-xs uppercase tracking-widest text-white/70 mt-1">Minutes</span>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-3 sm:px-6 sm:py-4 min-w-[70px]">
+                    <span id="cdSeconds" class="block font-heading font-bold text-2xl sm:text-4xl text-ytac-mint">--</span>
+                    <span class="block font-heading text-[10px] sm:text-xs uppercase tracking-widest text-white/70 mt-1">Seconds</span>
+                </div>
+            </div>
+            <p class="text-white/70 text-xs sm:text-sm">until the submission deadline — you can update your entry
+                any time before then.</p>
+        </div>
+    </section>
+
+    <main class="max-w-3xl mx-auto px-6 py-14 sm:py-20">
+
+        <!-- Status card -->
+        <div id="statusCard"
+            class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 sm:p-8 mb-10 flex items-center justify-between gap-4 flex-wrap">
+            <div class="flex items-center gap-4">
+                <div id="statusIcon"
+                    class="w-11 h-11 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-hourglass-half"></i>
+                </div>
+                <div>
+                    <p class="font-heading font-bold text-ytac-blue">Not submitted yet</p>
+                    <p id="statusSubtext" class="text-sm text-gray-500">Fill in the form below to submit your
+                        project.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lookup: identify which registration this belongs to -->
+        <section class="mb-10">
+            <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 sm:p-8">
+                <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Registered email
+                    address</label>
+                <p class="text-xs text-gray-400 mb-3">Use the same email you registered with — we'll link your
+                    submission to your team.</p>
+                <input required type="email" id="lookupEmail" placeholder="you@example.com"
+                    class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
+            </div>
+        </section>
+
+        <form id="submissionForm" class="space-y-10">
+
+            <!-- Project details -->
+            <section>
+                <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 sm:p-8 space-y-5">
+                    <div>
+                        <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Project
+                            title</label>
+                        <input required type="text" name="projectTitle" placeholder="Name of your project"
+                            class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 gap-5">
+                        <div>
+                            <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Category</label>
+                            <select required name="category"
+                                class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-white">
+                                <option value="" disabled selected>Select category</option>
+                                <option value="inno-tech">Inno-Tech Challenge</option>
+                                <option value="inno-maker">Inno-Maker Challenge</option>
+                                <option value="hackathon">Tech-Hackathon</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Competition
+                                stage</label>
+                            <select required name="stage"
+                                class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-white">
+                                <option value="" disabled selected>Select stage</option>
+                                <option value="malaysia">Malaysia</option>
+                                <option value="asean">ASEAN</option>
+                                <option value="international">International</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Project
+                            abstract</label>
+                        <textarea required name="abstract" rows="4"
+                            placeholder="Summarise your project — the problem it solves, how it works, what makes it stand out"
+                            class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm resize-none"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- File upload -->
+            <section>
+                <h2 class="font-heading font-bold text-lg text-ytac-blue mb-4">Project file</h2>
+                <label id="dropzone"
+                    class="dropzone cursor-pointer flex flex-col items-center justify-center text-center border-2 border-dashed border-gray-300 rounded-3xl bg-white py-14 px-6">
+                    <input type="file" id="fileInput" name="projectFile" class="hidden"
+                        accept=".pdf,.ppt,.pptx,.zip">
+                    <i class="fa-solid fa-cloud-arrow-up text-3xl text-ytac-blue/70 mb-4"></i>
+                    <p class="font-heading font-bold text-gray-700 mb-1">Drag & drop your file here</p>
+                    <p class="text-sm text-gray-400 mb-1">or click to browse</p>
+                    <p class="text-xs text-gray-400">PDF, PPT or ZIP · max 25MB</p>
+                    <p id="fileNameDisplay" class="mt-4 font-bold text-sm text-ytac-green hidden"></p>
+                </label>
+            </section>
+
+            <button type="submit" id="submitBtn"
+                class="w-full sm:w-auto bg-ytac-blue text-white font-heading font-extrabold text-lg px-10 py-4 rounded-full shadow-xl hover:bg-ytac-purple hover:scale-[1.02] transition-all duration-200">
+                Submit project →
+            </button>
+
+        </form>
+
+        <!-- Confirmation state -->
+        <div id="confirmationPanel" class="text-center bg-white rounded-3xl shadow-lg border border-gray-100 p-10">
+            <div
+                class="w-16 h-16 rounded-full bg-ytac-mint/20 text-ytac-green flex items-center justify-center mx-auto mb-5">
+                <i class="fa-solid fa-check text-2xl"></i>
+            </div>
+            <h2 class="font-heading font-bold text-2xl text-ytac-blue mb-2">Project received!</h2>
+            <p id="confirmationText" class="text-gray-500 max-w-md mx-auto mb-8">
+                Your project has been submitted. You can come back and update it any time before the deadline.
+            </p>
+            <button id="editSubmissionBtn"
+                class="inline-flex items-center gap-2 bg-ytac-blue text-white font-heading font-extrabold px-8 py-3.5 rounded-full shadow-lg hover:bg-ytac-purple transition-colors">
+                Edit submission
+            </button>
+        </div>
+
+    </main>
+
+    <footer class="w-full bg-white border-t border-gray-100 pt-3 pb-4">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col items-center text-center gap-0.5 font-sans text-sm text-gray-500">
+            <p>Copyright © 2026 CodeKidz. All rights reserved.</p>
+            <p class="font-bold text-xs">EDUWELD SDN. BHD. (1439286P / 202101038986)</p>
+        </div>
+    </footer>
+
+    <script>
+        // ---- Countdown ----
+        // TODO: replace with your real submission deadline.
+        const DEADLINE = new Date('2026-12-31T23:59:59+08:00').getTime();
+
+        function updateCountdown() {
+            const now = Date.now();
+            const diff = Math.max(0, DEADLINE - now);
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((diff / (1000 * 60)) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+            document.getElementById('cdDays').textContent = String(d).padStart(2, '0');
+            document.getElementById('cdHours').textContent = String(h).padStart(2, '0');
+            document.getElementById('cdMinutes').textContent = String(m).padStart(2, '0');
+            document.getElementById('cdSeconds').textContent = String(s).padStart(2, '0');
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // ---- Dropzone ----
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+        function showFileName(file) {
+            if (!file) return;
+            fileNameDisplay.textContent = `Selected: ${file.name}`;
+            fileNameDisplay.classList.remove('hidden');
+        }
+
+        fileInput.addEventListener('change', () => showFileName(fileInput.files[0]));
+
+        ['dragenter', 'dragover'].forEach(evt =>
+            dropzone.addEventListener(evt, (e) => {
+                e.preventDefault();
+                dropzone.classList.add('drag-over');
+            })
+        );
+        ['dragleave', 'drop'].forEach(evt =>
+            dropzone.addEventListener(evt, (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('drag-over');
+            })
+        );
+        dropzone.addEventListener('drop', (e) => {
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                fileInput.files = e.dataTransfer.files;
+                showFileName(file);
+            }
+        });
+
+        // ---- Status card + submission state ----
+        // TODO: on page load, look up any existing submission for the entered email, e.g.:
+        //
+        // const res = await fetch(`https://your-api.example.com/api/submissions?email=${email}`);
+        // if (res.ok) { const existing = await res.json(); prefill the form and set status to "Submitted" }
+        //
+        function setSubmittedStatus(dateStr) {
+            document.getElementById('statusIcon').className =
+                'w-11 h-11 rounded-full bg-ytac-mint/20 text-ytac-green flex items-center justify-center shrink-0';
+            document.getElementById('statusIcon').innerHTML = '<i class="fa-solid fa-check"></i>';
+            document.querySelector('#statusCard p.font-heading').textContent = `Submitted on ${dateStr}`;
+            document.getElementById('statusSubtext').textContent =
+                'You can still make changes until the deadline above.';
+        }
+
+        // ---- Form submission ----
+        // TODO: replace this handler with a real call to your backend. Because a file is involved,
+        // send it as multipart/form-data, e.g.:
+        //
+        // const body = new FormData(form);
+        // body.append('email', document.getElementById('lookupEmail').value);
+        // const res = await fetch('https://your-api.example.com/api/submissions', {
+        //     method: 'POST', // use PUT/PATCH on your API for the "edit" case if you separate them
+        //     body
+        // });
+        //
+        const form = document.getElementById('submissionForm');
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const payload = Object.fromEntries(formData.entries());
+            payload.email = document.getElementById('lookupEmail').value;
+            console.log('Submission payload (wire this to your backend):', payload);
+
+            const dateStr = new Date().toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' });
+            setSubmittedStatus(dateStr);
+            document.getElementById('confirmationText').textContent =
+                `Your project was submitted on ${dateStr}. You can come back and update it any time before the deadline.`;
+
+            form.classList.add('hidden-after-submit');
+            document.getElementById('confirmationPanel').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ---- Edit submission: bring the form back for resubmission ----
+        document.getElementById('editSubmissionBtn').addEventListener('click', function () {
+            document.getElementById('confirmationPanel').style.display = 'none';
+            form.classList.remove('hidden-after-submit');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+
+</body>
+
+</html>

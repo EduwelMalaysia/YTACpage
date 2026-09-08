@@ -1,0 +1,2418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youth Tech Asia Challenge (YTAC) 2026</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+
+    <!--Font Awesome-->
+    <script src="https://kit.fontawesome.com/6629857a22.js" crossorigin="anonymous"></script>
+
+    <!--lenis and gsap cdn-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+    <!--Tailwind CSS-->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {
+        --color-ytac-blue: #00607A;
+        --color-ytac-green: #14A39A;
+        --color-ytac-purple: #822384;
+        --color-ytac-mint: #84D4C7;
+        --color-ytac-gray: #F4F4F4;
+        --font-sans: 'Plus Jakarta Sans', sans-serif;
+        --font-heading: 'Space Grotesk', sans-serif;
+      }
+        /* Initial hidden state only — GSAP drives the actual reveal so the
+           motion can ease smoothly instead of stepping through CSS delays. */
+        .hero-anim, .hero-card-anim {
+            opacity: 0;
+            will-change: opacity, transform;
+        }
+
+        .node-expanded-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, margin-top 0.4s ease, padding-top 0.4s ease;
+        }
+
+        .pathway-node.expanded .node-expanded-content {
+            max-height: 600px;
+            margin-top: 1rem;
+            padding-top: 1rem;
+        }
+
+        .pathway-node.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu.show {
+            display: flex !important;
+        }
+
+        /* Ensure expanded node doesn't clip the dropdown menu */
+        .pathway-node.expanded .node-expanded-content {
+            max-height: 1200px;
+            overflow: visible;
+        }
+
+        .expand-card.open {
+            display: block !important;
+        }
+
+        /* Ensure node container wraps around the viewer side-by-side */
+        .pathway-node.expanded {
+            max-width: 100% !important;
+        }
+
+        /* --- YTAC BRANDED SCROLLBAR STYLES --- */
+
+        /* Firefox */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: #00607A #F9FBFC; /* YTAC Blue thumb / Light Track */
+        }
+
+        /* WebKit Browsers (Chrome, Safari, Edge) */
+        ::-webkit-scrollbar {
+            width: 10px !important;
+            height: 10px !important;
+        }
+
+        /* Scrollbar Track (Gutter background) */
+        ::-webkit-scrollbar-track {
+            background-color: #F9FBFC !important; /* Matches main site background */
+        }
+
+        /* Scrollbar Thumb (Draggable Bar) */
+        ::-webkit-scrollbar-thumb {
+            background-color: #00607A !important; /* YTAC Blue */
+            border-radius: 9999px !important;
+            border: 2px solid #F9FBFC !important; /* Gives a smooth padded pill effect */
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #14A39A !important; /* YTAC Green on hover */
+        }
+
+        html, body {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+        }
+
+        html.lenis, html.lenis-scrolling {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+
+        .pin-spacer {
+            padding-right: 0px !important;
+            margin-right: 0px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        #gallery, #gallery-sticky {
+            background-color: #1A1A1A !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-[#F9FBFC] bg-[radial-gradient(rgba(118,111,208,0.08)_1px,transparent_1px),linear-gradient(to_right,rgba(67,100,164,0.03)_1px,transparent_1px)] [background-size:32px_32px,64px_64px] select-none">
+    <header>
+        <div class="h-screen" id="video-container">
+            <video id="video" class="w-full h-full object-cover" autoplay muted playsinline>
+                <source src="{{ url_for('static', filename='img/ytac_video.mp4') }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+            <nav id="navbar"
+                class="tagline fixed top-0 left-0 z-[1000] w-full flex items-center justify-between px-6 py-3 bg-white font-display opacity-0 -translate-y-5 pointer-events-none transition-all duration-500 ease-in-out [&.visible]:opacity-100 [&.visible]:translate-y-0 [&.visible]:pointer-events-auto">
+                <a href="index.html">
+                    <img src="{{ url_for('static', filename='img/logo_nobg.png') }}" alt="YTAC logo"
+                        class="h-12 left-4 drop-shadow-[0_4px_8px_rgba(0,0,0,0.2)]">
+                </a>
+
+                <div class="flex items-center gap-8 font-bold">
+                    <a href="#home" class="nav-link text-ytac-blue transition-colors duration-300">HOME</a>
+                    <a href="#category" class="nav-link text-ytac-blue transition-colors duration-300">ABOUT YTAC</a>
+                    <a href="#pathway" class="nav-link text-ytac-blue transition-colors duration-300">PATHWAY</a>
+                    <a href="#recognition"
+                        class="nav-link text-ytac-blue transition-colors duration-300">RECOGNITION</a>
+                    <a href="#gallery" class="nav-link text-ytac-blue transition-colors duration-300">GALLERY</a>
+                    <a href="#contact" class="nav-link text-ytac-blue transition-colors duration-300">CONTACT</a>
+                </div>
+            </nav>
+
+            <!-- Visible Gray Track Line -->
+            <div class="video-controls group absolute bottom-6 left-[53%] -translate-x-1/2
+    w-[70%] max-w-4xl h-2.5 hover:h-14
+    flex items-center gap-4 px-5 py-0 hover:py-3
+    bg-transparent hover:bg-ytac-blue/80 backdrop-blur-none hover:backdrop-blur-md
+    rounded-full transition-all duration-300 ease-in-out cursor-pointer overflow-hidden">
+
+                <!-- Play/Pause Toggle -->
+                <button
+                    class="vc-btn w-9 h-9 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0 flex items-center justify-center text-white hover:scale-110"
+                    id="videoPlayToggle" aria-label="Play or pause video">
+                    <svg id="vcPlayIcon" class="w-5 h-5 fill-white" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                    <svg id="vcPauseIcon" class="w-5 h-5 fill-white" viewBox="0 0 24 24" style="display:none;">
+                        <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
+                    </svg>
+                </button>
+
+                <!-- Progress -->
+                <div class="vc-progress-track flex-1 h-2.5 bg-black/50 group-hover:bg-white/30 rounded-full cursor-pointer overflow-hidden transition-colors"
+                    id="vcProgressTrack">
+                    <!-- Solid White Played Line -->
+                    <div class="vc-progress-fill h-full w-0 bg-white rounded-full shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+                        id="vcProgressFill"></div>
+                </div>
+
+                <!-- Time Stamp -->
+                <span
+                    class="vc-time text-white text-sm font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    id="vcTime">
+                    0:00
+                </span>
+
+                <!-- Mute/Unmute Toggle -->
+                <button
+                    class="vc-btn w-9 h-9 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0 flex items-center justify-center text-white hover:scale-110"
+                    id="videoMuteToggle" aria-label="Mute or unmute video">
+                    <svg id="vcMuteIcon" class="w-5 h-5 fill-white" viewBox="0 0 24 24">
+                        <path d="M16.5 12A4.5 4.5 0 0014 7.97v8.05a4.5 4.5 0 002.5-4.02zM3 9v6h4l5 5V4L7 9H3z" />
+                    </svg>
+                    <svg id="vcUnmuteIcon" class="w-5 h-5 fill-white" viewBox="0 0 24 24" style="display:none;">
+                        <path
+                            d="M3 9v6h4l5 5V4L7 9H3zm13.59 3l2.71-2.71-1.41-1.41L15.17 12l-2.71-2.71-1.41 1.41L13.76 13l-2.71 2.71-2.71-1.41 1.41-1.41L15.17 14l2.71 2.71-1.41-1.41L16.59 12z" />
+                    </svg>
+                </button>
+
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="home min-h-[120vh] w-full pt-5 py-12 flex items-center justify-center" id="home">
+            <div class="w-full max-w-[90%] mx-auto flex flex-col lg:flex-row items-center justify-between gap-10">
+
+                <div id="heroTextContainer" class="flex-1 flex flex-col items-start text-left select-none">
+
+                    <span
+                        class="hero-anim hero-tag-anim font-heading text-ytac-purple text-base md:text-lg font-extrabold tracking-wide mb-6 inline-block bg-ytac-purple/10 px-6 py-2.5 rounded-lg uppercase">
+                        A TECH COMPETITION THAT BELONGS TO MALAYSIA.
+                    </span>
+
+                    <h1
+                        class="font-heading font-black text-7xl sm:text-8xl xl:text-9xl text-ytac-blue leading-[0.9] tracking-tight uppercase mb-2">
+                        <span class="hero-anim hero-line1-anim block">YOUTH TECH</span>
+                        <span class="hero-anim hero-line2-anim block">ASIA</span>
+                        <span class="hero-anim hero-line3-anim block">CHALLENGE</span>
+                    </h1>
+
+                    <span
+                        class="hero-anim hero-year-anim font-heading font-black text-7xl sm:text-8xl xl:text-9xl text-ytac-purple leading-none block mb-8">
+                        2027
+                    </span>
+
+                    <a href="#experience"
+                        class="hero-anim hero-btn-anim inline-flex items-center gap-3 font-heading font-bold text-lg md:text-xl text-ytac-blue hover:text-ytac-green transition-colors duration-200 group">
+                        <span class="text-3xl group-hover:translate-y-1 transition-transform duration-200">↓</span>
+                        <span>REGISTER NOW</span>
+                    </a>
+                </div>
+
+                <div class="hero-card-anim flex-1 w-full max-w-xl flex justify-center lg:justify-end">
+                    <div
+                        class="relative w-full bg-white rounded-3xl p-6 shadow-2xl border border-gray-100 transform hover:scale-[1.02] transition-transform duration-300">
+                        <img src="{{ url_for('static', filename='img/homepic3.jpeg') }}" alt="YTAC Tech Dome Penang"
+                            class="w-full h-auto object-contain rounded-2xl">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section
+            class="experience relative h-screen w-full px-[5%] py-16 flex items-center justify-center text-center overflow-hidden"
+            id="experience">
+
+            <img src="{{ url_for('static', filename='img/grouppic.jpg') }}" alt="YTAC Group Event"
+                class="absolute inset-0 w-full h-full object-cover z-0 brightness-40">
+
+            <div class="relative z-10 w-full max-w-4xl h-full flex items-center justify-center pointer-events-none">
+
+                <div id="expScene1" class="absolute inset-0 flex flex-col items-center justify-center gap-4 text-white">
+                    <div
+                        class="experience-text-wrapper font-heading font-black text-4xl sm:text-6xl md:text-7xl tracking-tight leading-tight uppercase drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] flex flex-col items-center">
+                        <div id="s1Line1" class="banner-heading-line text-white opacity-0 translate-y-16">FROM MALAYSIA.
+                        </div>
+                        <div id="s1Line2" class="banner-heading-line text-[#2AD6EC] opacity-0 translate-y-16">TO ASIA.
+                        </div>
+                        <div id="s1Line3" class="banner-heading-line text-white opacity-0 translate-y-16">TO THE WORLD.
+                        </div>
+                    </div>
+                </div>
+
+                <div id="expScene2" class="absolute inset-0 flex flex-col items-center justify-center gap-8 text-white">
+
+                    <div class="space-y-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                        <h2 id="s2Heading"
+                            class="font-heading font-bold text-2xl sm:text-4xl text-white opacity-0 translate-y-16">
+                            The Countdown Has Begun.
+                        </h2>
+                        <p id="s2Subheading"
+                            class="font-sans text-sm sm:text-lg text-white max-w-xl mx-auto font-medium opacity-0 translate-y-16">
+                            Registrations are open now for YTAC 2027 — don't miss your spot on the launchpad.
+                        </p>
+                    </div>
+
+                    <div id="s2Timer"
+                        class="countdown-timer-grid grid grid-cols-2 sm:grid-cols-4 gap-4 w-full max-w-2xl opacity-0 translate-y-16">
+                        <div
+                            class="time-card bg-ytac-blue/40 backdrop-blur-md border border-white/20 p-6 rounded-3xl flex flex-col items-center shadow-lg">
+                            <span class="time-digit font-heading font-bold text-4xl sm:text-6xl text-ytac-mint"
+                                id="daysCount">00</span>
+                            <span
+                                class="time-unit-label font-heading font-black text-xs sm:text-sm uppercase tracking-widest text-white/80 mt-2">Days</span>
+                        </div>
+                        <div
+                            class="time-card bg-ytac-blue/40 backdrop-blur-md border border-white/20 p-6 rounded-3xl flex flex-col items-center shadow-lg">
+                            <span class="time-digit font-heading font-bold text-4xl sm:text-6xl text-ytac-mint"
+                                id="hoursCount">00</span>
+                            <span
+                                class="time-unit-label font-heading font-black text-xs sm:text-sm uppercase tracking-widest text-white/80 mt-2">Hours</span>
+                        </div>
+                        <div
+                            class="time-card bg-ytac-blue/40 backdrop-blur-md border border-white/20 p-6 rounded-3xl flex flex-col items-center shadow-lg">
+                            <span class="time-digit font-heading font-bold text-4xl sm:text-6xl text-ytac-mint"
+                                id="minutesCount">00</span>
+                            <span
+                                class="time-unit-label font-heading font-black text-xs sm:text-sm uppercase tracking-widest text-white/80 mt-2">Minutes</span>
+                        </div>
+                        <div
+                            class="time-card bg-ytac-blue/40 backdrop-blur-md border border-white/20 p-6 rounded-3xl flex flex-col items-center shadow-lg">
+                            <span class="time-digit font-heading font-black text-3xl sm:text-6xl text-ytac-mint"
+                                id="secondsCount">00</span>
+                            <span
+                                class="time-unit-label font-heading font-black text-xs sm:text-sm uppercase tracking-widest text-white/80 mt-2">Seconds</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-row items-center justify-center gap-8 mt-8" id="register">
+                        <a id="s2Button" href="registration.html"
+                            class="primary-register-button pointer-events-auto inline-flex items-center gap-2 bg-white text-ytac-blue font-heading font-extrabold text-lg sm:text-xl px-10 py-4 rounded-full shadow-2xl hover:bg-ytac-mint hover:text-white hover:scale-105 opacity-0 translate-y-16">
+                            Register Now →
+                        </a>
+
+                        <a id="s2SubmitButton" href="submission.html"
+                            class="primary-submit-button pointer-events-auto inline-flex items-center gap-2 bg-white text-ytac-blue font-heading font-extrabold text-lg sm:text-xl px-10 py-4 rounded-full shadow-2xl hover:bg-ytac-mint hover:text-white hover:scale-105 opacity-0 translate-y-16">
+                            Submit Project →
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section class="category-section bg-[#F9FBFC] relative py-20 sm:py-28 bg-[#F9FBFC]" id="category">
+            <div class="max-w-6xl mx-auto px-4 flex flex-col items-center">
+
+                <div class="text-center mb-12 sm:mb-16">
+                    <span
+                        class="font-heading text-ytac-purple text-sm font-extrabold tracking-widest uppercase bg-ytac-purple/10 px-4 py-1.5 rounded-lg inline-block mb-3">
+                        CHALLENGE CATEGORIES
+                    </span>
+                    <h2 class="font-heading font-black text-4xl sm:text-5xl text-ytac-blue uppercase tracking-tight">
+                        EXPLORE THE TRACKS
+                    </h2>
+                </div>
+
+                <!-- 1. Inno-Tech Challenge -->
+                <div class="relative w-full max-w-5xl min-h-[460px] py-4 flex items-center justify-center perspective-[1200px]"
+                    id="carouselContainer">
+
+                    <div class="category-grid relative w-full h-full flex items-center justify-center min-h-[440px]">
+
+                        <!-- 1. Inno-Tech Challenge -->
+                        <div class="carousel-card absolute w-[340px] sm:w-[400px] cursor-pointer" data-index="0"
+                            data-gallery="inno-tech">
+                            <div
+                                class="category-card w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 flex flex-col justify-between hover:border-ytac-blue/40 transition-colors duration-300 min-h-[420px]">
+                                <div>
+                                    <h3
+                                        class="font-heading font-black text-2xl sm:text-3xl text-ytac-blue mb-4 tracking-tight text-center">
+                                        INNO-TECH<br>CHALLENGE
+                                    </h3>
+                                    <p
+                                        class="card-desc font-sans text-gray-600 text-base sm:text-lg leading-relaxed mt-[40px] mb-6 text-center">
+                                        A coding-based innovation competition where participants design and develop
+                                        functional projects using programming languages.
+                                    </p>
+                                </div>
+                                <div
+                                    class="text-sm font-extrabold text-ytac-purple uppercase tracking-wider flex items-center justify-center gap-2 mt-auto hover:text-ytac-blue transition-colors cursor-pointer">
+                                    <span>Learn More</span>
+                                    <i class="fa-solid fa-arrow-right ml-1"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Inno-Maker Challenge -->
+                        <div class="carousel-card absolute w-[340px] sm:w-[400px] cursor-pointer" data-index="1"
+                            data-gallery="inno-maker">
+                            <div
+                                class="category-card w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 flex flex-col justify-between hover:border-ytac-blue/40 transition-colors duration-300 min-h-[420px]">
+                                <div>
+                                    <h3
+                                        class="font-heading font-black text-2xl sm:text-3xl text-ytac-blue mb-4 tracking-tight text-center">
+                                        INNO-MAKER CHALLENGE
+                                    </h3>
+                                    <p
+                                        class="card-desc font-sans text-gray-600 text-base sm:text-lg leading-relaxed mt-[55px] mb-6 text-center">
+                                        A non-coding innovation<br>competition where participants design and present
+                                        creative product concepts or physical prototypes.
+                                    </p>
+                                </div>
+                                <div
+                                    class="text-sm font-extrabold text-ytac-purple uppercase tracking-wider flex items-center justify-center gap-2 mt-auto hover:text-ytac-blue transition-colors cursor-pointer">
+                                    <span>Learn More</span>
+                                    <i class="fa-solid fa-arrow-right ml-1"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Tech-Hackathon -->
+                        <div class="carousel-card absolute w-[340px] sm:w-[400px] cursor-pointer" data-index="2"
+                            data-gallery="hackathon">
+                            <div
+                                class="category-card w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 flex flex-col justify-between hover:border-ytac-blue/40 transition-colors duration-300 min-h-[420px]">
+                                <div>
+                                    <h3
+                                        class="font-heading font-black text-2xl sm:text-3xl text-ytac-blue mb-4 tracking-tight text-center">
+                                        TECH-HACKATHON
+                                    </h3>
+                                    <p
+                                        class="card-desc font-sans text-gray-600 text-base sm:text-lg leading-relaxed mt-[40px] mb-6 text-center">
+                                        A fast-paced coding sprint where participants collaborate under pressure to
+                                        solve real-world challenges, build rapid software prototypes, and pitch
+                                        functional tech solutions.
+                                    </p>
+                                </div>
+                                <div
+                                    class="text-sm font-extrabold text-ytac-purple uppercase tracking-wider flex items-center justify-center gap-2 mt-auto hover:text-ytac-blue transition-colors cursor-pointer">
+                                    <span>Learn More</span>
+                                    <i class="fa-solid fa-arrow-right ml-1"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Expanded Gallery-->
+
+                    <div id="challengeDetail" class="absolute left-[calc(50%+20px)] top-1/2 -translate-y-1/2
+    w-[340px] h-[420px] sm:w-[400px] sm:h-[420px]
+    bg-white rounded-3xl
+    shadow-[0_12px_25px_rgba(0,0,0,0.12),0_4px_8px_rgba(0,0,0,0.08)]
+    border border-gray-100
+    overflow-hidden opacity-0 pointer-events-none z-30
+    [transform-style:preserve-3d] [perspective:1200px]">
+
+                        <!-- CLOSE BUTTON -->
+                        <button id="closeDetail" type="button"
+                            class="absolute top-4 right-4 z-[60] w-9 h-9 rounded-full bg-white shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-100 hover:scale-110 transition-all duration-200">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+
+                        <!-- PHOTO GALLERY -->
+                        <div class="relative w-full h-full">
+
+                            <!-- PHOTO 1 -->
+                            <div
+                                class="detail-photo absolute w-[160px] h-[95px] left-8 top-6 rounded-lg border-4 border-white shadow-xl overflow-hidden z-10">
+                                <img class="gallery-img w-full h-full object-cover" src="" alt="">
+                            </div>
+
+                            <!-- PHOTO 2 -->
+                            <div
+                                class="detail-photo absolute w-[180px] h-[105px] right-5 top-20 rounded-lg border-4 border-white shadow-xl overflow-hidden z-20">
+                                <img class="gallery-img w-full h-full object-cover" src="" alt="">
+                            </div>
+
+                            <!-- PHOTO 3 -->
+                            <div
+                                class="detail-photo absolute w-[165px] h-[100px] left-10 top-40 rounded-lg border-4 border-white shadow-xl overflow-hidden z-30">
+                                <img class="gallery-img w-full h-full object-cover" src="" alt="">
+                            </div>
+
+                            <!-- PHOTO 4 -->
+                            <div
+                                class="detail-photo absolute w-[180px] h-[105px] right-5 top-[235px] rounded-lg border-4 border-white shadow-xl overflow-hidden z-40">
+                                <img class="gallery-img w-full h-full object-cover" src="" alt="">
+                            </div>
+
+                            <!-- PHOTO 5 -->
+                            <div
+                                class="detail-photo absolute w-[165px] h-[100px] left-12 bottom-4 rounded-lg border-4 border-white shadow-xl overflow-hidden z-50">
+                                <img class="gallery-img w-full h-full object-cover" src="" alt="">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <button id="prevBtn" type="button" aria-label="Previous Category"
+                        class="absolute left-2 sm:-left-12 top-1/2 -translate-y-1/2 w-14 h-14 bg-white text-ytac-blue rounded-full shadow-2xl flex items-center justify-center text-xl z-40 hover:bg-ytac-purple hover:text-white hover:scale-110 active:scale-95 transition-all duration-300 group">
+                        <i class="fa-solid fa-chevron-left group-hover:-translate-x-1 transition-transform"></i>
+                    </button>
+
+                    <button id="nextBtn" type="button" aria-label="Next Category"
+                        class="absolute right-2 sm:-right-12 top-1/2 -translate-y-1/2 w-14 h-14 bg-white text-ytac-blue rounded-full shadow-2xl flex items-center justify-center text-xl z-40 hover:bg-ytac-purple hover:text-white hover:scale-110 active:scale-95 transition-all duration-300 group">
+                        <i class="fa-solid fa-chevron-right group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Pathway Section -->
+        <section
+            class="pathway relative min-h-[120vh] py-32 pb-44 px-[5%] text-center transition-all duration-700 ease-in-out overflow-hidden flex flex-col items-center"
+            id="pathway">
+
+            <div id="pathwayBgA" class="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none"
+                style="background: linear-gradient(135deg, #0f172a 0%, #3b3e80 10%, #a89ee8 100%);"></div>
+            <div id="pathwayBgB" class="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none opacity-0"
+                style="background: linear-gradient(135deg, #0f172a 0%, #3b3e80 10%, #a89ee8 100%);"></div>
+
+
+            <div id="pathwayTransition" class="absolute w-8 h-8 rounded-full pointer-events-none z-0 scale-0"></div>
+
+            <div class="relative z-10 w-full">
+                <span id="pathwayTag"
+                    class="inline-block bg-[#ffffff33] text-white text-sm font-heading font-bold text-base tracking-widest uppercase px-4 py-2 rounded-xl mb-5">
+                    PATHWAY</span>
+                <h2 id="pathwayTitle"
+                    class="font-heading font-black text-4xl sm:text-5xl text-white uppercase tracking-tight mb-10 transition-colors duration-500">
+                    PROGRESSION AND GROWTH</h2>
+
+                <div class="filter-button relative z-10 flex flex-wrap justify-center gap-3 mb-12 sm:mb-16">
+                    <button type="button"
+                        class="stage-btn active px-6 py-2.5 rounded-full font-heading font-bold text-sm tracking-wider uppercase border border-ytac-blue/30 bg-white text-[#4b4f9e] shadow-sm transition-all duration-300 cursor-pointer hover:scale-110"
+                        data-stage-filter="all">ALL</button>
+                    <button type="button"
+                        class="stage-btn px-6 py-2.5 rounded-full font-heading font-bold text-sm tracking-wider uppercase border border-white text-white shadow-sm transition-all duration-300 cursor-pointer hover:scale-110"
+                        data-stage-filter="malaysia">MALAYSIA</button>
+                    <button type="button"
+                        class="stage-btn px-6 py-2.5 rounded-full font-heading font-bold text-sm tracking-wider uppercase border border-white text-white shadow-sm transition-all duration-300 cursor-pointer hover:scale-110"
+                        data-stage-filter="asean">ASEAN</button>
+                    <button type="button"
+                        class="stage-btn px-6 py-2.5 rounded-full font-heading font-bold text-sm tracking-wider uppercase border border-white text-white shadow-sm transition-all duration-300 cursor-pointer hover:scale-110"
+                        data-stage-filter="international">INTERNATIONAL</button>
+                </div>
+
+                <div class="pathway-tree max-w-6xl w-full mx-auto flex flex-col items-center gap-2 min-h-[500px]">
+
+                    <!-- YTAC Node -->
+                    <div class="pathway-node w-full max-w-2xl bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-2 hover:border-white text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
+                        data-stage="malaysia">
+
+                        <!-- Left Column: Main Node Content -->
+                        <div class="pathway-main w-full flex flex-col justify-between">
+
+                            <!-- Top Bar -->
+                            <div class="flex items-center justify-between w-full mb-1">
+                                <span
+                                    class="bg-ytac-purple/10 text-ytac-purple text-xs font-bold px-4 py-2 rounded-lg uppercase tracking-wider">
+                                    NATIONAL LEVEL
+                                </span>
+                                <div class="flex items-center gap-3">
+                                    <span class="font-heading font-extrabold text-ytac-purple/40 text-xl">01</span>
+                                    <i
+                                        class="fa-solid fa-chevron-down text-ytac-blue expand-icon transition-transform duration-300"></i>
+                                </div>
+                            </div>
+
+                            <!-- Centered Logo -->
+                            <div class="flex justify-center my-3">
+                                <img src="{{ url_for('static', filename='img/logo.jpeg') }}" alt="YTAC logo"
+                                    class="h-16 w-60 object-contain rounded-xl bg-ytac-gray p-2 border border-gray-100 shadow-sm">
+                            </div>
+
+                            <!-- Centered Title -->
+                            <h3 class="font-heading font-extrabold text-xl sm:text-2xl text-ytac-blue text-center mb-3">
+                                YTAC — Youth Tech Asia Challenge
+                            </h3>
+
+                            <!-- Description -->
+                            <p class="font-sans text-gray-600 text-sm sm:text-base text-center leading-relaxed">
+                                The initial launchpad for Malaysian students to showcase local innovation.
+                            </p>
+
+                            <!-- Expanded Content -->
+                            <div
+                                class="node-expanded-content max-h-0 overflow-hidden transition-all duration-400 ease-in-out border-t border-gray-100 mt-4">
+                                <p class="font-sans text-gray-500 text-base leading-relaxed mb-4 pt-4">
+                                    Annual technology competition uniting young innovators from across Malaysia. Offers
+                                    workshop training, mentorship, and national accreditation.
+                                </p>
+
+                                <div class="resource-buttons flex flex-col gap-3">
+                                    <!-- Main Resource Buttons -->
+                                    <div class="flex flex-wrap items-center gap-3">
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); selectResourceType('ytac', 'handbook', this)">
+                                            Handbook
+                                        </button>
+
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); selectResourceType('ytac', 'webpage', this)">
+                                            Webpage
+                                        </button>
+
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); selectResourceType('ytac', 'letter', this)">
+                                            Letter of Recognition
+                                        </button>
+                                    </div>
+
+                                    <!-- Year Selector Row (Disabled by default) -->
+                                    <div class="year-selector flex items-center gap-1.5 bg-ytac-gray/60 p-1.5 rounded-xl w-fit transition-all duration-300"
+                                        id="ytacYears">
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('ytac', '2026')">
+                                            2026
+                                        </button>
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('ytac', '2025')">
+                                            2025
+                                        </button>
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('ytac', '2024')">
+                                            2024
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Right Column: Document Viewer (Side Panel) -->
+                        <div class="expand-card hidden flex-col lg:w-[60%] flex-1 w-full shrink-0 border-t lg:border-t-0 lg:border-l border-gray-200 pt-4 lg:pt-0 lg:pl-6"
+                            id="ytacViewer">
+                            <div class="bg-white rounded-2xl p-2 h-full flex flex-col justify-between">
+                                <div class="expand-header flex justify-between items-center mb-3 px-2 pt-1">
+                                    <h3 class="viewer-title font-heading font-bold text-base text-ytac-blue">
+                                        Document View
+                                    </h3>
+                                    <button type="button"
+                                        class="close-expand text-gray-400 hover:text-ytac-purple font-bold text-lg px-2"
+                                        onclick="event.stopPropagation(); closeDocument('ytacViewer')">
+                                        ✕
+                                    </button>
+                                </div>
+                                <div class="expand-body flex-1">
+                                    <iframe id="ytacDocument" src=""
+                                        class="w-full h-[450px] rounded-xl border border-gray-200"
+                                        title="YTAC Document Viewer">
+                                    </iframe>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Directional Arrow Connector 1 -->
+                    <div class="pathway-connector flex flex-col items-center my-2 text-white/80">
+                        <div class="w-0.5 h-8 bg-current"></div>
+                        <i class="fa-solid fa-chevron-down text-lg -mt-1"></i>
+                    </div>
+
+                    <!-- ICIA Node -->
+                    <div class="pathway-node w-full max-w-2xl bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-2 hover:border-white text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
+                        data-stage="asean">
+
+                        <!-- Left Column: Main Node Content -->
+                        <div class="pathway-main w-full flex flex-col justify-between">
+
+                            <!-- Top Bar -->
+                            <div class="flex items-center justify-between w-full mb-1">
+                                <span
+                                    class="bg-ytac-purple/10 text-ytac-purple text-xs font-bold px-4 py-2 rounded-lg uppercase tracking-wider">
+                                    REGIONAL LEVEL
+                                </span>
+                                <div class="flex items-center gap-3">
+                                    <span class="font-heading font-extrabold text-ytac-purple/40 text-xl">02</span>
+                                    <i
+                                        class="fa-solid fa-chevron-down text-ytac-blue expand-icon transition-transform duration-300"></i>
+                                </div>
+                            </div>
+
+                            <!-- Centered Logo -->
+                            <div class="flex justify-center my-3">
+                                <img src="{{ url_for('static', filename='img/logo.jpeg') }}" alt="YTAC logo"
+                                    class="h-16 w-60 object-contain rounded-xl bg-ytac-gray p-2 border border-gray-100 shadow-sm">
+                            </div>
+
+                            <!-- Centered Title -->
+                            <h3 class="font-heading font-extrabold text-xl sm:text-2xl text-ytac-blue text-center mb-3">
+                                ICIA — International Cultural & Innovation Competition
+                            </h3>
+
+                            <!-- Description -->
+                            <p class="font-sans text-gray-600 text-sm sm:text-base text-center leading-relaxed">
+                                Regional ASEAN stage connecting cross-border technological solutions.
+                            </p>
+
+                            <!-- Expanded Content -->
+                            <div
+                                class="node-expanded-content max-h-0 overflow-hidden transition-all duration-400 ease-in-out border-t border-gray-100 mt-4">
+                                <p class="font-sans text-gray-500 text-sm leading-relaxed mb-4 pt-4">
+                                    Top teams from YTAC advance to compete against regional ASEAN counterparts, focusing
+                                    on cross-cultural tech integration and sustainability.
+                                </p>
+
+                                <div class="resource-buttons flex flex-col gap-3">
+                                    <!-- Main Resource Buttons -->
+                                    <div class="flex flex-wrap items-center gap-3">
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); selectResourceType('icia', 'handbook', this)">
+                                            Handbook
+                                        </button>
+
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); selectResourceType('icia', 'webpage', this)">
+                                            Webpage
+                                        </button>
+
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); selectResourceType('icia', 'letter', this)">
+                                            Letter of Recognition
+                                        </button>
+                                    </div>
+
+                                    <!-- Year Selector Row (Disabled by default) -->
+                                    <div class="year-selector flex items-center gap-1.5 bg-ytac-gray/60 p-1.5 rounded-xl w-fit transition-all duration-300"
+                                        id="iciaYears">
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('icia', '2026')">
+                                            2026
+                                        </button>
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('icia', '2025')">
+                                            2025
+                                        </button>
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('icia', '2024')">
+                                            2024
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Right Column: Document Viewer Panel -->
+                        <div class="expand-card hidden flex-col lg:w-[60%] flex-1 w-full shrink-0 border-t lg:border-t-0 lg:border-l border-gray-200 pt-4 lg:pt-0 lg:pl-6"
+                            id="iciaViewer">
+                            <div class="bg-white rounded-2xl p-2 h-full flex flex-col justify-between">
+                                <div class="expand-header flex justify-between items-center mb-3 px-2 pt-1">
+                                    <h3 class="viewer-title font-heading font-bold text-base text-ytac-blue">
+                                        Document View
+                                    </h3>
+                                    <button type="button"
+                                        class="close-expand text-gray-400 hover:text-ytac-purple font-bold text-lg px-2"
+                                        onclick="event.stopPropagation(); closeDocument('iciaViewer')">
+                                        ✕
+                                    </button>
+                                </div>
+                                <div class="expand-body flex-1">
+                                    <iframe id="iciaDocument" src=""
+                                        class="w-full h-[450px] rounded-xl border border-gray-200"
+                                        title="ICIA Document Viewer">
+                                    </iframe>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Directional Arrow Connector 2 -->
+                    <div class="pathway-connector flex flex-col items-center my-2 text-white/80">
+                        <div class="w-0.5 h-8 bg-current"></div>
+                        <i class="fa-solid fa-chevron-down text-lg -mt-1"></i>
+                    </div>
+
+                    <!-- IITS Node -->
+                    <div class="pathway-node w-full max-w-2xl bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-2 hover:border-white text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
+                        data-stage="international">
+
+                        <!-- Left Column: Main Node Content -->
+                        <div class="pathway-main w-full flex flex-col justify-between">
+
+                            <!-- Top Bar -->
+                            <div class="flex items-center justify-between w-full mb-1">
+                                <span
+                                    class="bg-ytac-purple/10 text-ytac-purple text-xs font-bold px-4 py-2 rounded-lg uppercase tracking-wider">
+                                    GLOBAL LEVEL
+                                </span>
+                                <div class="flex items-center gap-3">
+                                    <span class="font-heading font-extrabold text-ytac-purple/40 text-xl">03</span>
+                                    <i
+                                        class="fa-solid fa-chevron-down text-ytac-blue expand-icon transition-transform duration-300"></i>
+                                </div>
+                            </div>
+
+                            <!-- Centered Logo -->
+                            <div class="flex justify-center my-3">
+                                <img src="{{ url_for('static', filename='img/logo.jpeg') }}" alt="YTAC logo"
+                                    class="h-16 w-60 object-contain rounded-xl bg-ytac-gray p-2 border border-gray-100 shadow-sm">
+                            </div>
+
+                            <!-- Centered Title -->
+                            <h3 class="font-heading font-extrabold text-xl sm:text-2xl text-ytac-blue text-center mb-3">
+                                IITS — International Innovation Tech Summit
+                            </h3>
+
+                            <!-- Description -->
+                            <p class="font-sans text-gray-600 text-sm sm:text-base text-center leading-relaxed">
+                                The apex global event for world-class youth technological achievements.
+                            </p>
+
+                            <!-- Expanded Content -->
+                            <div
+                                class="node-expanded-content max-h-0 overflow-hidden transition-all duration-400 ease-in-out border-t border-gray-100 mt-4">
+                                <p class="font-sans text-gray-500 text-sm leading-relaxed mb-4 pt-4">
+                                    The global final stage bringing together top youth innovators from Asia, Europe, and
+                                    America to present market-ready prototypes.
+                                </p>
+
+                                <div class="resource-buttons flex flex-col gap-3">
+                                    <!-- Main Resource Buttons -->
+                                    <div class="flex flex-wrap items-center gap-3">
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); selectResourceType('iits', 'handbook', this)">
+                                            Handbook
+                                        </button>
+
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); selectResourceType('iits', 'webpage', this)">
+                                            Webpage
+                                        </button>
+
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); selectResourceType('iits', 'letter', this)">
+                                            Letter of Recognition
+                                        </button>
+                                    </div>
+
+                                    <!-- Year Selector Row (Disabled by default) -->
+                                    <div class="year-selector flex items-center gap-1.5 bg-ytac-gray/60 p-1.5 rounded-xl w-fit transition-all duration-300"
+                                        id="iitsYears">
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('iits', '2026')">
+                                            2026
+                                        </button>
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('iits', '2025')">
+                                            2025
+                                        </button>
+                                        <button type="button" disabled
+                                            class="year-btn text-sm font-bold text-gray-400 bg-gray-200/60 cursor-not-allowed px-6 py-2.5 rounded-lg transition-colors"
+                                            onclick="event.stopPropagation(); openSelectedDocument('iits', '2024')">
+                                            2024
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Right Column: Document Viewer Panel -->
+                        <div class="expand-card hidden flex-col lg:w-[60%] flex-1 w-full shrink-0 border-t lg:border-t-0 lg:border-l border-gray-200 pt-4 lg:pt-0 lg:pl-6"
+                            id="iitsViewer">
+                            <div class="bg-white rounded-2xl p-2 h-full flex flex-col justify-between">
+                                <div class="expand-header flex justify-between items-center mb-3 px-2 pt-1">
+                                    <h3 class="viewer-title font-heading font-bold text-base text-ytac-blue">
+                                        Document View
+                                    </h3>
+                                    <button type="button"
+                                        class="close-expand text-gray-400 hover:text-ytac-purple font-bold text-lg px-2"
+                                        onclick="event.stopPropagation(); closeDocument('iitsViewer')">
+                                        ✕
+                                    </button>
+                                </div>
+                                <div class="expand-body flex-1">
+                                    <iframe id="iitsDocument" src=""
+                                        class="w-full h-[450px] rounded-xl border border-gray-200"
+                                        title="IITS Document Viewer">
+                                    </iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recognition Section -->
+        <section class="recognition relative py-20 px-[5%] bg-[#F9FBFC] text-center overflow-hidden h-200"
+            id="recognition">
+            <span
+                class="font-heading text-ytac-purple text-sm font-extrabold tracking-widest uppercase bg-ytac-purple/10 px-4 py-1.5 rounded-lg inline-block mb-3">CREDIBILITY
+                & RECOGNITION</span>
+            <h2 class="font-heading font-black text-4xl sm:text-5xl text-ytac-blue uppercase tracking-tight mb-12">
+                Official Endorsements</h2>
+
+            <div
+                class="documents-container grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto my-20 justify-center">
+                <div
+                    class="doc-card bg-white p-8 sm:p-9 rounded-3xl shadow-lg border border-gray-100 flex flex-col items-center hover:scale-110 transition-transform duration-300 min-h-[380px] justify-between">
+                    <div
+                        class="preview w-full h-60 bg-ytac-gray rounded-2xl flex items-center justify-center font-heading font-bold text-gray-400 text-sm mb-5 border border-dashed border-gray-300">
+                        DOCUMENT PREVIEW</div>
+                    <div>
+                        <h3 class="font-heading font-bold text-xl sm:text-2xl text-ytac-blue mb-1.5">Ministry
+                            Endorsement</h3>
+                        <p class="font-sans text-gray-500 text-sm sm:text-base">Official Co-Curricular Certificate</p>
+                    </div>
+                </div>
+
+                <div
+                    class="doc-card bg-white p-8 sm:p-9 rounded-3xl shadow-lg border border-gray-100 flex flex-col items-center hover:scale-110 transition-transform duration-300 min-h-[380px] justify-between">
+                    <div
+                        class="preview w-full h-60 bg-ytac-gray rounded-2xl flex items-center justify-center font-heading font-bold text-gray-400 text-sm mb-5 border border-dashed border-gray-300">
+                        DOCUMENT PREVIEW</div>
+                    <div>
+                        <h3 class="font-heading font-bold text-xl sm:text-2xl text-ytac-blue mb-1.5">Venue Partnership
+                        </h3>
+                        <p class="font-sans text-gray-500 text-sm sm:text-base">Tech Dome Penang Collaboration</p>
+                    </div>
+                </div>
+
+                <div
+                    class="doc-card bg-white p-8 sm:p-9 rounded-3xl shadow-lg border border-gray-100 flex flex-col items-center hover:scale-110 transition-transform duration-300 min-h-[380px] justify-between">
+                    <div
+                        class="preview w-full h-60 bg-ytac-gray rounded-2xl flex items-center justify-center font-heading font-bold text-gray-400 text-sm mb-5 border border-dashed border-gray-300">
+                        DOCUMENT PREVIEW</div>
+                    <div>
+                        <h3 class="font-heading font-bold text-xl sm:text-2xl text-ytac-blue mb-1.5">International
+                            Accreditation</h3>
+                        <p class="font-sans text-gray-500 text-sm sm:text-base">STEM Education Framework</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery -->
+        <section class="gallery relative h-210 overflow-hidden bg-[#1A1A1A]" id="gallery">
+
+            <div class="absolute inset-0 pointer-events-none
+        bg-[linear-gradient(rgba(156,163,175,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(156,163,175,0.12)_1px,transparent_1px)]
+        bg-[size:10px_10px]">
+            </div>
+
+            <!-- TITLE OVERLAY -->
+            <div class="absolute top-10 left-0 w-full z-20 text-center pointer-events-none">
+
+                <span
+                    class="font-heading text-purple-300 text-sm font-extrabold tracking-widest uppercase bg-purple-900/60 border border-purple-500/30 px-4 py-1.5 rounded-lg inline-block mb-2 shadow-lg backdrop-blur-sm">
+                    YTAC HIGHLIGHTS
+                </span>
+
+                <h2
+                    class="font-heading font-black text-4xl sm:text-5xl text-ytac-mint uppercase tracking-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
+                    OUR STORIES
+                </h2>
+
+            </div>
+
+            <!-- FULL SCREEN GALLERY -->
+            <div class="gallery-sticky sticky top-40 h-[calc(100vh-10rem)] w-full flex items-center overflow-hidden">
+
+                <div class="gallery-track flex items-center gap-12 px-[10vw]">
+
+                    <!-- IMAGE 1 -->
+                    <div class="shrink-0 w-[26vw] h-[43vh] flex flex-col gap-2 translate-y-30">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2026
+                        </span>
+
+                        <img src="{{ url_for('static', filename='img/2026 pic 2.jpg') }}" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+
+                    <!-- IMAGE 2 -->
+                    <div class="shrink-0 w-[45vw] h-[60vh] flex flex-col gap-2 -translate-y-10">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2026
+                        </span>
+
+                        <img src="{{ url_for('static', filename='img/2026 pic 1.jpg') }}" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+
+                    <!-- IMAGE 3 -->
+                    <div class="shrink-0 w-[28vw] h-[48vh] flex flex-col gap-2 translate-y-12">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2026
+                        </span>
+
+                        <img src="{{ url_for('static', filename='img/2026 pic 3.jpg') }}" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+
+                    <!-- IMAGE 4 -->
+                    <div class="shrink-0 w-[30vw] h-[60vh] flex flex-col gap-2 translate-y-8">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2026
+                        </span>
+
+                        <img src="{{ url_for('static', filename='img/2026 pic 4.jpg') }}" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+
+                    <!-- IMAGE 5 -->
+                    <div class="shrink-0 w-[25vw] h-[40vh] flex flex-col gap-2 translate-y-15">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2025
+                        </span>
+
+                        <img src="{{ url_for('static', filename='img/2025 pic 1.jpg') }}" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+
+                    <!-- IMAGE 6 -->
+                    <div class="shrink-0 w-[45vw] h-[70vh] flex flex-col gap-2 -translate-y-4">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2025
+                        </span>
+
+                        <img src="{{ url_for('static', filename='img/2025 pic 4.jpg') }}" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+
+                    <!-- IMAGE 7 -->
+                    <div class="shrink-0 w-[30vw] h-[50vh] flex flex-col gap-2 translate-y-20">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2025
+                        </span>
+
+                        <img src="{{ url_for('static', filename='img/2025 pic 2.jpg') }}" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+
+                    <!-- IMAGE 8 -->
+                    <div class="shrink-0 w-[48vw] h-[68vh] flex flex-col gap-2">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2025
+                        </span>
+
+                        <img src="{{ url_for('static', filename='img/2025 pic 3.jpg') }}" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <div class="floating-contact-container group fixed bottom-8 right-8 z-[150] flex flex-col items-end">
+
+            <!-- Hover Menu -->
+            <div
+                class="mb-3 flex flex-col gap-[10px] opacity-0 invisible translate-y-[15px] group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 ease-out">
+
+                <!-- WhatsApp Option -->
+                <a href="https://wa.me/message/CS2SJFC4EELDP1" target="_blank" rel="noopener noreferrer"
+                    class="flex items-center gap-[10px] px-[20px] py-[12px] bg-white text-ytac-blue font-bold text-sm rounded-full shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:scale-105 hover:bg-ytac-gray transition-all duration-200 ease-out whitespace-nowrap">
+                    <img src="{{ url_for('static', filename='img/whatsapp.png') }}" alt="WhatsApp" class="w-[20px] h-[20px] object-contain block">
+                    <span>WhatsApp</span>
+                </a>
+
+                <!-- Email Option -->
+                <a href="mailto:ytac@eduwel.asia"
+                    class="flex items-center gap-[10px] px-[20px] py-[12px] bg-white text-ytac-blue font-bold text-sm rounded-full shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:scale-105 hover:bg-ytac-gray transition-all duration-200 ease-out whitespace-nowrap">
+                    <img src="{{ url_for('static', filename='img/gmail.png') }}" alt="Email Us" class="w-[20px] h-[20px] object-contain block">
+                    <span>Email Us</span>
+                </a>
+
+            </div>
+
+            <!-- Contact Us Trigger Button -->
+            <button type="button"
+                class="bg-[linear-gradient(135deg,#426cbd,#749be3)] text-white px-[28px] py-[16px] rounded-full font-heading font-bold text-base cursor-pointer shadow-[0_8px_24px_rgba(118,111,208,0.4)] whitespace-nowrap">
+                Contact Us
+            </button>
+
+        </div>
+
+        <!-- Contact / Footer Section -->
+        <section class="contact relative px-[5%] bg-white pt-12 pb-10 w-full" id="contact">
+            <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-stretch justify-between gap-12">
+
+                <div class="contact-container-1 flex-1 flex flex-col justify-between">
+                    <h3
+                        class="font-heading font-black text-3xl sm:text-4xl text-ytac-blue uppercase tracking-tight mx-2 my-6 mb-6">
+                        IGNITE YOUR JOURNEY AND CONNECT WITH US
+                    </h3>
+                    <div
+                        class="map-container w-full h-[320px] rounded-3xl overflow-hidden shadow-xl border border-gray-100">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3605.3435929285715!2d101.6904511744704!3d3.085504953541636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc4bf370d14b0f%3A0x49a006ae9caa139d!2sCodeKids%20by%20EDUWEL!5e1!3m2!1sen!2smy!4v1787562569506!5m2!1sen!2smy"
+                            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="strict-origin-when-cross-origin" title="YTAC Location Map"></iframe>
+                    </div>
+                </div>
+
+                <div
+                    class="contact-container-2 flex-1 bg-[#F9FBFC] p-6 sm:p-10 rounded-3xl border border-gray-100 shadow-lg flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-heading font-extrabold text-2xl text-ytac-blue mb-6">
+                            YTAC - YOUTH TECH ASIA CHALLENGE
+                        </h4>
+                        <div class="space-y-4 font-sans text-gray-700 text-sm sm:text-base leading-relaxed">
+                            <p class="flex flex-wrap items-center gap-1">
+                                <strong class="text-ytac-purple font-bold">Email:</strong>
+                                <a href="mailto:ytac@eduwel.asia"
+                                    class="hover:text-ytac-blue underline transition-colors">ytac@eduwel.asia</a>
+                            </p>
+                            <p class="flex flex-wrap items-center gap-1">
+                                <strong class="text-ytac-purple font-bold">Phone:</strong>
+                                <a href="tel:+60149756369" class="hover:text-ytac-blue transition-colors">+6014-975 6369
+                                    (Customer Support)</a>
+                            </p>
+                            <p class="flex flex-wrap items-center gap-1">
+                                <strong class="text-ytac-purple font-bold">Phone:</strong>
+                                <a href="tel:+60183858888" class="hover:text-ytac-blue transition-colors">+6018-385 8888
+                                    (Ms Yivonn)</a>
+                            </p>
+                            <p class="leading-relaxed">
+                                <strong class="text-ytac-purple font-bold">Address:</strong>
+                                <span>A-3-6 Block A, Kuchai Exchange, 58200 Kuala Lumpur, Wilayah Persekutuan Kuala
+                                    Lumpur</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-gray-200">
+                        <p
+                            class="font-heading font-bold text-xs uppercase tracking-wider text-gray-500 mb-4 text-center">
+                            Follow us on our social media to get the latest info!
+                        </p>
+                        <div class="flex items-center justify-center gap-4">
+                            <a href="https://www.facebook.com/official.ytac/" target="_blank" rel="noopener noreferrer"
+                                class="w-12 h-12 rounded-2xl bg-white shadow-md flex items-center justify-center p-2.5 hover:scale-110 hover:shadow-xl transition-all duration-300 border border-gray-100">
+                                <img src="{{ url_for('static', filename='img/facebook.png') }}" alt="YTAC Facebook Page"
+                                    class="w-full h-full object-contain">
+                            </a>
+                            <a href="https://www.instagram.com/ytac.official/?hl=en" target="_blank"
+                                rel="noopener noreferrer"
+                                class="w-12 h-12 rounded-2xl bg-white shadow-md flex items-center justify-center p-2.5 hover:scale-110 hover:shadow-xl transition-all duration-300 border border-gray-100">
+                                <img src="{{ url_for('static', filename='img/instagram.png') }}" alt="YTAC Instagram Page"
+                                    class="w-full h-full object-contain">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <footer class="w-full bg-white backdrop-blur-sm pt-3 pb-4">
+            <div class="max-w-6xl mx-auto px-4 flex flex-col items-center">
+
+                <!-- Divider Line -->
+                <div class="w-full h-[1px] bg-gray-200/80 mb-3"></div>
+
+                <!-- Centered Copyright Text -->
+                <div class="flex flex-col items-center text-center gap-0.5 font-sans text-sm sm:text-sm text-gray-500">
+                    <p>Copyright © 2026 CodeKidz. All rights reserved.</p>
+                    <p class="font-bold text-xs">EDUWELD SDN. BHD. (1439286P / 202101038986)</p>
+                </div>
+
+            </div>
+        </footer>
+
+        <script>
+            const $ = (selector) => document.querySelector(selector);
+            const $$ = (selector) => document.querySelectorAll(selector);
+
+            gsap.registerPlugin(ScrollTrigger);
+
+            // =========================================================
+            // LENIS SMOOTH SCROLL
+            // =========================================================
+
+            const lenis = new Lenis({
+                duration: 1.35,
+                easing: (t) => 1 - Math.pow(1 - t, 4),
+                smoothWheel: true,
+                wheelMultiplier: 1,
+                touchMultiplier: 1.6,
+                normalizeWheel: true,
+                prevent: (node) => node.classList.contains('pin-spacer') // Prevents Lenis from calculating pin padding
+            });
+
+            lenis.on('scroll', ScrollTrigger.update);
+
+            gsap.ticker.add((time) => {
+                lenis.raf(time * 1000);
+            });
+
+            gsap.ticker.lagSmoothing(0);
+
+            // =========================================================
+            // NAV BAR SECTION
+            // =========================================================
+            const navbar = document.getElementById("navbar");
+            const navLinks = document.querySelectorAll("#navbar .nav-link");
+
+            function setNavTheme(mode) {
+                if (!navbar) return;
+
+                // Reset background and border utility classes
+                navbar.classList.remove("bg-white", "bg-transparent", "bg-[#1A1A1A]", "border-b", "border-white/20", "backdrop-blur-sm");
+
+                if (mode === "dark" || mode === true) {
+                    // Dark theme: translucent navbar with white text (matches Pathway & Experience)
+                    navbar.classList.add("bg-transparent", "border-b", "border-white/20", "backdrop-blur-sm");
+                    navLinks.forEach(link => {
+                        link.classList.add("text-white");
+                        link.classList.remove("text-ytac-blue");
+                    });
+                } else {
+                    // Light theme: solid white navbar with blue text (matches Home, Contact, Categories)
+                    navbar.classList.add("bg-white");
+                    navLinks.forEach(link => {
+                        link.classList.add("text-ytac-blue");
+                        link.classList.remove("text-white");
+                    });
+                }
+            }
+
+            // =========================================================
+            // VIDEO CONTROLS SECTION
+            // =========================================================
+            const video = document.getElementById("video");
+            const playToggleBtn = document.getElementById("videoPlayToggle");
+            const playIcon = document.getElementById("vcPlayIcon");
+            const pauseIcon = document.getElementById("vcPauseIcon");
+
+            const muteToggleBtn = document.getElementById("videoMuteToggle");
+            const muteIcon = document.getElementById("vcMuteIcon");
+            const unmuteIcon = document.getElementById("vcUnmuteIcon");
+
+            const progressTrack = document.getElementById("vcProgressTrack");
+            const progressFill = document.getElementById("vcProgressFill");
+            const timeDisplay = document.getElementById("vcTime");
+
+            let isDraggingProgress = false;
+
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+
+            if (video) {
+                playToggleBtn?.addEventListener("click", () => {
+                    if (video.paused) {
+                        video.play();
+                        playIcon.style.display = "none";
+                        pauseIcon.style.display = "block";
+                    } else {
+                        video.pause();
+                        playIcon.style.display = "block";
+                        pauseIcon.style.display = "none";
+                    }
+                });
+
+                muteToggleBtn?.addEventListener("click", () => {
+                    video.muted = !video.muted;
+                    if (video.muted) {
+                        muteIcon.style.display = "block";
+                        unmuteIcon.style.display = "none";
+                    } else {
+                        muteIcon.style.display = "none";
+                        unmuteIcon.style.display = "block";
+                    }
+                });
+
+                video.addEventListener("timeupdate", () => {
+                    if (!isNaN(video.duration) && !isDraggingProgress) {
+                        const percentage = (video.currentTime / video.duration) * 100;
+                        progressFill.style.width = `${percentage}%`;
+                        timeDisplay.textContent = formatTime(video.currentTime);
+                    }
+                });
+
+                function scrubVideo(e) {
+                    if (!progressTrack || isNaN(video.duration)) return;
+                    const rect = progressTrack.getBoundingClientRect();
+                    let clickPosition = (e.clientX - rect.left) / rect.width;
+                    clickPosition = Math.max(0, Math.min(1, clickPosition));
+
+                    progressFill.style.width = `${clickPosition * 100}%`;
+                    video.currentTime = clickPosition * video.duration;
+                    timeDisplay.textContent = formatTime(video.currentTime);
+                }
+
+                progressTrack?.addEventListener("mousedown", (e) => {
+                    isDraggingProgress = true;
+                    scrubVideo(e);
+                });
+
+                window.addEventListener("mousemove", (e) => {
+                    if (isDraggingProgress) {
+                        scrubVideo(e);
+                    }
+                });
+
+                window.addEventListener("mouseup", () => {
+                    if (isDraggingProgress) {
+                        isDraggingProgress = false;
+                    }
+                });
+            }
+
+            // =========================================================
+            // HOME SECTION
+            // =========================================================
+
+            ScrollTrigger.create({
+                trigger: '#home',
+                start: 'top 80%',
+
+                onEnter: () => {
+                    $('.tagline')?.classList.add('visible');
+                },
+
+                onLeaveBack: () => {
+                    $('.tagline')?.classList.remove('visible');
+                }
+            });
+
+            // =========================================================
+            // GALLERY SECTION NAV THEME (Transparent)
+            // =========================================================
+            ScrollTrigger.create({
+                trigger: '#gallery',
+                start: 'top 80px',
+                end: 'bottom 80px',
+                onEnter: () => setNavTheme("transparent"),
+                onLeave: () => setNavTheme("light"),
+                onEnterBack: () => setNavTheme("transparent"),
+                onLeaveBack: () => setNavTheme("light")
+            });
+
+            // =========================================================
+            // CONTACT SECTION NAV THEME (White)
+            // =========================================================
+            ScrollTrigger.create({
+                trigger: '#contact',
+                start: 'top 100px',
+                end: 'bottom bottom',
+                onEnter: () => setNavTheme("light"),
+                onLeaveBack: () => setNavTheme("transparent")
+            });
+
+            const heroTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: '#home',
+                    start: 'top 75%',
+                    toggleActions: 'play reverse play reverse'
+                }
+            });
+
+            heroTl
+                .set('.hero-anim, .hero-card-anim', { y: 90, scale: 0.94, opacity: 0 })
+                .to('.hero-tag-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.1)
+                .to('.hero-line1-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.3)
+                .to('.hero-line2-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.45)
+                .to('.hero-line3-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.6)
+                .to('.hero-year-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.8)
+                .to('.hero-btn-anim', { y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' }, 1.0)
+                .to('.hero-card-anim', { y: 0, scale: 1, opacity: 1, duration: 1.2, ease: 'expo.out' }, 1.1);
+
+            // =========================================================
+            // EXPERIENCE SECTION
+            // =========================================================
+
+            ScrollTrigger.create({
+                trigger: '#home',
+                start: 'top 50%',
+                end: 'bottom 50%',
+                onEnter: () => setNavTheme(false),
+                onEnterBack: () => setNavTheme(false)
+            });
+
+            const expTimeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: '#experience',
+                    start: 'top top',
+                    end: '+=200%',
+                    scrub: 0.5,
+                    pin: true,
+                    pinReparent: false,
+                    padding: false, // Prevents GSAP from injecting right-side padding
+                    anticipatePin: 1,
+                    onEnter: () => setNavTheme("dark"),
+                    onLeave: () => setNavTheme("light"),
+                    onEnterBack: () => setNavTheme("dark"),
+                    onLeaveBack: () => setNavTheme("light")
+                }
+            });
+
+            expTimeline
+                .to('#s1Line1', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' })
+                .to('#s1Line2', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '+=0.2')
+                .to('#s1Line3', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '+=0.2')
+                .to('#expScene1', { y: '-60px', opacity: 0, duration: 1.2, ease: 'power1.in' }, '+=0.5')
+                .to('#s2Heading, #s2Subheading, #s2Timer, #s2Button, #s2SubmitButton', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '-=0.2');
+
+            // =========================================================
+            // CATEGORY CAROUSEL SECTION
+            // =========================================================
+
+            let currentAngle = 0;
+
+            function updateCarouselPositions(extraSwirl = 0) {
+                const cards = document.querySelectorAll('.carousel-card');
+                const radius = window.innerWidth < 640 ? 180 : 320;
+
+                cards.forEach((card, i) => {
+                    const baseAngle = i * 120;
+                    const totalAngle = (baseAngle + currentAngle + extraSwirl) * (Math.PI / 180);
+
+                    const x = Math.sin(totalAngle) * radius;
+                    const z = Math.cos(totalAngle) * radius;
+                    const scale = (z + radius * 1.5) / (radius * 2.5);
+                    const opacity = Math.max(0.35, (z + radius) / (radius * 2));
+
+                    card.style.transform = `translate3d(${x}px, 0, ${z}px) scale(${scale})`;
+                    card.style.zIndex = Math.round(z + radius);
+                    card.style.opacity = opacity;
+                });
+            }
+
+            const nextButton = $('#nextBtn');
+            const previousButton = $('#prevBtn');
+
+            nextButton?.addEventListener('click', () => {
+
+                if (detailOpen) {
+                    closeDetail.click();
+
+                    setTimeout(() => {
+                        currentAngle -= 120;
+                        updateCarouselPositions();
+                    }, 1000);
+
+                    return;
+                }
+
+                currentAngle -= 120;
+                updateCarouselPositions();
+            });
+
+            previousButton?.addEventListener('click', () => {
+                if (detailOpen) {
+                    closeDetail.click();
+
+                    setTimeout(() => {
+                        currentAngle -= 120;
+                        updateCarouselPositions();
+                    }, 1000);
+
+                    return;
+                }
+
+                currentAngle += 120;
+                updateCarouselPositions();
+            });
+
+            function initializeCarousel() {
+                const carouselContainer = $('#carouselContainer');
+
+                if (carouselContainer) {
+                    carouselContainer.className =
+                        'relative w-full max-w-5xl min-h-[460px] py-4 ' +
+                        'flex items-center justify-center ' +
+                        'perspective-[1200px]';
+                }
+
+                $$('.carousel-card').forEach((card) => {
+                    card.className =
+                        'carousel-card absolute ' +
+                        'w-[340px] sm:w-[400px] ' +
+                        'transition-all duration-700 ' +
+                        'ease-out cursor-pointer [transform-style:preserve-3d]';
+                });
+
+                updateCarouselPositions();
+            }
+
+            // =========================================================
+            // CAROUSEL EXPAND BOOK EFFECT
+            // =========================================================
+            const detailPanel = document.getElementById("challengeDetail");
+            const closeDetail = document.getElementById("closeDetail");
+
+            const carouselCards = document.querySelectorAll(".carousel-card");
+            const detailPhotos = document.querySelectorAll(".detail-photo");
+            const galleryImages = document.querySelectorAll(".gallery-img");
+
+            let activeCard = null;
+            let detailOpen = false;
+
+            const galleries = {
+
+                "inno-tech": [
+                    "{{ url_for('static', filename='img/inno-tech-1.jpg') }}",
+                    "{{ url_for('static', filename='img/inno-tech-2.jpg') }}",
+                    "{{ url_for('static', filename='img/inno-tech-3.jpg') }}",
+                    "{{ url_for('static', filename='img/inno-tech-4.jpg') }}",
+                    "{{ url_for('static', filename='img/inno-tech-5.jpg') }}"
+                ],
+
+                "inno-maker": [
+                    "{{ url_for('static', filename='img/inno-maker-1.jpg') }}",
+                    "{{ url_for('static', filename='img/inno-maker-2.jpg') }}",
+                    "{{ url_for('static', filename='img/inno-maker-3.jpg') }}",
+                    "{{ url_for('static', filename='img/inno-maker-4.jpg') }}",
+                    "{{ url_for('static', filename='img/inno-maker-5.jpg') }}"
+                ],
+
+                "hackathon": [
+                    "{{ url_for('static', filename='img/hackathon-1.jpg') }}",
+                    "{{ url_for('static', filename='img/hackathon-2.jpg') }}",
+                    "{{ url_for('static', filename='img/hackathon-3.jpg') }}",
+                    "{{ url_for('static', filename='img/hackathon-4.jpg') }}",
+                    "{{ url_for('static', filename='img/hackathon-5.jpg') }}"
+                ]
+
+            };
+
+            gsap.set(detailPanel, {
+                opacity: 0,
+                rotationY: -90,
+                transformOrigin: "left center"
+            });
+
+            gsap.set(detailPhotos, {
+                opacity: 0,
+                scale: 0.8,
+                y: 20
+            });
+
+            carouselCards.forEach(card => {
+
+                card.addEventListener("click", (event) => {
+
+                    // Don't trigger expansion when Learn More is clicked
+                    if (event.target.closest("a")) {
+                        return;
+                    }
+
+                    // Don't open twice
+                    if (detailOpen) {
+                        return;
+                    }
+
+                    detailOpen = true;
+                    activeCard = card;
+
+                    const galleryName = card.dataset.gallery;
+
+                    const images = galleries[galleryName];
+
+                    // Safety check
+                    if (!images) {
+                        console.error("Gallery not found:", galleryName);
+                        return;
+                    }
+
+
+                    // ======================================
+                    // LOAD THE 5 IMAGES
+                    // ======================================
+
+                    galleryImages.forEach((img, index) => {
+
+                        img.src = images[index];
+
+                        img.alt = `${galleryName} photo ${index + 1}`;
+
+                    });
+
+
+                    // ======================================
+                    // GET THE ACTUAL CARD
+                    // ======================================
+
+                    const categoryCard =
+                        card.querySelector(".category-card");
+
+
+                    // ======================================
+                    // ENABLE PANEL
+                    // ======================================
+
+                    detailPanel.style.pointerEvents = "auto";
+
+
+                    // ======================================
+                    // HIDE OTHER CARDS
+                    // ======================================
+
+                    carouselCards.forEach(otherCard => {
+
+                        if (otherCard !== card) {
+
+                            gsap.to(otherCard, {
+                                opacity: 0,
+                                duration: 0.3,
+                                ease: "power2.out"
+                            });
+
+                        }
+
+                    });
+
+
+                    // ======================================
+                    // ANIMATION
+                    // ======================================
+
+                    const tl = gsap.timeline();
+
+
+                    // 1. Selected card moves slightly left
+
+                    tl.to(categoryCard, {
+                        x: -183,
+                        duration: 0.50,
+                        ease: "power3.out"
+                    });
+
+
+                    // 2. Gallery unfolds
+
+                    tl.to(detailPanel, {
+                        opacity: 1,
+                        rotationY: 0,
+                        duration: 0.6,
+                        ease: "power3.out"
+                    }, "-=0.1");
+
+
+                    // 3. Photos appear
+
+                    tl.to(detailPhotos, {
+                        opacity: 1,
+                        scale: 1,
+                        y: 0,
+                        duration: 0.45,
+                        stagger: 0.08,
+                        ease: "back.out(1.3)"
+                    }, "-=0.25");
+
+                });
+
+            });
+
+            closeDetail.addEventListener("click", (event) => {
+
+                event.stopPropagation();
+
+                if (!detailOpen) {
+                    return;
+                }
+
+
+                const tl = gsap.timeline({
+
+                    onComplete: () => {
+
+                        detailOpen = false;
+                        activeCard = null;
+
+                        detailPanel.style.pointerEvents = "none";
+
+                    }
+
+                });
+
+
+                // ======================================
+                // 1. PHOTOS DISAPPEAR
+                // ======================================
+
+                tl.to(detailPhotos, {
+
+                    opacity: 0,
+                    scale: 0.8,
+                    y: 20,
+
+                    duration: 0.3,
+
+                    stagger: 0.05,
+
+                    ease: "power2.in"
+
+                });
+
+
+                // ======================================
+                // 2. PANEL CLOSES
+                // ======================================
+
+                tl.to(detailPanel, {
+                    opacity: 0,
+                    rotationY: -90,
+                    duration: 0.6,
+                    ease: "power3.in"
+                }, "-=0.1");
+
+
+                // ======================================
+                // 3. CARD RETURNS
+                // ======================================
+
+                if (activeCard) {
+
+                    const categoryCard =
+                        activeCard.querySelector(".category-card");
+
+                    tl.to(categoryCard, {
+
+                        x: 0,
+
+                        duration: 0.5,
+
+                        ease: "power3.out"
+
+                    }, "-=0.25");
+
+                }
+
+
+                // ======================================
+                // 4. OTHER CARDS RETURN
+                // ======================================
+
+                tl.to(carouselCards, {
+
+                    opacity: 1,
+
+                    duration: 0.3,
+
+                    ease: "power2.out"
+
+                }, "-=0.3");
+
+            });
+
+
+            // =========================================================
+            // PATHWAY LIGHTENED & HIGH-LEGIBILITY THEMES
+            // =========================================================
+            const pathwaySection = $('#pathway');
+            const pathwayTag = $('#pathwayTag');
+            const pathwayTitle = $('#pathwayTitle');
+            const stageButtons = $$('.stage-btn');
+            const pathwayNodes = $$('.pathway-node');
+            const pathwayConnectors = $$('.pathway-connector');
+            const pathwayTree = $('.pathway-tree');
+            const pathwayBgA = $('#pathwayBgA');
+            const pathwayBgB = $('#pathwayBgB');
+            let pathwayBgToggle = false;
+
+            // Smooth crossfade between pathway gradients instead of an instant
+            // background swap — two stacked layers, fade the incoming one in.
+            function transitionPathwayBackground(gradient) {
+
+                if (!pathwayBgA || !pathwayBgB) return;
+
+                const incoming = pathwayBgToggle ? pathwayBgA : pathwayBgB;
+                const outgoing = pathwayBgToggle ? pathwayBgB : pathwayBgA;
+
+                // Stop previous animations
+                gsap.killTweensOf([pathwayBgA, pathwayBgB]);
+
+                // Set the new gradient
+                incoming.style.background = gradient;
+
+                // Hide old background
+                gsap.set(outgoing, {
+                    opacity: 0,
+                    zIndex: -10
+                });
+
+                // Show new background IMMEDIATELY
+                gsap.set(incoming, {
+                    opacity: 1,
+                    zIndex: -10
+                });
+
+                pathwayBgToggle = !pathwayBgToggle;
+            }
+
+            // Gentle one-time entrance for the pathway nodes as the section
+            // scrolls in. `once: true` + an early trigger point so it can't get
+            // stuck mid-animation; connectors only fade (no transform) so the
+            // arrows never render offset from their card.
+            gsap.from('.pathway-node', {
+                scrollTrigger: { trigger: '#pathway', start: 'top bottom', once: true },
+                opacity: 0,
+                y: 40,
+                duration: 0.9,
+                ease: 'power3.out',
+                stagger: 0.12,
+                clearProps: 'opacity,transform'
+            });
+            gsap.from('.pathway-connector', {
+                scrollTrigger: { trigger: '#pathway', start: 'top bottom', once: true },
+                opacity: 0,
+                duration: 0.9,
+                ease: 'power3.out',
+                stagger: 0.12,
+                clearProps: 'opacity'
+            });
+
+            ScrollTrigger.create({
+                trigger: '#pathway',
+                start: 'top 10%',
+                end: 'bottom 10%',
+                onEnter: () => setNavTheme("dark"),
+                onLeave: () => setNavTheme("light"),
+                onEnterBack: () => setNavTheme("dark"),
+                onLeaveBack: () => setNavTheme("light")
+            });
+
+            const pathwayThemes = {
+                all: {
+                    background: 'linear-gradient(135deg, #0f172a 0%, #3b3e80 10%, #a89ee8 100%)', // Custom Periwinkle Blue
+                    isDark: true
+                },
+                malaysia: {
+                    background: 'linear-gradient(135deg, #0f172a 0%, #00607A 45%, #14A39A 100%)', // YTAC Brand Blue
+                    isDark: true
+                },
+                asean: {
+                    background: 'linear-gradient(135deg, #1f1410 0%, #8a4a1f 45%, #f0932b 100%)', // ASEAN Orange
+                    isDark: true
+                },
+                international: {
+                    background: 'linear-gradient(135deg, #1a0f14 0%, #7a1f3d 45%, #e2434f 100%)', // Chinese Red
+                    isDark: true
+                }
+            };
+
+            // =========================================================
+            // PATHWAY BUTTON COLOR EXPANSION
+            // =========================================================
+
+            const pathwayTransition = $('#pathwayTransition');
+
+            const pathwayTransitionGradients = {
+                all: 'linear-gradient(135deg, #0f172a 0%, #3b3e80 10%, #a89ee8 100%)',
+
+                malaysia: 'linear-gradient(135deg, #0f172a 0%, #00607A 45%, #14A39A 100%)',
+
+                asean: 'linear-gradient(135deg, #1f1410 0%, #8a4a1f 45%, #f0932b 100%)',
+
+                international: 'linear-gradient(135deg, #1a0f14 0%, #7a1f3d 45%, #e2434f 100%)'
+            };
+
+            let pathwayTransitioning = false;
+
+            stageButtons.forEach(btn => {
+
+                btn.addEventListener('click', () => {
+
+                    if (pathwayTransitioning) {
+                        return;
+                    }
+
+                    const filter = btn.dataset.stageFilter;
+                    const theme = pathwayThemes[filter];
+
+                    // Prevent clicking the same button repeatedly
+                    if (btn.classList.contains('active')) {
+                        return;
+                    }
+
+                    // Lock the buttons
+                    pathwayTransitioning = true;
+
+
+                    // =====================================================
+                    // 1. GET BUTTON POSITION
+                    // =====================================================
+
+                    const buttonRect = btn.getBoundingClientRect();
+                    const sectionRect = pathwaySection.getBoundingClientRect();
+
+                    const x =
+                        buttonRect.left +
+                        buttonRect.width / 2 -
+                        sectionRect.left;
+
+                    const y =
+                        buttonRect.top +
+                        buttonRect.height / 2 -
+                        sectionRect.top;
+
+
+                    // =====================================================
+                    // 2. POSITION THE TRANSITION CIRCLE
+                    // =====================================================
+
+                    pathwayTransition.style.left = `${x}px`;
+                    pathwayTransition.style.top = `${y}px`;
+
+                    pathwayTransition.style.background =
+                        pathwayTransitionGradients[filter];
+
+
+                    // =====================================================
+                    // 3. CALCULATE CIRCLE SIZE
+                    // =====================================================
+
+                    const maxX = Math.max(
+                        x,
+                        sectionRect.width - x
+                    );
+
+                    const maxY = Math.max(
+                        y,
+                        sectionRect.height - y
+                    );
+
+                    const distance = Math.hypot(maxX, maxY);
+
+                    const finalScale = (distance * 2) / 32;
+
+
+                    // =====================================================
+                    // 4. RESET CIRCLE
+                    // =====================================================
+
+                    gsap.killTweensOf(pathwayTransition);
+
+                    gsap.set(pathwayTransition, {
+                        scale: 0,
+                        opacity: 1
+                    });
+
+
+                    // =====================================================
+                    // 5. CHANGE BUTTON IMMEDIATELY
+                    // =====================================================
+
+                    stageButtons.forEach(b => {
+
+                        b.classList.remove(
+                            'active',
+                            'bg-ytac-blue',
+                            'bg-white',
+                            'text-white',
+                            'text-ytac-blue'
+                        );
+
+                        b.classList.add(
+                            'text-white',
+                            'border-white/30'
+                        );
+
+                    });
+
+
+                    btn.classList.add(
+                        'active',
+                        'bg-white',
+                        'text-ytac-blue'
+                    );
+
+                    btn.classList.remove(
+                        'text-white',
+                        'border-white/30'
+                    );
+
+
+                    // =====================================================
+                    // 6. CHANGE BACKGROUND IMMEDIATELY
+                    // =====================================================
+
+                    if (theme && pathwaySection) {
+
+                        transitionPathwayBackground(
+                            theme.background
+                        );
+
+                        pathwayTitle.classList.remove(
+                            'text-ytac-blue'
+                        );
+
+                        pathwayTitle.classList.add(
+                            'text-white'
+                        );
+
+                        pathwayTag.classList.remove(
+                            'text-ytac-purple',
+                            'bg-ytac-purple/10'
+                        );
+
+                        pathwayTag.classList.add(
+                            'text-white',
+                            'bg-white/20'
+                        );
+
+                    }
+
+
+                    // =====================================================
+                    // 7. SHOW / HIDE NODES IMMEDIATELY
+                    // =====================================================
+
+                    pathwayNodes.forEach(node => {
+
+                        const nodeStage =
+                            node.dataset.stage;
+
+                        if (
+                            filter === 'all' ||
+                            nodeStage === filter
+                        ) {
+
+                            node.classList.remove('hidden');
+
+                            if (filter !== 'all') {
+                                node.classList.add('expanded');
+                            }
+
+                        } else {
+
+                            node.classList.add('hidden');
+
+                            node.classList.remove('expanded');
+
+                        }
+
+                    });
+
+
+                    // =====================================================
+                    // 8. SHOW / HIDE CONNECTORS IMMEDIATELY
+                    // =====================================================
+
+                    pathwayConnectors.forEach(connector => {
+
+                        if (filter === 'all') {
+
+                            connector.classList.remove('hidden');
+
+                            gsap.set(connector, {
+                                opacity: 1
+                            });
+
+                        } else {
+
+                            connector.classList.add('hidden');
+
+                            gsap.set(connector, {
+                                opacity: 0
+                            });
+
+                        }
+
+                    });
+
+
+                    // =====================================================
+                    // 9. CHANGE SECTION HEIGHT
+                    // =====================================================
+
+                    if (pathwaySection) {
+
+                        if (filter === 'all') {
+
+                            pathwaySection.style.minHeight =
+                                '120vh';
+
+                            pathwaySection.style.paddingBottom =
+                                '11rem';
+
+                        } else {
+
+                            pathwaySection.style.minHeight =
+                                '160vh';
+
+                            pathwaySection.style.paddingBottom =
+                                '16rem';
+
+                        }
+
+                    }
+
+
+                    // =====================================================
+                    // 10. EXPAND CIRCLE
+                    // =====================================================
+
+                    gsap.to(pathwayTransition, {
+
+                        scale: finalScale,
+
+                        duration: 0.7,
+
+                        ease: "power3.inOut",
+
+                        onComplete: () => {
+
+                            // =================================================
+                            // 11. FADE CIRCLE AWAY
+                            // =================================================
+
+                            gsap.to(pathwayTransition, {
+
+                                opacity: 0,
+
+                                duration: 0.25,
+
+                                ease: "power2.out",
+
+                                onComplete: () => {
+
+                                    gsap.set(pathwayTransition, {
+                                        scale: 0,
+                                        opacity: 1
+                                    });
+
+                                    // Allow another button click
+                                    pathwayTransitioning = false;
+
+                                }
+
+                            });
+
+
+                            // =================================================
+                            // 12. REFRESH SCROLL
+                            // =================================================
+
+                            setTimeout(() => {
+
+                                ScrollTrigger.refresh(true);
+
+                                if (typeof lenis !== 'undefined') {
+                                    lenis.resize();
+                                }
+
+                            }, 150);
+
+                        }
+
+                    });
+
+                });
+
+            });
+
+            pathwayNodes.forEach(node => {
+                node.addEventListener('click', (e) => {
+                    // Prevent toggling when clicking dropdowns or document buttons
+                    if (e.target.closest('.resource-buttons') || e.target.closest('.expand-card')) {
+                        return;
+                    }
+
+                    // Toggle expanded class
+                    node.classList.toggle('expanded');
+
+                    // Recalculate layout heights for Lenis and ScrollTrigger
+                    setTimeout(() => {
+                        ScrollTrigger.refresh(true);
+                        if (typeof lenis !== 'undefined') lenis.resize();
+                    }, 400);
+                });
+            });
+
+            // =========================================================
+            // PATHWAY SECTION
+            // =========================================================
+
+            const activeResourceType = {
+                ytac: null,
+                icia: null,
+                iits: null
+            };
+
+            const documentMap = {
+                ytac: {
+                    handbook: {
+                        '2026': "{{ url_for('static', filename='docs/ytac2026_handbook.pdf') }}",
+                        '2025': "{{ url_for('static', filename='docs/ytac2025_handbook.pdf') }}",
+                        '2024': "{{ url_for('static', filename='docs/ytac2024_handbook.pdf') }}"
+                    },
+                    webpage: {
+                        '2026': 'https://example.com/ytac2026',
+                        '2025': 'https://example.com/ytac2025',
+                        '2024': 'https://example.com/ytac2024'
+                    },
+                    letter: {
+                        '2026': "{{ url_for('static', filename='docs/ytac2026_surat.pdf') }}",
+                        '2025': "{{ url_for('static', filename='docs/ytac2025_surat.pdf') }}",
+                        '2024': "{{ url_for('static', filename='docs/ytac2024_surat.pdf') }}"
+                    }
+                },
+                icia: {
+                    handbook: {
+                        '2026': "{{ url_for('static', filename='docs/icia2026_handbook.pdf') }}",
+                        '2025': "{{ url_for('static', filename='docs/icia2025_handbook.pdf') }}",
+                        '2024': "{{ url_for('static', filename='docs/icia2024_handbook.pdf') }}"
+                    },
+                    webpage: {
+                        '2026': 'https://example.com/icia2026',
+                        '2025': 'https://example.com/icia2025',
+                        '2024': 'https://example.com/icia2024'
+                    },
+                    letter: {
+                        '2026': "{{ url_for('static', filename='docs/icia2026_surat.pdf') }}",
+                        '2025': "{{ url_for('static', filename='docs/icia2025_surat.pdf') }}",
+                        '2024': "{{ url_for('static', filename='docs/icia2024_surat.pdf') }}"
+                    }
+                },
+                iits: {
+                    handbook: {
+                        '2026': "{{ url_for('static', filename='docs/iits2026_handbook.pdf') }}",
+                        '2025': "{{ url_for('static', filename='docs/iits2025_handbook.pdf') }}",
+                        '2024': "{{ url_for('static', filename='docs/iits2024_handbook.pdf') }}"
+                    },
+                    webpage: {
+                        '2026': 'https://example.com/iits2026',
+                        '2025': 'https://example.com/iits2025',
+                        '2024': 'https://example.com/iits2024'
+                    },
+                    letter: {
+                        '2026': "{{ url_for('static', filename='docs/iits2026_surat.pdf') }}",
+                        '2025': "{{ url_for('static', filename='docs/iits2025_surat.pdf') }}",
+                        '2024': "{{ url_for('static', filename='docs/iits2024_surat.pdf') }}"
+                    }
+                }
+            };
+
+            function selectResourceType(nodeId, resourceType, button) {
+                activeResourceType[nodeId] = resourceType;
+
+                // Highlight active resource button within this node
+                const parent = button.closest('.resource-buttons');
+                parent.querySelectorAll('.res-btn').forEach(btn => {
+                    btn.classList.remove('bg-ytac-purple', 'text-white');
+                    btn.classList.add('bg-ytac-gray', 'text-ytac-blue');
+                });
+                button.classList.remove('bg-ytac-gray', 'text-ytac-blue');
+                button.classList.add('bg-ytac-purple', 'text-white');
+
+                // Enable year buttons for this node
+                const yearContainer = document.getElementById(`${nodeId}Years`);
+                if (!yearContainer) return;
+
+                const yearBtns = yearContainer.querySelectorAll('.year-btn');
+                yearBtns.forEach(btn => {
+                    btn.removeAttribute('disabled');
+                    btn.classList.remove('text-gray-400', 'bg-gray-200/60', 'cursor-not-allowed');
+                    btn.classList.add('text-ytac-blue', 'hover:bg-ytac-purple', 'hover:text-white', 'cursor-pointer');
+                });
+            }
+
+            function openSelectedDocument(nodeId, year) {
+                const type = activeResourceType[nodeId];
+                if (!type) return;
+
+                const fileUrl = documentMap[nodeId]?.[type]?.[year] || '';
+                const labelMap = {
+                    handbook: 'Handbook',
+                    webpage: 'Webpage',
+                    letter: 'Recognition Letter'
+                };
+                const title = `${nodeId.toUpperCase()} ${year} ${labelMap[type]}`;
+
+                openDocument(`${nodeId}Viewer`, fileUrl, title);
+            }
+
+            window.addEventListener('click', (e) => {
+                if (!e.target.closest('.resource-buttons')) {
+                    document.querySelectorAll('.dropdown-menu').forEach((menu) => {
+                        menu.classList.add('hidden');
+                        menu.classList.remove('flex');
+                    });
+                }
+            });
+
+            // =========================================================
+            // DOCUMENT VIEWER
+            // =========================================================
+            function openDocument(viewerId, filePath, title) {
+                const viewer = document.getElementById(viewerId);
+                if (!viewer) return;
+
+                const parentNode = viewer.closest('.pathway-node');
+                if (parentNode) {
+                    // 1. Expand parent card to wide mode
+                    parentNode.classList.remove('max-w-2xl');
+                    parentNode.classList.add('max-w-6xl', 'expanded');
+
+                    // 2. Expand content panel height
+                    const expandedContent = parentNode.querySelector('.node-expanded-content');
+                    if (expandedContent) {
+                        expandedContent.classList.remove('max-h-0');
+                        expandedContent.classList.add('max-h-[1200px]');
+                    }
+
+                    // 3. Shift left content to 38% width
+                    const mainContent = parentNode.querySelector('.pathway-main');
+                    if (mainContent) {
+                        mainContent.classList.add('lg:w-[38%]', 'shrink-0');
+                    }
+                }
+
+                const iframe = viewer.querySelector('iframe');
+                const heading = viewer.querySelector('.viewer-title');
+
+                if (iframe) iframe.src = filePath;
+                if (heading) heading.textContent = title;
+
+                // Show side panel viewer
+                viewer.classList.remove('hidden');
+                viewer.classList.add('flex');
+
+                // Hide active dropdown menus
+                document.querySelectorAll('.dropdown-menu').forEach((menu) => {
+                    menu.classList.add('hidden');
+                    menu.classList.remove('flex');
+                });
+
+                setTimeout(() => {
+                    ScrollTrigger.refresh();
+                    if (typeof lenis !== 'undefined') lenis.resize();
+                }, 300);
+            }
+
+            function closeDocument(viewerId) {
+                const viewer = document.getElementById(viewerId);
+                if (!viewer) return;
+
+                const parentNode = viewer.closest('.pathway-node');
+                if (parentNode) {
+                    // 1. Return parent card to centered narrow mode
+                    parentNode.classList.remove('max-w-6xl');
+                    parentNode.classList.add('max-w-2xl');
+
+                    // 2. Return left content back to full width
+                    const mainContent = parentNode.querySelector('.pathway-main');
+                    if (mainContent) {
+                        mainContent.classList.remove('lg:w-[38%]', 'shrink-0');
+                    }
+                }
+
+                const iframe = viewer.querySelector('iframe');
+                viewer.classList.add('hidden');
+                viewer.classList.remove('flex');
+                if (iframe) iframe.src = '';
+
+                setTimeout(() => {
+                    ScrollTrigger.refresh();
+                    if (typeof lenis !== 'undefined') lenis.resize();
+                }, 300);
+            }
+            // =========================================================
+            // ENDORSEMENT SECTION
+            // =========================================================
+
+            ScrollTrigger.create({
+                trigger: '#recognition',
+                start: 'top 80px',
+                end: 'bottom 80px',
+                onEnter: () => setNavTheme(false),
+                onLeave: () => setNavTheme(false),
+                onEnterBack: () => setNavTheme(false),
+                onLeaveBack: () => setNavTheme(true)
+            });
+
+            // =========================================================
+            // GALLERY
+            // =========================================================
+
+            gsap.registerPlugin(ScrollTrigger);
+
+            const galleryTrack = document.querySelector(".gallery-track");
+
+            gsap.to(galleryTrack, {
+                x: () => -(galleryTrack.scrollWidth - window.innerWidth),
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "#gallery",
+                    start: "top -10%",
+                    end: () => `+=${galleryTrack.scrollWidth - window.innerWidth}`,
+                    scrub: 1,
+                    pin: true,
+                    padding: false,
+                    anticipatePin: 1,
+                    invalidateOnRefresh: true,
+                    onEnter: () => setNavTheme("dark"),
+                    onLeave: () => setNavTheme("light"),
+                    onEnterBack: () => setNavTheme("dark"),
+                    onLeaveBack: () => setNavTheme("light")
+                }
+            });
+
+            // =========================================================
+            // INITIALIZE
+            // =========================================================
+
+            initializeCarousel();
+        </script>
+</body>
+
+</html>
