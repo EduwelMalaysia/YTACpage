@@ -39,7 +39,35 @@
             opacity: 0;
             will-change: opacity, transform;
         }
+        @media screen and (min-width: 640px) and (max-width: 1023px) {
+            #carouselContainer #prevBtn,
+            #carouselContainer #nextBtn {
+                z-index: 1000;
+                width: 44px;
+                height: 44px;
+                pointer-events: auto;
+            }
 
+            #carouselContainer #prevBtn {
+                left: 0.5rem;
+            }
+
+            #carouselContainer #nextBtn {
+                right: 0.5rem;
+            }
+        }
+        @media screen and (min-width: 640px) and (max-width: 1023px) {
+            #recognition .documents-container {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 1.25rem;
+            }
+
+            #recognition .doc-card:last-child {
+                grid-column: 1 / -1;
+                justify-self: center;
+                width: calc((100% - 1.25rem) / 2);
+            }
+        }
         .node-expanded-content {
             max-height: 0;
             overflow: hidden;
@@ -133,11 +161,601 @@
             max-width: 100% !important;
             box-sizing: border-box !important;
         }
+
+        .pathway-node {
+            max-width: 42rem; /* Matches max-w-2xl by default */
+            transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                        min-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                        padding 0.4s ease, 
+                        transform 0.3s ease;
+        }
+
+        /* Override max-width when expanded */
+        .pathway-node.expanded {
+            width: 95%;
+            max-width: 100% !important;
+            min-height: 560px !important;
+            padding: 2.5rem !important;
+        }
+
+        /* ===================== */
+        /* Gallery zoom / lightbox */
+        /* ===================== */
+
+        .detail-photo {
+            cursor: zoom-in;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            pointer-events: auto !important; /* Ensures the featured photo receives clicks */
+        }
+
+        /* Keep top spacing outside the image's height allocation. */
+        #challengeDetail .detail-photo {
+            margin-top: 24px;
+        }
+
+        #challengeDetail .detail-photo,
+        #challengeDetail .detail-photo img {
+            cursor: zoom-in;
+        }
+
+        .detail-photo:hover {
+            transform: scale(1.04);
+            box-shadow: 0 16px 30px rgba(0,0,0,0.25);
+        }
+
+        #imgLightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            padding: 2rem;
+        }
+
+        #imgLightbox.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #imgLightbox img {
+            max-width: 90vw;
+            max-height: 85vh;
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            transform: scale(0.9);
+            transition: transform 0.25s ease;
+            cursor: zoom-out;
+        }
+
+        #imgLightbox.open img {
+            transform: scale(1);
+        }
+
+        #lightboxClose {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 9999px;
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        #lightboxClose:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        .gallery-swipe-hint {
+            display: none;
+        }
+
+        @media screen and (max-width: 1023px) {
+            #navbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+                padding: 0.75rem 1rem;
+            }
+
+            #navbar > a {
+                align-self: flex-start;
+            }
+
+            #navbar > a img {
+                height: 2.5rem;
+            }
+
+            #navbar > div {
+                width: 100%;
+                min-width: 0;
+                gap: 1.25rem;
+                overflow-x: auto;
+                padding-bottom: 0.25rem;
+            }
+
+            #navbar .nav-link {
+                flex-shrink: 0;
+                white-space: nowrap;
+                font-size: 0.75rem;
+                padding-block: 0.5rem;
+            }
+
+            main section[id] {
+                scroll-margin-top: 8rem;
+            }
+
+            #video-container {
+                height: 100svh;
+            }
+
+            .experience {
+                height: auto;
+                min-height: 100svh;
+                padding-top: 4rem;
+                padding-bottom: 4rem;
+            }
+
+            .pathway-node,
+            .pathway-node.expanded {
+                width: 100%;
+                min-height: 0 !important;
+                padding: 1.5rem !important;
+            }
+
+            .pathway-main,
+            .expand-card {
+                min-width: 0;
+                max-width: 100%;
+            }
+
+            .resource-buttons {
+                flex-wrap: wrap;
+            }
+
+            .expand-card iframe {
+                width: 100%;
+                max-width: 100%;
+                height: 60svh;
+            }
+
+            .documents-container {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 1.25rem;
+            }
+
+            .floating-contact-container {
+                right: 1rem;
+                bottom: 1rem;
+            }
+            #recognition {
+                height: auto;
+                min-height: 0;
+                overflow: visible;
+                padding-block: 3rem;
+            }
+
+            #recognition .documents-container {
+                margin-block: 2rem 0;
+            }
+        }
+
+        /* Phones */
+        @media screen and (max-width: 639px) {
+            #home > div {
+                max-width: 100%;
+                padding-inline: 1rem;
+            }
+
+            .experience-text-wrapper {
+                font-size: clamp(1.75rem, 7vw, 2.5rem);
+            }
+
+            .countdown-timer-grid {
+                gap: 0.75rem;
+            }
+
+            /* Overrides widths assigned by initializeCarousel() */
+            .carousel-card {
+                width: min(340px, calc(100vw - 2rem));
+            }
+
+            .category-card {
+                padding: 1.25rem;
+                border-radius: 1.5rem;
+            }
+
+            .pathway-node,
+            .pathway-node.expanded {
+                padding: 1rem !important;
+                border-radius: 1rem;
+            }
+
+            .pathway-node.expanded .node-expanded-content {
+                max-height: none;
+            }
+
+            .documents-container {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 1rem;
+                margin-block: 2rem;
+            }
+
+            /* Larger gallery images while retaining current scrolling */
+            .gallery-track {
+                gap: 1rem;
+                padding-inline: 1rem;
+            }
+
+            .gallery-track > div {
+                width: 80vw;
+                height: 45svh;
+                translate: none;
+            }
+
+            #imgLightbox {
+                padding: 1rem;
+            }
+
+            #imgLightbox img {
+                max-width: 100%;
+                max-height: 80svh;
+            }
+
+            #lightboxClose {
+                top: 1rem;
+                right: 1rem;
+            }
+
+            .floating-contact-container > button {
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+            }
+
+            #navbar > div {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 0.25rem 0.5rem;
+                overflow: visible;
+                padding: 0;
+            }
+
+            #navbar .nav-link {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 0;
+                min-height: 2.75rem;
+                padding: 0.25rem;
+                font-size: 0.65rem;
+                white-space: normal;
+                text-align: center;
+            }
+
+            main section[id] {
+                scroll-margin-top: 11rem;
+            }
+
+            /* Mobile carousel: use the existing previous/next buttons */
+            #carouselContainer .carousel-card {
+                cursor: default;
+            }
+
+            #challengeDetail {
+                display: none !important;
+            }
+
+            /* Endorsements */
+            #recognition .documents-container {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 1.25rem;
+            }
+
+            #recognition .doc-card {
+                min-width: 0;
+                padding: 1.5rem;
+            }
+
+            #recognition h2 {
+                font-size: 2rem;
+            }
+
+            /* Mobile gallery: normal section with horizontal swiping */
+            #gallery {
+                height: auto;
+                min-height: 0;
+                padding-top: 10rem;
+                padding-bottom: 2rem;
+            }
+
+            #gallery .gallery-sticky {
+                position: relative;
+                top: auto;
+                height: auto;
+                display: block;
+                overflow-x: auto;
+                overflow-y: hidden;
+                scroll-snap-type: x proximity;
+            }
+
+            #gallery .gallery-track {
+                width: max-content;
+                gap: 1rem;
+                padding: 0 1rem 1rem;
+            }
+
+            #gallery .gallery-track > div {
+                width: 80vw;
+                height: 24rem;
+                height: clamp(18rem, 55svh, 30rem);
+                translate: none;
+                scroll-snap-align: center;
+            }
+
+            #gallery .gallery-swipe-hint {
+                position: relative;
+                display: block;
+                margin: 1rem 0 0;
+                padding-inline: 1rem;
+                color: #d1d5db;
+                font-size: 0.875rem;
+                text-align: center;
+            }
+        }
+
+        /* Touch devices: controls must not depend on hover */
+        @media (hover: none) and (pointer: coarse) {
+            .video-controls {
+                left: 50%;
+                width: calc(100% - 2rem);
+                height: auto;
+                min-height: 3.5rem;
+                padding: 0.5rem 0.75rem;
+                gap: 0.5rem;
+                background: rgb(0 96 122 / 85%);
+            }
+
+            .video-controls .vc-btn,
+            .video-controls .vc-time {
+                opacity: 1;
+            }
+
+            .video-controls .vc-btn {
+                width: 2.75rem;
+                height: 2.75rem;
+            }
+
+            /* Show contact options when its button receives focus */
+            .floating-contact-container:focus-within > div {
+                opacity: 1;
+                visibility: visible;
+                translate: none;
+                transform: none;
+            }
+
+        }
     </style>
+
+    <style>
+        /* Navigation works independently of scroll animations. */
+        #navbar {}
+
+        #mobileMenuButton {
+            display: none;
+        }
+
+        @media screen and (max-width:1023px) {
+            #navbar {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1rem;
+                padding: .75rem 1rem;
+            }
+
+            #navbar>a {
+                align-self: center;
+                flex-shrink: 0;
+                margin-right: auto;
+            }
+
+            #navbar>a img {
+                height: 40px;
+            }
+
+            #mobileMenuButton {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 5px;
+                width: 44px;
+                height: 44px;
+                flex-shrink: 0;
+                margin-left: auto;
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                cursor: pointer;
+            }
+
+            #mobileMenuButton span {
+                display: block;
+                width: 23px;
+                height: 2px;
+                background: #00607a;
+            }
+
+            #navbar #mobileNavLinks {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                max-height: calc(100dvh - 68px);
+                overflow-y: auto;
+                overflow-x: hidden;
+                padding: .5rem 1rem;
+                margin: 0;
+                background: white;
+                box-shadow: 0 8px 16px rgb(0 0 0 / 10%);
+            }
+
+            #navbar #mobileNavLinks.is-open {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+            }
+
+            #navbar #mobileNavLinks .nav-link {
+                display: block;
+                padding: .875rem .5rem;
+                min-height: 44px;
+                color: #00607a;
+                font-size: .875rem;
+                text-align: left;
+                white-space: nowrap;
+            }
+
+            main section[id] {
+                scroll-margin-top: 5rem;
+            }
+
+            #recognition {
+                height: auto;
+                min-height: 0;
+                overflow: visible;
+            }
+        }
+
+        @media screen and (max-width:639px) {
+            #challengeDetail {
+                display: none !important;
+            }
+
+            #carouselContainer #prevBtn,
+            #carouselContainer #nextBtn {
+                z-index: 1000;
+                pointer-events: auto;
+                cursor: pointer;
+            }
+
+            #gallery {
+                height: auto;
+                min-height: 0;
+                padding: 10rem 1rem 2rem;
+            }
+
+            #gallery .gallery-sticky {
+                position: relative;
+                top: auto;
+                display: block;
+                height: auto;
+                overflow: visible;
+                scroll-snap-type: none;
+            }
+
+            #gallery .gallery-track {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+                gap: 1.5rem;
+                padding: 0;
+            }
+
+            #gallery .gallery-track>div {
+                width: 100%;
+                height: auto;
+                min-width: 0;
+                translate: none;
+                transform: none;
+            }
+
+            #gallery .gallery-track img {
+                display: block;
+                flex: none;
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+            }
+
+            #gallery .gallery-swipe-hint {
+                display: none;
+            }
+        }
+    </style>
+    <style>
+        /* Fix the navigation to the viewport independently of Tailwind loading. */
+        #navbar {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100%;
+            z-index: 1050;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            box-sizing: border-box;
+
+
+        }
+
+        #navbar>a {
+            flex-shrink: 0;
+        }
+
+        #navbar>a img {
+            display: block;
+            height: 40px;
+            width: auto;
+        }
+
+        #video-container {
+            position: relative;
+        }
+    </style>
+
 </head>
 
 <body
     class="bg-[#F9FBFC] bg-[radial-gradient(rgba(118,111,208,0.08)_1px,transparent_1px),linear-gradient(to_right,rgba(67,100,164,0.03)_1px,transparent_1px)] [background-size:32px_32px,64px_64px] select-none">
+    <nav id="navbar"
+        class="tagline fixed top-0 left-0 z-[1000] w-full flex items-center justify-between px-6 py-3 bg-white font-display opacity-0 -translate-y-5 pointer-events-none transition-all duration-500 ease-in-out [&.visible]:opacity-100 [&.visible]:translate-y-0 [&.visible]:pointer-events-auto">
+        <a href="{{ url_for('home') }}" aria-label="YTAC home"><img
+                src="{{ url_for('static', filename='img/logo_nobg.png') }}" alt="YTAC logo" class="h-10 w-auto"></a>
+        <button id="mobileMenuButton" type="button" aria-label="Toggle navigation" aria-expanded="false"
+            aria-controls="mobileNavLinks">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div id="mobileNavLinks" class="flex items-center gap-8 font-bold">
+            <a href="#home" class="nav-link text-ytac-blue">HOME</a>
+            <a href="#category" class="nav-link text-ytac-blue">ABOUT YTAC</a>
+            <a href="#pathway" class="nav-link text-ytac-blue">PATHWAY</a>
+            <a href="#recognition" class="nav-link text-ytac-blue">RECOGNITION</a>
+            <a href="#gallery" class="nav-link text-ytac-blue">GALLERY</a>
+            <a href="#contact" class="nav-link text-ytac-blue">CONTACT</a>
+        </div>
+    </nav>
     <header>
         <div class="h-screen" id="video-container">
             <video id="video" class="w-full h-full object-cover" autoplay muted playsinline>
@@ -145,23 +763,7 @@
                 Your browser does not support the video tag.
             </video>
 
-            <nav id="navbar"
-                class="tagline fixed top-0 left-0 z-[1000] w-full flex items-center justify-between px-6 py-3 bg-white font-display opacity-0 -translate-y-5 pointer-events-none transition-all duration-500 ease-in-out [&.visible]:opacity-100 [&.visible]:translate-y-0 [&.visible]:pointer-events-auto">
-                <a href="index.html">
-                    <img src="{{ url_for('static', filename='img/logo_nobg.png') }}" alt="YTAC logo"
-                        class="h-12 left-4 drop-shadow-[0_4px_8px_rgba(0,0,0,0.2)]">
-                </a>
 
-                <div class="flex items-center gap-8 font-bold">
-                    <a href="#home" class="nav-link text-ytac-blue transition-colors duration-300">HOME</a>
-                    <a href="#category" class="nav-link text-ytac-blue transition-colors duration-300">ABOUT YTAC</a>
-                    <a href="#pathway" class="nav-link text-ytac-blue transition-colors duration-300">PATHWAY</a>
-                    <a href="#recognition"
-                        class="nav-link text-ytac-blue transition-colors duration-300">RECOGNITION</a>
-                    <a href="#gallery" class="nav-link text-ytac-blue transition-colors duration-300">GALLERY</a>
-                    <a href="#contact" class="nav-link text-ytac-blue transition-colors duration-300">CONTACT</a>
-                </div>
-            </nav>
 
             <!-- Visible Gray Track Line -->
             <div class="video-controls group absolute bottom-6 left-[53%] -translate-x-1/2
@@ -232,7 +834,7 @@
                         <span class="hero-anim hero-line3-anim block">CHALLENGE</span>
                     </h1>
 
-                    <span
+                    <span id="currentYear"
                         class="hero-anim hero-year-anim font-heading font-black text-7xl sm:text-8xl xl:text-9xl text-ytac-purple leading-none block mb-8">
                         2027
                     </span>
@@ -321,15 +923,10 @@
                         </div>
                     </div>
 
-                    <div class="flex flex-row items-center justify-center gap-8 mt-8" id="register">
-                        <a id="s2Button" href="registration.html"
+                    <div class="flex justify-center w-full mt-8" id="register">
+                        <a id="s2Button" href="{{ url_for('registration') }}"
                             class="primary-register-button pointer-events-auto inline-flex items-center gap-2 bg-white text-ytac-blue font-heading font-extrabold text-lg sm:text-xl px-10 py-4 rounded-full shadow-2xl hover:bg-ytac-mint hover:text-white hover:scale-105 opacity-0 translate-y-16">
                             Register Now →
-                        </a>
-
-                        <a id="s2SubmitButton" href="submission.html"
-                            class="primary-submit-button pointer-events-auto inline-flex items-center gap-2 bg-white text-ytac-blue font-heading font-extrabold text-lg sm:text-xl px-10 py-4 rounded-full shadow-2xl hover:bg-ytac-mint hover:text-white hover:scale-105 opacity-0 translate-y-16">
-                            Submit Project →
                         </a>
                     </div>
                 </div>
@@ -355,131 +952,193 @@
                 <div class="relative w-full max-w-5xl min-h-[460px] py-4 flex items-center justify-center perspective-[1200px]"
                     id="carouselContainer">
 
-                    <div class="category-grid relative w-full h-full flex items-center justify-center min-h-[440px]">
+                    <div class="category-grid relative w-full h-full flex items-center justify-center min-h-[500px]">
 
                         <!-- 1. Inno-Tech Challenge -->
-                        <div class="carousel-card absolute w-[340px] sm:w-[400px] cursor-pointer" data-index="0"
+                        <div class="carousel-card absolute w-[340px] sm:w-[380px] cursor-pointer" data-index="0"
                             data-gallery="inno-tech">
                             <div
-                                class="category-card w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 flex flex-col justify-between hover:border-ytac-blue/40 transition-colors duration-300 min-h-[420px]">
-                                <div>
+                                class="category-card w-full bg-white/90 backdrop-blur-md p-8 rounded-[2.5rem] shadow-[0_20px_50px_rgba(118,111,208,0.15)] border border-white flex flex-col items-center justify-between transition-all duration-300 min-h-[480px] relative overflow-hidden group">
+
+                                <!-- Soft Corner Glow Backgrounds -->
+                                <div
+                                    class="absolute -top-12 -left-12 w-32 h-32 bg-cyan-200/40 rounded-full blur-2xl pointer-events-none">
+                                </div>
+                                <div
+                                    class="absolute -bottom-12 -right-12 w-32 h-32 bg-purple-200/40 rounded-full blur-2xl pointer-events-none">
+                                </div>
+
+                                <div class="w-full flex flex-col items-center z-10">
+                                    <!-- Top Illustration Icon -->
+                                    <div
+                                        class="w-52 h-48 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                                        <img src="{{ url_for('static', filename='img/inno-tech-icon-nobg.png') }}"
+                                            alt="Inno-Tech Challenge"
+                                            class="w-full h-full object-contain drop-shadow-md">
+                                    </div>
+
+                                    <!-- Title & Decorative Line -->
                                     <h3
-                                        class="font-heading font-black text-2xl sm:text-3xl text-ytac-blue mb-4 tracking-tight text-center">
+                                        class="-mt-6 font-heading font-black text-2xl sm:text-3xl text-[#004A5E] tracking-tight text-center uppercase">
                                         INNO-TECH<br>CHALLENGE
                                     </h3>
+                                    <div
+                                        class="w-12 h-1 bg-gradient-to-r from-ytac-green to-ytac-purple rounded-full my-3">
+                                    </div>
+
+                                    <!-- Description -->
                                     <p
-                                        class="card-desc font-sans text-gray-600 text-base sm:text-lg leading-relaxed mt-[40px] mb-6 text-center">
+                                        class="font-sans text-gray-500 text-sm sm:text-base leading-relaxed text-center px-2">
                                         A coding-based innovation competition where participants design and develop
                                         functional projects using programming languages.
                                     </p>
                                 </div>
-                                <div
-                                    class="text-sm font-extrabold text-ytac-purple uppercase tracking-wider flex items-center justify-center gap-2 mt-auto hover:text-ytac-blue transition-colors cursor-pointer">
-                                    <span>Learn More</span>
-                                    <i class="fa-solid fa-arrow-right ml-1"></i>
+
+                                <!-- Gradient Button -->
+                                <div class="w-full flex justify-center mt-6 z-10">
+                                    <span
+                                        class="w-full max-w-[220px] py-3.5 px-6 bg-gradient-to-r from-[#00A8B5] to-[#8A2BE2] text-white font-heading font-bold text-sm tracking-wider uppercase rounded-full shadow-[0_10px_20px_rgba(138,43,226,0.3)] flex items-center justify-center gap-2 group-hover:shadow-[0_12px_25px_rgba(0,168,181,0.4)] transition-all duration-300">
+                                        LEARN MORE <i class="fa-solid fa-arrow-right text-xs"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- 2. Inno-Maker Challenge -->
-                        <div class="carousel-card absolute w-[340px] sm:w-[400px] cursor-pointer" data-index="1"
+                        <div class="carousel-card absolute w-[340px] sm:w-[380px] cursor-pointer" data-index="1"
                             data-gallery="inno-maker">
                             <div
-                                class="category-card w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 flex flex-col justify-between hover:border-ytac-blue/40 transition-colors duration-300 min-h-[420px]">
-                                <div>
+                                class="category-card w-full bg-white/90 backdrop-blur-md p-8 rounded-[2.5rem] shadow-[0_20px_50px_rgba(118,111,208,0.15)] border border-white flex flex-col items-center justify-between transition-all duration-300 min-h-[480px] relative overflow-hidden group">
+
+                                <!-- Soft Corner Glow Backgrounds -->
+                                <div
+                                    class="absolute -top-12 -left-12 w-32 h-32 bg-amber-200/40 rounded-full blur-2xl pointer-events-none">
+                                </div>
+                                <div
+                                    class="absolute -bottom-12 -right-12 w-32 h-32 bg-purple-200/40 rounded-full blur-2xl pointer-events-none">
+                                </div>
+
+                                <div class="w-full flex flex-col items-center z-10">
+                                    <!-- Top Illustration Icon -->
+                                    <div
+                                        class="w-52 h-48 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                                        <img src="{{ url_for('static', filename='img/inno-maker-icon-nobg.png') }}"
+                                            alt="Inno-Maker Challenge"
+                                            class="w-full h-full object-contain drop-shadow-md">
+                                    </div>
+
+                                    <!-- Title & Decorative Line -->
                                     <h3
-                                        class="font-heading font-black text-2xl sm:text-3xl text-ytac-blue mb-4 tracking-tight text-center">
-                                        INNO-MAKER CHALLENGE
+                                        class="-mt-6 font-heading font-black text-2xl sm:text-3xl text-[#004A5E] tracking-tight text-center uppercase">
+                                        INNO-MAKER<br>CHALLENGE
                                     </h3>
+                                    <div
+                                        class="w-12 h-1 bg-gradient-to-r from-amber-400 to-ytac-purple rounded-full my-3">
+                                    </div>
+
+                                    <!-- Description -->
                                     <p
-                                        class="card-desc font-sans text-gray-600 text-base sm:text-lg leading-relaxed mt-[55px] mb-6 text-center">
-                                        A non-coding innovation<br>competition where participants design and present
+                                        class="font-sans text-gray-500 text-sm sm:text-base leading-relaxed text-center px-2">
+                                        A non-coding innovation competition where participants design and present
                                         creative product concepts or physical prototypes.
                                     </p>
                                 </div>
-                                <div
-                                    class="text-sm font-extrabold text-ytac-purple uppercase tracking-wider flex items-center justify-center gap-2 mt-auto hover:text-ytac-blue transition-colors cursor-pointer">
-                                    <span>Learn More</span>
-                                    <i class="fa-solid fa-arrow-right ml-1"></i>
+
+                                <!-- Gradient Button -->
+                                <div class="w-full flex justify-center mt-6 z-10">
+                                    <span
+                                        class="w-full max-w-[220px] py-3.5 px-6 bg-gradient-to-r from-[#00A8B5] to-[#8A2BE2] text-white font-heading font-bold text-sm tracking-wider uppercase rounded-full shadow-[0_10px_20px_rgba(138,43,226,0.3)] flex items-center justify-center gap-2 group-hover:shadow-[0_12px_25px_rgba(0,168,181,0.4)] transition-all duration-300">
+                                        LEARN MORE <i class="fa-solid fa-arrow-right text-xs"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- 3. Tech-Hackathon -->
-                        <div class="carousel-card absolute w-[340px] sm:w-[400px] cursor-pointer" data-index="2"
+                        <div class="carousel-card absolute w-[340px] sm:w-[380px] cursor-pointer" data-index="2"
                             data-gallery="hackathon">
                             <div
-                                class="category-card w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 flex flex-col justify-between hover:border-ytac-blue/40 transition-colors duration-300 min-h-[420px]">
-                                <div>
+                                class="category-card w-full bg-white/90 backdrop-blur-md p-8 rounded-[2.5rem] shadow-[0_20px_50px_rgba(118,111,208,0.15)] border border-white flex flex-col items-center justify-between transition-all duration-300 min-h-[480px] relative overflow-hidden group">
+
+                                <!-- Soft Corner Glow Backgrounds -->
+                                <div
+                                    class="absolute -top-12 -left-12 w-32 h-32 bg-cyan-200/40 rounded-full blur-2xl pointer-events-none">
+                                </div>
+                                <div
+                                    class="absolute -bottom-12 -right-12 w-32 h-32 bg-purple-200/40 rounded-full blur-2xl pointer-events-none">
+                                </div>
+
+                                <div class="w-full flex flex-col items-center z-10">
+                                    <!-- Top Illustration Icon -->
+                                    <div
+                                        class="w-52 h-48 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                                        <img src="{{ url_for('static', filename='img/tech-hack-icon-nobg.png') }}"
+                                            alt="Tech Hackathon" class="w-full h-full object-contain drop-shadow-md">
+                                    </div>
+
+                                    <!-- Title & Decorative Line -->
                                     <h3
-                                        class="font-heading font-black text-2xl sm:text-3xl text-ytac-blue mb-4 tracking-tight text-center">
+                                        class="-mt-6 font-heading font-black text-2xl sm:text-3xl text-[#004A5E] tracking-tight text-center uppercase">
                                         TECH-HACKATHON
                                     </h3>
+                                    <div
+                                        class="w-12 h-1 bg-gradient-to-r from-ytac-green to-ytac-purple rounded-full my-3">
+                                    </div>
+
+                                    <!-- Description -->
                                     <p
-                                        class="card-desc font-sans text-gray-600 text-base sm:text-lg leading-relaxed mt-[40px] mb-6 text-center">
+                                        class="font-sans text-gray-500 text-sm sm:text-base leading-relaxed text-center px-2">
                                         A fast-paced coding sprint where participants collaborate under pressure to
                                         solve real-world challenges, build rapid software prototypes, and pitch
                                         functional tech solutions.
                                     </p>
                                 </div>
-                                <div
-                                    class="text-sm font-extrabold text-ytac-purple uppercase tracking-wider flex items-center justify-center gap-2 mt-auto hover:text-ytac-blue transition-colors cursor-pointer">
-                                    <span>Learn More</span>
-                                    <i class="fa-solid fa-arrow-right ml-1"></i>
+
+                                <!-- Gradient Button -->
+                                <div class="w-full flex justify-center mt-6 z-10">
+                                    <span
+                                        class="w-full max-w-[220px] py-3.5 px-6 bg-gradient-to-r from-[#00A8B5] to-[#8A2BE2] text-white font-heading font-bold text-sm tracking-wider uppercase rounded-full shadow-[0_10px_20px_rgba(138,43,226,0.3)] flex items-center justify-center gap-2 group-hover:shadow-[0_12px_25px_rgba(0,168,181,0.4)] transition-all duration-300">
+                                        LEARN MORE <i class="fa-solid fa-arrow-right text-xs"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
                     <!--Expanded Gallery-->
 
                     <div id="challengeDetail" class="absolute left-[calc(50%+20px)] top-1/2 -translate-y-1/2
-    w-[340px] h-[420px] sm:w-[400px] sm:h-[420px]
+    w-[340px] sm:w-[480px] h-[480px]
     bg-white rounded-3xl
     shadow-[0_12px_25px_rgba(0,0,0,0.12),0_4px_8px_rgba(0,0,0,0.08)]
     border border-gray-100
-    overflow-hidden opacity-0 pointer-events-none z-30
+    overflow-hidden opacity-0 pointer-events-none z-[80]
+    flex flex-col
     [transform-style:preserve-3d] [perspective:1200px]">
 
                         <!-- CLOSE BUTTON -->
                         <button id="closeDetail" type="button"
-                            class="absolute top-4 right-4 z-[60] w-9 h-9 rounded-full bg-white shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-100 hover:scale-110 transition-all duration-200">
+                            class="absolute top-4 right-4 z-[120] w-9 h-9 rounded-full bg-white shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-100 hover:scale-110 transition-all duration-200 pointer-events-auto">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
 
-                        <!-- PHOTO GALLERY -->
-                        <div class="relative w-full h-full">
+                        <!-- FEATURED PHOTO (wide, top of card) -->
+                        <div
+                            class="detail-photo relative mx-auto w-[80%] h-[30%] rounded-xl shrink-0 overflow-hidden cursor-pointer pointer-events-auto">
+                            <img class="gallery-img block w-full h-full object-cover pointer-events-auto" src="" alt="">
+                        </div>
 
-                            <!-- PHOTO 1 -->
-                            <div
-                                class="detail-photo absolute w-[160px] h-[95px] left-8 top-6 rounded-lg border-4 border-white shadow-xl overflow-hidden z-10">
-                                <img class="gallery-img w-full h-full object-cover" src="" alt="">
+                        <!-- CATEGORY DESCRIPTION -->
+                        <div class="relative flex flex-col h-[65%] min-h-0 shrink-0 overflow-y-auto gap-2 p-6 sm:p-7 pointer-events-auto">
+                            <h3 id="detailTitle"
+                                class="font-heading font-black text-xl sm:text-2xl text-center text-[#004A5E] uppercase tracking-tight">
+                            </h3>
+                            <div class="w-10 h-1 bg-gradient-to-r from-ytac-green to-ytac-purple mx-auto rounded-full">
                             </div>
-
-                            <!-- PHOTO 2 -->
-                            <div
-                                class="detail-photo absolute w-[180px] h-[105px] right-5 top-20 rounded-lg border-4 border-white shadow-xl overflow-hidden z-20">
-                                <img class="gallery-img w-full h-full object-cover" src="" alt="">
-                            </div>
-
-                            <!-- PHOTO 3 -->
-                            <div
-                                class="detail-photo absolute w-[165px] h-[100px] left-10 top-40 rounded-lg border-4 border-white shadow-xl overflow-hidden z-30">
-                                <img class="gallery-img w-full h-full object-cover" src="" alt="">
-                            </div>
-
-                            <!-- PHOTO 4 -->
-                            <div
-                                class="detail-photo absolute w-[180px] h-[105px] right-5 top-[235px] rounded-lg border-4 border-white shadow-xl overflow-hidden z-40">
-                                <img class="gallery-img w-full h-full object-cover" src="" alt="">
-                            </div>
-
-                            <!-- PHOTO 5 -->
-                            <div
-                                class="detail-photo absolute w-[165px] h-[100px] left-12 bottom-4 rounded-lg border-4 border-white shadow-xl overflow-hidden z-50">
-                                <img class="gallery-img w-full h-full object-cover" src="" alt="">
-                            </div>
-
+                            <p id="detailDescription"
+                                class="font-sans text-gray-500 text-center text-sm sm:text-base leading-relaxed">
+                            </p>
                         </div>
 
                     </div>
@@ -534,10 +1193,10 @@
                         data-stage-filter="international">INTERNATIONAL</button>
                 </div>
 
-                <div class="pathway-tree max-w-6xl w-full mx-auto flex flex-col items-center gap-2 min-h-[500px]">
+                <div class="pathway-tree max-w-full w-full mx-auto flex flex-col items-center gap-2 min-h-[500px]">
 
                     <!-- YTAC Node -->
-                    <div class="pathway-node w-full max-w-2xl bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-2 hover:border-white text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
+                    <div class="pathway-node w-full bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-2 hover:border-white text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
                         data-stage="malaysia">
 
                         <!-- Left Column: Main Node Content -->
@@ -600,6 +1259,12 @@
                                             onclick="event.stopPropagation(); selectResourceType('ytac', 'letter', this)">
                                             Letter of Recognition
                                         </button>
+
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); selectResourceType('ytac', 'gallery', this)">
+                                            Gallery
+                                        </button>
                                     </div>
 
                                     <!-- Year Selector Row (Disabled by default) -->
@@ -658,7 +1323,7 @@
                     </div>
 
                     <!-- ICIA Node -->
-                    <div class="pathway-node w-full max-w-2xl bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-2 hover:border-white text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
+                    <div class="pathway-node w-full bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-2 hover:border-white text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
                         data-stage="asean">
 
                         <!-- Left Column: Main Node Content -->
@@ -721,6 +1386,12 @@
                                             onclick="event.stopPropagation(); selectResourceType('icia', 'letter', this)">
                                             Letter of Recognition
                                         </button>
+
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); selectResourceType('icia', 'gallery', this)">
+                                            Gallery
+                                        </button>
                                     </div>
 
                                     <!-- Year Selector Row (Disabled by default) -->
@@ -779,7 +1450,7 @@
                     </div>
 
                     <!-- IITS Node -->
-                    <div class="pathway-node w-full max-w-2xl bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-2 hover:border-white text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
+                    <div class="pathway-node w-full bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-2 hover:border-white text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
                         data-stage="international">
 
                         <!-- Left Column: Main Node Content -->
@@ -841,6 +1512,12 @@
                                             class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
                                             onclick="event.stopPropagation(); selectResourceType('iits', 'letter', this)">
                                             Letter of Recognition
+                                        </button>
+
+                                        <button type="button"
+                                            class="res-btn bg-ytac-gray hover:bg-ytac-purple hover:text-white text-ytac-blue font-heading font-bold text-sm px-5 py-2.5 rounded-xl transition-colors duration-200"
+                                            onclick="event.stopPropagation(); selectResourceType('iits', 'gallery', this)">
+                                            Gallery
                                         </button>
                                     </div>
 
@@ -945,7 +1622,7 @@
         </section>
 
         <!-- Gallery -->
-        <section class="gallery relative h-210 overflow-hidden bg-[#1A1A1A]" id="gallery">
+        <section class="gallery relative sm:h-svh overflow-hidden bg-[#1A1A1A]" id="gallery">
 
             <div class="absolute inset-0 pointer-events-none
         bg-[linear-gradient(rgba(156,163,175,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(156,163,175,0.12)_1px,transparent_1px)]
@@ -953,7 +1630,7 @@
             </div>
 
             <!-- TITLE OVERLAY -->
-            <div class="absolute top-10 left-0 w-full z-20 text-center pointer-events-none">
+            <div class="absolute top-10 sm:top-24 left-0 w-full z-20 text-center pointer-events-none">
 
                 <span
                     class="font-heading text-purple-300 text-sm font-extrabold tracking-widest uppercase bg-purple-900/60 border border-purple-500/30 px-4 py-1.5 rounded-lg inline-block mb-2 shadow-lg backdrop-blur-sm">
@@ -967,10 +1644,16 @@
 
             </div>
 
+            <!-- Mouse scroll hint stays in place while the gallery track moves. -->
+            <div class="absolute bottom-8 left-8 right-auto z-30 m-0 hidden sm:flex items-center gap-2 font-heading text-lg font-bold tracking-[0.12em] text-ytac-mint whitespace-nowrap pointer-events-none [text-shadow:0_2px_8px_rgba(0,0,0,0.8)]"
+                aria-label="Use your mouse wheel to explore the gallery"><span>SCROLL TO EXPLORE</span><span
+                    aria-hidden="true">&rarr;</span></div>
             <!-- FULL SCREEN GALLERY -->
-            <div class="gallery-sticky sticky top-40 h-[calc(100vh-10rem)] w-full flex items-center overflow-hidden">
+            <div
+                class="gallery-sticky relative sm:absolute sm:top-48 sm:bottom-24 w-full flex items-center overflow-hidden">
 
-                <div class="gallery-track flex items-center gap-12 px-[10vw]">
+                <div
+                    class="gallery-track flex sm:h-full items-center gap-12 px-[10vw] sm:[&>div]:max-h-full sm:[&>div]:translate-none sm:max-[1367px]:gap-6 sm:max-[1367px]:px-8 sm:max-[1367px]:[&>div]:w-[min(72vw,56rem,calc(150svh_-_30rem))] sm:max-[1367px]:[&>div]:h-auto sm:max-[1367px]:[&>div>img]:aspect-[3/2] sm:max-[1367px]:[&>div>img]:flex-none sm:max-[1367px]:[&>div>img]:h-auto sm:max-[1367px]:[&>div>div]:aspect-[3/2] sm:max-[1367px]:[&>div>div]:flex-none">
 
                     <!-- IMAGE 1 -->
                     <div class="shrink-0 w-[26vw] h-[43vh] flex flex-col gap-2 translate-y-30">
@@ -978,67 +1661,74 @@
                             YTAC, 2026
                         </span>
 
-                        <img src="{{ url_for('static', filename='img/2026 pic 2.jpg') }}" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        <img src="{{ url_for('static', filename='img/2026 pic 2.jpg') }}"
+                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
                     </div>
 
 
                     <!-- IMAGE 2 -->
-                    <div class="shrink-0 w-[45vw] h-[60vh] flex flex-col gap-2 -translate-y-10">
+                    <div class="shrink-0 w-[45vw] h-[60vh] flex flex-col gap-2 translate-y-14">
                         <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
                             YTAC, 2026
                         </span>
 
-                        <img src="{{ url_for('static', filename='img/2026 pic 1.jpg') }}" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        <img src="{{ url_for('static', filename='img/2026 pic 1.jpg') }}"
+                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
                     </div>
 
 
                     <!-- IMAGE 3 -->
-                    <div class="shrink-0 w-[28vw] h-[48vh] flex flex-col gap-2 translate-y-12">
+                    <div class="shrink-0 w-[28vw] h-[48vh] flex flex-col gap-2 translate-y-13">
                         <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
                             YTAC, 2026
                         </span>
 
-                        <img src="{{ url_for('static', filename='img/2026 pic 3.jpg') }}" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        <img src="{{ url_for('static', filename='img/2026 pic 4.jpg') }}"
+                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
                     </div>
 
 
                     <!-- IMAGE 4 -->
-                    <div class="shrink-0 w-[30vw] h-[60vh] flex flex-col gap-2 translate-y-8">
+                    <div class="shrink-0 w-[28vw] h-[48vh] flex flex-col gap-2 translate-y-11">
                         <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
                             YTAC, 2026
                         </span>
 
-                        <img src="{{ url_for('static', filename='img/2026 pic 4.jpg') }}" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        <img src="{{ url_for('static', filename='img/2025 pic 1.jpg') }}"
+                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
                     </div>
 
 
                     <!-- IMAGE 5 -->
-                    <div class="shrink-0 w-[25vw] h-[40vh] flex flex-col gap-2 translate-y-15">
+                    <div class="shrink-0 w-[45vw] h-[70vh] flex flex-col gap-2 translate-y-4">
                         <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
                             YTAC, 2025
                         </span>
 
-                        <img src="{{ url_for('static', filename='img/2025 pic 1.jpg') }}" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        <img src="{{ url_for('static', filename='img/2025 pic 4.jpg') }}"
+                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
                     </div>
 
 
                     <!-- IMAGE 6 -->
-                    <div class="shrink-0 w-[45vw] h-[70vh] flex flex-col gap-2 -translate-y-4">
+                    <div class="shrink-0 w-[32vw] h-[48vh] flex flex-col gap-2 translate-y-8">
                         <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
                             YTAC, 2025
                         </span>
 
-                        <img src="{{ url_for('static', filename='img/2025 pic 4.jpg') }}" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        <img src="{{ url_for('static', filename='img/2025 pic 2.jpg') }}"
+                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
                     </div>
 
 
                     <!-- IMAGE 7 -->
-                    <div class="shrink-0 w-[30vw] h-[50vh] flex flex-col gap-2 translate-y-20">
+                    <div class="shrink-0 w-[38vw] h-[55vh] flex flex-col gap-2 translate-y-8">
                         <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
                             YTAC, 2025
                         </span>
 
-                        <img src="{{ url_for('static', filename='img/2025 pic 2.jpg') }}" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        <img src="{{ url_for('static', filename='img/2025 pic 3.jpg') }}"
+                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
                     </div>
 
 
@@ -1048,7 +1738,50 @@
                             YTAC, 2025
                         </span>
 
-                        <img src="{{ url_for('static', filename='img/2025 pic 3.jpg') }}" class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        <div class="flex-1 min-h-0 rounded-2xl overflow-hidden">
+                            <img src="{{ url_for('static', filename='img/2025 pic 5.jpg') }}"
+                                class="block w-full h-full object-cover" alt="YTAC 2025 event">
+                        </div>
+                    </div>
+
+                    <!-- IMAGE 9 -->
+                    <div class="shrink-0 w-[35vw] h-[50vh] flex flex-col gap-2 translate-y-8">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2025
+                        </span>
+
+                        <img src="{{ url_for('static', filename='img/2025 pic 6.jpg') }}"
+                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+                    <!-- IMAGE 10 -->
+                    <div class="shrink-0 w-[42vw] h-[58vh] flex flex-col gap-2 translate-y-8">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2025
+                        </span>
+
+                        <img src="{{ url_for('static', filename='img/2025 pic 7.jpg') }}"
+                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+                    <!-- IMAGE 11 -->
+                    <div class="shrink-0 w-[48vw] h-[68vh] flex flex-col gap-2 translate-y-8">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2024
+                        </span>
+
+                        <img src="{{ url_for('static', filename='img/2024 pic 2.jpg') }}"
+                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                    </div>
+
+                    <!-- IMAGE 12 -->
+                    <div class="shrink-0 w-[33vw] h-[50vh] flex flex-col gap-2 translate-y-8">
+                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                            YTAC, 2024
+                        </span>
+
+                        <img src="{{ url_for('static', filename='img/2024 pic 1.jpg') }}"
+                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
                     </div>
 
                 </div>
@@ -1065,14 +1798,16 @@
                 <!-- WhatsApp Option -->
                 <a href="https://wa.me/message/CS2SJFC4EELDP1" target="_blank" rel="noopener noreferrer"
                     class="flex items-center gap-[10px] px-[20px] py-[12px] bg-white text-ytac-blue font-bold text-sm rounded-full shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:scale-105 hover:bg-ytac-gray transition-all duration-200 ease-out whitespace-nowrap">
-                    <img src="{{ url_for('static', filename='img/whatsapp.png') }}" alt="WhatsApp" class="w-[20px] h-[20px] object-contain block">
+                    <img src="{{ url_for('static', filename='img/whatsapp.png') }}" alt="WhatsApp"
+                        class="w-[20px] h-[20px] object-contain block">
                     <span>WhatsApp</span>
                 </a>
 
                 <!-- Email Option -->
                 <a href="mailto:ytac@eduwel.asia"
                     class="flex items-center gap-[10px] px-[20px] py-[12px] bg-white text-ytac-blue font-bold text-sm rounded-full shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:scale-105 hover:bg-ytac-gray transition-all duration-200 ease-out whitespace-nowrap">
-                    <img src="{{ url_for('static', filename='img/gmail.png') }}" alt="Email Us" class="w-[20px] h-[20px] object-contain block">
+                    <img src="{{ url_for('static', filename='img/gmail.png') }}" alt="Email Us"
+                        class="w-[20px] h-[20px] object-contain block">
                     <span>Email Us</span>
                 </a>
 
@@ -1110,26 +1845,37 @@
                         <h4 class="font-heading font-extrabold text-2xl text-ytac-blue mb-6">
                             YTAC - YOUTH TECH ASIA CHALLENGE
                         </h4>
-                        <div class="space-y-4 font-sans text-gray-700 text-sm sm:text-base leading-relaxed">
-                            <p class="flex flex-wrap items-center gap-1">
-                                <strong class="text-ytac-purple font-bold">Email:</strong>
+                        <div class="w-full space-y-6 font-sans text-base sm:text-lg leading-relaxed text-gray-700">
+                            <p>
+                                <strong class="font-bold text-ytac-purple">Email:</strong>
                                 <a href="mailto:ytac@eduwel.asia"
-                                    class="hover:text-ytac-blue underline transition-colors">ytac@eduwel.asia</a>
+                                    class="underline-offset-4 transition-colors hover:text-ytac-blue hover:underline">
+                                    ytac@eduwel.asia
+                                </a>
                             </p>
-                            <p class="flex flex-wrap items-center gap-1">
-                                <strong class="text-ytac-purple font-bold">Phone:</strong>
-                                <a href="tel:+60149756369" class="hover:text-ytac-blue transition-colors">+6014-975 6369
-                                    (Customer Support)</a>
+
+                            <p>
+                                <strong class="font-bold text-ytac-purple">Phone:</strong>
+                                <a href="tel:+60149756369"
+                                    class="underline-offset-4 transition-colors hover:text-ytac-blue hover:underline">
+                                    <span class="whitespace-nowrap">+6014-975 6369</span>
+                                    <span class="text-gray-500">(Customer Support)</span>
+                                </a>
                             </p>
-                            <p class="flex flex-wrap items-center gap-1">
-                                <strong class="text-ytac-purple font-bold">Phone:</strong>
-                                <a href="tel:+60183858888" class="hover:text-ytac-blue transition-colors">+6018-385 8888
-                                    (Ms Yivonn)</a>
-                            </p>
-                            <p class="leading-relaxed">
-                                <strong class="text-ytac-purple font-bold">Address:</strong>
-                                <span>A-3-6 Block A, Kuchai Exchange, 58200 Kuala Lumpur, Wilayah Persekutuan Kuala
-                                    Lumpur</span>
+
+                            <p>
+                                <strong class="font-bold text-ytac-purple">Address:</strong>
+                                <a href="https://waze.com/ul/hw283d1dwt" target="_blank" rel="noopener noreferrer"
+                                    class="group transition-colors hover:text-ytac-blue">
+                                    <span class="group-hover:underline">
+                                        A-3-6 Block A, Kuchai Exchange, 58200 Kuala Lumpur,
+                                        Wilayah Persekutuan Kuala Lumpur
+                                    </span>
+                                    <span
+                                        class="ml-2 inline-block whitespace-nowrap text-sm sm:text-base font-bold text-ytac-purple transition-colors group-hover:text-ytac-blue group-hover:underline">
+                                        Open in Waze ↗
+                                    </span>
+                                </a>
                             </p>
                         </div>
                     </div>
@@ -1148,8 +1894,8 @@
                             <a href="https://www.instagram.com/ytac.official/?hl=en" target="_blank"
                                 rel="noopener noreferrer"
                                 class="w-12 h-12 rounded-2xl bg-white shadow-md flex items-center justify-center p-2.5 hover:scale-110 hover:shadow-xl transition-all duration-300 border border-gray-100">
-                                <img src="{{ url_for('static', filename='img/instagram.png') }}" alt="YTAC Instagram Page"
-                                    class="w-full h-full object-contain">
+                                <img src="{{ url_for('static', filename='img/instagram.png') }}"
+                                    alt="YTAC Instagram Page" class="w-full h-full object-contain">
                             </a>
                         </div>
                     </div>
@@ -1173,7 +1919,50 @@
             </div>
         </footer>
 
+        <!-- IMAGE LIGHTBOX (ZOOM VIEWER) -->
+        <div id="imgLightbox">
+            <button id="lightboxClose" type="button" aria-label="Close enlarged image"><i
+                    class="fa-solid fa-xmark"></i></button>
+            <img id="lightboxImg" src="" alt="">
+        </div>
+
         <script>
+            (() => {
+                const button = document.getElementById("mobileMenuButton");
+                const menu = document.getElementById("mobileNavLinks");
+
+                function setMenu(open) {
+                    menu.classList.toggle("is-open", open);
+                    button.setAttribute("aria-expanded", String(open));
+                }
+
+                button.addEventListener("click", () => {
+                    setMenu(button.getAttribute("aria-expanded") !== "true");
+                });
+
+                menu.querySelectorAll("a").forEach(link => {
+                    link.addEventListener("click", () => setMenu(false));
+                });
+
+                document.addEventListener("click", event => {
+                    if (!event.target.closest("#navbar")) {
+                        setMenu(false);
+                    }
+                });
+
+                document.addEventListener("keydown", event => {
+                    if (
+                        event.key === "Escape" &&
+                        button.getAttribute("aria-expanded") === "true"
+                    ) {
+                        setMenu(false);
+                        button.focus();
+                    }
+                });
+
+                window.matchMedia("(max-width: 1023px)")
+                    .addEventListener("change", () => setMenu(false));
+            })();
             const $ = (selector) => document.querySelector(selector);
             const $$ = (selector) => document.querySelectorAll(selector);
 
@@ -1319,6 +2108,8 @@
             // HOME SECTION
             // =========================================================
 
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+
             ScrollTrigger.create({
                 trigger: '#home',
                 start: 'top 80%',
@@ -1408,7 +2199,7 @@
                 .to('#s1Line2', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '+=0.2')
                 .to('#s1Line3', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '+=0.2')
                 .to('#expScene1', { y: '-60px', opacity: 0, duration: 1.2, ease: 'power1.in' }, '+=0.5')
-                .to('#s2Heading, #s2Subheading, #s2Timer, #s2Button, #s2SubmitButton', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '-=0.2');
+                .to('#s2Heading, #s2Subheading, #s2Timer, #s2Button', { y: 0, opacity: 1, duration: 1, ease: 'power1.out' }, '-=0.2');
 
             // =========================================================
             // CATEGORY CAROUSEL SECTION
@@ -1460,7 +2251,7 @@
                     closeDetail.click();
 
                     setTimeout(() => {
-                        currentAngle -= 120;
+                        currentAngle += 120;
                         updateCarouselPositions();
                     }, 1000);
 
@@ -1524,14 +2315,29 @@
                 ],
 
                 "hackathon": [
-                    "{{ url_for('static', filename='img/hackathon-1.jpg') }}",
-                    "{{ url_for('static', filename='img/hackathon-2.jpg') }}",
-                    "{{ url_for('static', filename='img/hackathon-3.jpg') }}",
-                    "{{ url_for('static', filename='img/hackathon-4.jpg') }}",
                     "{{ url_for('static', filename='img/hackathon-5.jpg') }}"
                 ]
 
             };
+
+            // Title + description shown below the featured photo for each track
+            const categoryInfo = {
+                "inno-tech": {
+                    title: "Inno-Tech Challenge",
+                    description: "A coding-based innovation competition where participants design and develop functional projects using programming languages."
+                },
+                "inno-maker": {
+                    title: "Inno-Maker Challenge",
+                    description: "A non-coding innovation competition where participants design and present creative product concepts or physical prototypes."
+                },
+                "hackathon": {
+                    title: "Tech-Hackathon",
+                    description: "A fast-paced coding sprint where participants collaborate under pressure to solve real-world challenges, build rapid software prototypes, and pitch functional tech solutions."
+                }
+            };
+
+            const detailTitle = document.getElementById("detailTitle");
+            const detailDescription = document.getElementById("detailDescription");
 
             gsap.set(detailPanel, {
                 opacity: 0,
@@ -1548,6 +2354,9 @@
             carouselCards.forEach(card => {
 
                 card.addEventListener("click", (event) => {
+                    if (window.matchMedia("(max-width: 639px)").matches) {
+                        return;
+                    }
 
                     // Don't trigger expansion when Learn More is clicked
                     if (event.target.closest("a")) {
@@ -1574,16 +2383,23 @@
 
 
                     // ======================================
-                    // LOAD THE 5 IMAGES
+                    // LOAD THE FEATURED IMAGE + DESCRIPTION
                     // ======================================
 
-                    galleryImages.forEach((img, index) => {
+                    const info = categoryInfo[galleryName];
 
-                        img.src = images[index];
+                    galleryImages.forEach((img) => {
 
-                        img.alt = `${galleryName} photo ${index + 1}`;
+                        img.src = images[0];
+
+                        img.alt = info ? `${info.title} photo` : `${galleryName} photo`;
 
                     });
+
+                    if (info) {
+                        detailTitle.textContent = info.title;
+                        detailDescription.textContent = info.description;
+                    }
 
 
                     // ======================================
@@ -2204,6 +3020,11 @@
                         '2026': "{{ url_for('static', filename='docs/ytac2026_surat.pdf') }}",
                         '2025': "{{ url_for('static', filename='docs/ytac2025_surat.pdf') }}",
                         '2024': "{{ url_for('static', filename='docs/ytac2024_surat.pdf') }}"
+                    },
+                    gallery: {
+                        '2026': 'https://example.com/ytac2026-gallery',
+                        '2025': 'https://example.com/ytac2025-gallery',
+                        '2024': 'https://example.com/ytac2024-gallery'
                     }
                 },
                 icia: {
@@ -2221,6 +3042,11 @@
                         '2026': "{{ url_for('static', filename='docs/icia2026_surat.pdf') }}",
                         '2025': "{{ url_for('static', filename='docs/icia2025_surat.pdf') }}",
                         '2024': "{{ url_for('static', filename='docs/icia2024_surat.pdf') }}"
+                    },
+                    gallery: {
+                        '2026': 'https://example.com/icia2026-gallery',
+                        '2025': 'https://example.com/icia2025-gallery',
+                        '2024': 'https://example.com/icia2024-gallery'
                     }
                 },
                 iits: {
@@ -2238,6 +3064,11 @@
                         '2026': "{{ url_for('static', filename='docs/iits2026_surat.pdf') }}",
                         '2025': "{{ url_for('static', filename='docs/iits2025_surat.pdf') }}",
                         '2024': "{{ url_for('static', filename='docs/iits2024_surat.pdf') }}"
+                    },
+                    gallery: {
+                        '2026': 'https://example.com/iits2026-gallery',
+                        '2025': 'https://example.com/iits2025-gallery',
+                        '2024': 'https://example.com/iits2024-gallery'
                     }
                 }
             };
@@ -2274,9 +3105,10 @@
                 const labelMap = {
                     handbook: 'Handbook',
                     webpage: 'Webpage',
-                    letter: 'Recognition Letter'
+                    letter: 'Recognition Letter',
+                    gallery: 'Gallery'
                 };
-                const title = `${nodeId.toUpperCase()} ${year} ${labelMap[type]}`;
+                const title = `${nodeId.toUpperCase()} ${year} ${labelMap[type] || ''}`;
 
                 openDocument(`${nodeId}Viewer`, fileUrl, title);
             }
@@ -2299,18 +3131,14 @@
 
                 const parentNode = viewer.closest('.pathway-node');
                 if (parentNode) {
-                    // 1. Expand parent card to wide mode
-                    parentNode.classList.remove('max-w-2xl');
-                    parentNode.classList.add('max-w-6xl', 'expanded');
+                    parentNode.classList.add('expanded');
 
-                    // 2. Expand content panel height
                     const expandedContent = parentNode.querySelector('.node-expanded-content');
                     if (expandedContent) {
                         expandedContent.classList.remove('max-h-0');
                         expandedContent.classList.add('max-h-[1200px]');
                     }
 
-                    // 3. Shift left content to 38% width
                     const mainContent = parentNode.querySelector('.pathway-main');
                     if (mainContent) {
                         mainContent.classList.add('lg:w-[38%]', 'shrink-0');
@@ -2323,15 +3151,8 @@
                 if (iframe) iframe.src = filePath;
                 if (heading) heading.textContent = title;
 
-                // Show side panel viewer
                 viewer.classList.remove('hidden');
                 viewer.classList.add('flex');
-
-                // Hide active dropdown menus
-                document.querySelectorAll('.dropdown-menu').forEach((menu) => {
-                    menu.classList.add('hidden');
-                    menu.classList.remove('flex');
-                });
 
                 setTimeout(() => {
                     ScrollTrigger.refresh();
@@ -2345,11 +3166,6 @@
 
                 const parentNode = viewer.closest('.pathway-node');
                 if (parentNode) {
-                    // 1. Return parent card to centered narrow mode
-                    parentNode.classList.remove('max-w-6xl');
-                    parentNode.classList.add('max-w-2xl');
-
-                    // 2. Return left content back to full width
                     const mainContent = parentNode.querySelector('.pathway-main');
                     if (mainContent) {
                         mainContent.classList.remove('lg:w-[38%]', 'shrink-0');
@@ -2387,31 +3203,103 @@
             gsap.registerPlugin(ScrollTrigger);
 
             const galleryTrack = document.querySelector(".gallery-track");
-
-            gsap.to(galleryTrack, {
-                x: () => -(galleryTrack.scrollWidth - window.innerWidth),
-                ease: "none",
-                scrollTrigger: {
-                    trigger: "#gallery",
-                    start: "top -10%",
-                    end: () => `+=${galleryTrack.scrollWidth - window.innerWidth}`,
-                    scrub: 1,
-                    pin: true,
-                    padding: false,
-                    anticipatePin: 1,
-                    invalidateOnRefresh: true,
-                    onEnter: () => setNavTheme("dark"),
-                    onLeave: () => setNavTheme("light"),
-                    onEnterBack: () => setNavTheme("dark"),
-                    onLeaveBack: () => setNavTheme("light")
-                }
+            const galleryMedia = gsap.matchMedia();
+            galleryMedia.add("(min-width: 640px)", () => {
+                const distance = () => Math.max(0,
+                    galleryTrack.scrollWidth - galleryTrack.parentElement.clientWidth);
+                gsap.to(galleryTrack, {
+                    x: () => -distance(),
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: "#gallery",
+                        start: "top top",
+                        end: () => `+=${Math.max(1, distance())}`,
+                        scrub: 1,
+                        pin: true,
+                        pinSpacing: true,
+                        anticipatePin: 1,
+                        invalidateOnRefresh: true,
+                        onRefresh: () => lenis.resize(),
+                        onEnter: () => setNavTheme("dark"),
+                        onLeave: () => setNavTheme("light"),
+                        onEnterBack: () => setNavTheme("dark"),
+                        onLeaveBack: () => setNavTheme("light")
+                    }
+                });
+            });
+            galleryMedia.add("(max-width: 639px)", () => {
+                gsap.set(galleryTrack, { x: 0 });
             });
 
+            // Recalculate pin spacing and the scroll limit after page assets settle.
+            const refreshGalleryLayout = () => {
+                ScrollTrigger.refresh();
+                lenis.resize();
+            };
+            if (document.readyState === "complete") {
+                refreshGalleryLayout();
+            } else {
+                window.addEventListener("load", refreshGalleryLayout, { once: true });
+            }
+            document.fonts.ready.then(refreshGalleryLayout);
             // =========================================================
             // INITIALIZE
             // =========================================================
 
             initializeCarousel();
+
+            // =========================================================
+            // GALLERY IMAGE ZOOM (LIGHTBOX)
+            // =========================================================
+
+            function openLightbox(src, alt) {
+                const imgLightbox = document.getElementById("imgLightbox");
+                const lightboxImg = document.getElementById("lightboxImg");
+                if (!imgLightbox || !lightboxImg) return;
+
+                lightboxImg.src = src;
+                lightboxImg.alt = alt || "";
+                imgLightbox.classList.add("open");
+            }
+
+            function closeLightbox() {
+                const imgLightbox = document.getElementById("imgLightbox");
+                if (imgLightbox) imgLightbox.classList.remove("open");
+            }
+
+            // Event Delegation for image clicks inside detail photos
+            document.addEventListener("click", (event) => {
+                const isDetailPhoto = event.target.closest("#challengeDetail .detail-photo");
+                const img = isDetailPhoto?.querySelector("img") || event.target.closest("img");
+                const isGalleryTrack = event.target.closest(".gallery-track");
+
+                if (img && (isDetailPhoto || isGalleryTrack)) {
+                    if (img.src && img.src.trim() !== "" && img.src !== window.location.href) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        openLightbox(img.currentSrc || img.src, img.alt);
+                    }
+                }
+            }, true);
+
+            document.addEventListener("DOMContentLoaded", () => {
+                const lightboxClose = document.getElementById("lightboxClose");
+                const imgLightbox = document.getElementById("imgLightbox");
+
+                lightboxClose?.addEventListener("click", (event) => {
+                    event.stopPropagation();
+                    closeLightbox();
+                });
+
+                imgLightbox?.addEventListener("click", (event) => {
+                    event.stopPropagation();
+                    closeLightbox();
+                });
+
+                document.addEventListener("keydown", (event) => {
+                    if (event.key === "Escape") closeLightbox();
+                });
+            });
         </script>
 </body>
 

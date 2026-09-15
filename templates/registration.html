@@ -80,6 +80,130 @@
         .conditional-block.is-visible {
             display: block;
         }
+
+        @keyframes add-member-pop {
+            0% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            40% {
+                transform: scale(1.6) rotate(90deg);
+            }
+
+            70% {
+                transform: scale(0.9) rotate(90deg);
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .add-member-icon-pop {
+            display: inline-block;
+            animation: add-member-pop 0.5s ease;
+        }
+
+        @keyframes member-card-drop-in {
+            0% {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+
+            60% {
+                opacity: 1;
+                transform: translateY(6px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .member-card-drop-in {
+            animation: member-card-drop-in 1.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        @media screen and (max-width: 639px) {
+            header > div,
+            body > section,
+            main {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            body > section {
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+            }
+
+            main {
+                padding-top: 2rem;
+                padding-bottom: 3rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+                line-height: 1.2;
+            }
+
+            #registrationForm h2 {
+                font-size: 1.25rem;
+                line-height: 1.4;
+            }
+
+            /* Form cards, including generated member cards */
+            main .bg-white.rounded-3xl {
+                padding: 1.25rem;
+                border-radius: 1rem;
+            }
+
+            #registrationForm .grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            #registrationForm .grid > * {
+                min-width: 0;
+            }
+
+            .category-option-card {
+                padding: 1rem;
+            }
+
+            .field-input {
+                min-width: 0;
+                max-width: 100%;
+                font-size: 1rem;
+            }
+
+            .section-index {
+                flex-shrink: 0;
+                font-size: 1.5rem;
+            }
+
+            #registrationForm button[type="submit"] {
+                width: 100%;
+                padding: 1rem;
+                white-space: normal;
+            }
+
+            #confirmationPanel {
+                overflow-wrap: anywhere;
+            }
+        }
+
+        @media screen and (min-width: 640px) and (max-width: 1023px) {
+            main {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+
+            .field-input {
+                min-width: 0;
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 
@@ -88,10 +212,10 @@
     <!-- Simple top bar -->
     <header class="w-full bg-white border-b border-gray-100">
         <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-2">
-                <img src="{{ url_for('static', filename='img/logonobg.png') }}" alt="YTAC logo" class="h-10">
+            <a href="{{ url_for('home') }}" class="flex items-center gap-2">
+                <img src="{{ url_for('static', filename='img/logo_nobg.png') }}" alt="YTAC logo" class="h-10">
             </a>
-            <a href="ytac.html"
+            <a href="{{ url_for('home') }}"
                 class="font-heading font-bold text-sm text-ytac-blue hover:text-ytac-purple transition-colors flex items-center gap-2">
                 <i class="fa-solid fa-arrow-left"></i> Back to Home
             </a>
@@ -325,10 +449,9 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Identity card
-                                    number</label>
-                                <input type="text" name="mentorIc" placeholder="XXXXXX-XX-XXXX"
-                                    pattern="\d{6}-\d{2}-\d{4}" title="Format: XXXXXX-XX-XXXX"
+                                <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">IC/Passport
+                                    No.</label>
+                                <input type="text" name="mentorIc" placeholder="IC number or passport number"
                                     class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
                             </div>
                             <div class="sm:col-span-2">
@@ -354,11 +477,6 @@
                                 <input type="text" name="mentorRaceOther" id="mentorRaceOtherText"
                                     placeholder="Please state your race"
                                     class="conditional-block field-input w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm mt-2">
-                            </div>
-                            <div>
-                                <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Age</label>
-                                <input type="number" name="mentorAge" placeholder="e.g. 32"
-                                    class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
                             </div>
                             <div>
                                 <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Email
@@ -644,21 +762,12 @@
     </footer>
 
     <script>
-        const MY_STATES = [
-            'Johor', 'Kedah', 'Kelantan', 'Malacca', 'Negeri Sembilan', 'Pahang',
-            'Penang', 'Perak', 'Perlis', 'Sabah', 'Sarawak', 'Selangor', 'Terengganu'
-        ];
-
         // ---- Team member cards (add / remove) ----
         const membersList = document.getElementById('membersList');
         const addMemberBtn = document.getElementById('addMemberBtn');
         let memberCount = 0;
-        const MAX_MEMBERS = 6;
+        const MAX_MEMBERS = 3;
         const MIN_MEMBERS = 2;
-
-        function stateOptionsHTML() {
-            return MY_STATES.map(s => `<option value="${s}">${s}</option>`).join('');
-        }
 
         function memberCardHTML(index, removable) {
             return `
@@ -678,9 +787,8 @@
                         </select>
                     </div>
                     <div>
-                        <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Identity card number</label>
-                        <input type="text" name="memberIc_${index}" placeholder="XXXXXX-XX-XXXX"
-                            pattern="\\d{6}-\\d{2}-\\d{4}" title="Format: XXXXXX-XX-XXXX"
+                        <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">IC/Passport No.</label>
+                        <input type="text" name="memberIc_${index}" placeholder="IC number or passport number"
                             class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
                     </div>
                     <div class="sm:col-span-2">
@@ -728,19 +836,19 @@
                         </div>
                     </div>
                     <div>
-                        <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">State</label>
-                        <select name="memberState_${index}"
-                            class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-white">
-                            <option value="">Select state</option>
-                            ${stateOptionsHTML()}
-                        </select>
+                        <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Country</label>
+                        <input type="text" name="memberCountry_${index}" value="Malaysia" placeholder="e.g. Malaysia"
+                            class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
                     </div>
                     <div>
-                        <label class="field-label block text-sm font-bold text-gray-700 mb-2">Country</label>
-                        <label class="flex items-center gap-2 cursor-pointer text-sm text-gray-700 mt-2.5">
-                            <input type="radio" name="memberCountry_${index}" value="malaysia" checked class="h-4 w-4 accent-ytac-blue">
-                            Malaysia
-                        </label>
+                        <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">State</label>
+                        <input type="text" name="memberState_${index}" placeholder="e.g. Selangor"
+                            class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                    </div>
+                    <div>
+                        <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">City</label>
+                        <input type="text" name="memberCity_${index}" placeholder="e.g. Subang Jaya"
+                            class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
                     </div>
                     <div>
                         <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Email address</label>
@@ -752,10 +860,22 @@
                         <input type="tel" name="memberPhone_${index}" placeholder="e.g. 012-3456789"
                             class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
                     </div>
-                    <div>
-                        <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Parent contact number</label>
-                        <input type="tel" name="memberParentPhone_${index}" placeholder="e.g. 012-3456789"
-                            class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                </div>
+                <div class="mt-6 pt-5 border-t border-gray-100">
+                    <h4 class="field-label font-bold text-sm text-ytac-purple mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-user-shield text-xs"></i> Guardian information
+                    </h4>
+                    <div class="grid sm:grid-cols-2 gap-5">
+                        <div>
+                            <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Parent / guardian name</label>
+                            <input type="text" name="memberParentName_${index}" placeholder="Full name"
+                                class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                        </div>
+                        <div>
+                            <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Parent / guardian contact number</label>
+                            <input type="tel" name="memberParentPhone_${index}" placeholder="e.g. 012-3456789"
+                                class="field-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                        </div>
                     </div>
                 </div>
                 ${removable ? `
@@ -805,7 +925,7 @@
             const removable = index > MIN_MEMBERS;
 
             const wrapper = document.createElement('div');
-            wrapper.className = 'bg-white rounded-3xl shadow-lg border border-gray-100 p-6 sm:p-8 relative';
+            wrapper.className = 'bg-white rounded-3xl shadow-lg border border-gray-100 p-6 sm:p-8 relative member-card-drop-in';
             wrapper.innerHTML = `
                 <h3 class="font-heading font-bold text-lg text-ytac-blue mb-5">Team member ${index}</h3>
                 ${memberCardHTML(index, removable)}
@@ -834,7 +954,13 @@
             }
         }
 
-        addMemberBtn.addEventListener('click', addMemberCard);
+        addMemberBtn.addEventListener('click', () => {
+            const icon = addMemberBtn.querySelector('i');
+            icon.classList.remove('add-member-icon-pop');
+            void icon.offsetWidth; // restart animation
+            icon.classList.add('add-member-icon-pop');
+            addMemberCard();
+        });
         addMemberCard(); // team member 1
         addMemberCard(); // team member 2
 
