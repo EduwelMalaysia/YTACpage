@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration complete — YTAC 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --blue: #00607A;
+            --green: #14A39A;
+            --purple: #822384;
+            --mint: #84D4C7;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            color: #334155;
+            background: #F9FBFC;
+            font: 15px/1.7 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            color: var(--blue);
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e8eef1;
+        }
+
+        .nav {
+            max-width: 1024px;
+            margin: auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            display: block;
+            height: 40px;
+            width: auto;
+        }
+
+        .home {
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        main {
+            flex: 1;
+            padding: 42px 24px 64px;
+            background: radial-gradient(ellipse at 15% 25%, #84d4c722, transparent 48%), radial-gradient(ellipse at 90% 70%, #8223840b, transparent 45%);
+        }
+
+        .progress {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            padding: 0;
+            margin: 0 auto 30px;
+            list-style: none;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .progress li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress li+li:before {
+            content: '';
+            height: 1px;
+            width: 38px;
+            background: #d5e3e7;
+            margin-right: 6px;
+        }
+
+        .step {
+            border: 1px solid #d5e3e7;
+            width: 25px;
+            height: 25px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            font-size: 11px;
+        }
+
+        .done .step {
+            background: #e2f4ef;
+            color: #087b72;
+            border-color: #e2f4ef;
+        }
+
+        .current {
+            color: var(--blue);
+            font-weight: 800;
+        }
+
+        .current .step {
+            background: var(--blue);
+            color: white;
+            border-color: var(--blue);
+        }
+
+        .card {
+            max-width: 720px;
+            margin: auto;
+            border-radius: 28px;
+            overflow: hidden;
+            background: white;
+            border: 1px solid #e4ecef;
+            box-shadow: 0 20px 65px #004a5e0c;
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            padding: 38px 32px 34px;
+            color: white;
+            background: linear-gradient(125deg, var(--blue), #0d7a97 55%, var(--green));
+        }
+
+        .hero:after {
+            content: '';
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            border: 1px solid #ffffff17;
+            border-radius: 50%;
+            right: -110px;
+            top: -65px;
+            box-shadow: 0 0 0 35px #ffffff05, 0 0 0 70px #ffffff04;
+            pointer-events: none;
+        }
+
+        .check {
+            display: grid;
+            place-items: center;
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 18px;
+            border: 1px solid #ffffff55;
+            border-radius: 50%;
+            background: #ffffff19;
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin: 0 0 9px;
+            color: #ceeee9;
+        }
+
+        h1,
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        h1 {
+            font-size: 36px;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin: 0 0 12px;
+        }
+
+        .hero p:last-child {
+            margin: 0;
+            color: #ecf8fa;
+            font-size: 14px;
+        }
+
+        .content {
+            padding: 30px 40px 34px;
+        }
+
+        .email-note {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            padding: 20px;
+            background: #f0f8f8;
+            border: 1px solid #dceeed;
+            border-radius: 16px;
+        }
+
+        .email-note svg {
+            flex: none;
+            color: var(--green);
+            margin-top: 3px;
+        }
+
+        h2 {
+            color: var(--blue);
+            font-size: 19px;
+            margin: 0 0 5px;
+            line-height: 1.4;
+        }
+
+        .email-note p {
+            margin: 0;
+            font-size: 13px;
+            color: #526575;
+        }
+
+        .instructions {
+            list-style: none;
+            margin: 24px 0;
+            padding: 0;
+            display: grid;
+            gap: 16px;
+        }
+
+        .instructions li {
+            display: flex;
+            gap: 13px;
+            align-items: flex-start;
+        }
+
+        .number {
+            flex: none;
+            display: grid;
+            place-items: center;
+            width: 26px;
+            height: 26px;
+            background: #f4edf5;
+            color: var(--purple);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .instructions p {
+            margin: 0;
+            font-size: 13px;
+        }
+
+        .instructions strong {
+            display: block;
+            color: #334155;
+            font-size: 14px;
+        }
+
+        .login {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 14px 24px;
+            border-radius: 12px;
+            background: var(--blue);
+            color: white;
+            text-decoration: none;
+            font-weight: 800;
+            box-shadow: 0 6px 16px #00607a18;
+            transition: background .2s;
+        }
+
+        .login:hover {
+            background: var(--purple);
+        }
+
+        a:focus-visible {
+            outline: 3px solid var(--purple);
+            outline-offset: 5px;
+        }
+
+        .help {
+            text-align: center;
+            margin: 16px 0 0;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        footer {
+            text-align: center;
+            padding: 18px 24px;
+            background: white;
+            border-top: 1px solid #e8eef1;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        footer p+p {
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        @media(max-width:520px) {
+            main {
+                padding: 28px 16px 40px;
+            }
+
+            .nav {
+                padding: 16px;
+            }
+
+            .progress {
+                gap: 8px;
+                font-size: 10px;
+            }
+
+            .progress li {
+                gap: 5px;
+            }
+
+            .progress li+li:before {
+                width: 12px;
+                margin-right: 3px;
+            }
+
+            .hero {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 29px;
+            }
+
+            .content {
+                padding: 24px 20px;
+            }
+
+            .email-note {
+                padding: 16px;
+                gap: 10px;
+            }
+
+            .card {
+                border-radius: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="nav" aria-label="Main navigation">
+            <a href="{{ url_for('home') }}" aria-label="YTAC home"><img class="logo"
+                    src="{{ url_for('static', filename='img/logo_nobg.png') }}" alt="YTAC"></a>
+            <a class="home" href="{{ url_for('home') }}">← Back to Home</a>
+        </nav>
+    </header>
+    <main>
+        <ol class="progress" aria-label="Registration progress">
+            <li class="done"><span class="step" aria-hidden="true">✓</span> Registration</li>
+            <li class="current" aria-current="step"><span class="step" aria-hidden="true">2</span> Confirmation</li>
+            <li><span class="step" aria-hidden="true">3</span> Login</li>
+        </ol>
+        <article class="card" aria-labelledby="success-title">
+            <div class="hero">
+                <div class="check"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="m5 12 4 4L19 6" />
+                    </svg></div>
+                <p class="eyebrow">YTAC 2026 · YOU'RE REGISTERED</p>
+                <h1 id="success-title">Registration complete!</h1>
+                <p>You've successfully completed your registration.<br>Your YTAC journey starts here.</p>
+            </div>
+            <div class="content">
+                <div class="email-note">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="5" width="18" height="14" rx="3" />
+                        <path d="m4 7 8 6 8-6" />
+                    </svg>
+                    <div>
+                        <h2>Check your inbox</h2>
+                        <p>Your login password has been sent to your registered email address.</p>
+                    </div>
+                </div>
+                <ol class="instructions">
+                    <li><span class="number" aria-hidden="true">1</span>
+                        <p><strong>Log in with your registered email</strong>Use the password provided in your email to
+                            access your account.</p>
+                    </li>
+                    <li><span class="number" aria-hidden="true">2</span>
+                        <p><strong>Make your password your own</strong>After logging in, you can change your password.
+                        </p>
+                    </li>
+                </ol>
+                <a class="login" href="{{ url_for('login') }}">Login Now <span aria-hidden="true">→</span></a>
+                <p class="help">Can't find the email? Check your spam or junk folder.</p>
+            </div>
+        </article>
+    </main>
+    <footer>
+        <p>Copyright © 2026 CodeKidz. All rights reserved.</p>
+        <p>EDUWELD SDN. BHD. (1439286P / 202101038986)</p>
+    </footer>
+</body>
+
+</html>

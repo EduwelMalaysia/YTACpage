@@ -546,6 +546,28 @@
             }
 
         }
+    
+        /* A centered two-page spread, with neighboring covers visible at both edges. */
+        #carouselContainer { max-width:1200px; padding-block:42px; perspective:1600px; }
+        #carouselContainer .category-grid { min-height:560px; }
+        #carouselContainer .carousel-card { transition:transform .4s ease,opacity .2s ease,width .2s ease; }
+        #carouselContainer .category-card { background:linear-gradient(105deg,#f8f9fb 0%,#fff 7%,#fff 92%,#f3f2f6 100%); box-shadow:inset -4px 0 10px #23384c10,2px 2px 0 #dcdfe6,0 14px 30px #17364e21; }
+        #carouselContainer .category-card::after { content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(90deg,transparent 95%,#12304710); }
+        #carouselContainer.book-open .book-selected .category-card { border-radius:26px 5px 5px 26px; }
+        #carouselContainer #challengeDetail { border-radius:5px 26px 26px 5px; background:linear-gradient(90deg,#e9e9ee 0,#f7f7fa 3%,#fff 9%,#fff 97%,#f5f4f8 100%); box-shadow:inset 6px 0 12px #23384c10,2px 2px 0 #dcdfe6,0 14px 30px #17364e21; padding-top:28px; }
+        #carouselContainer #challengeDetail .detail-photo { height:38%; }
+        #carouselContainer #challengeDetail .gallery-img { object-fit:contain; }
+        #carouselContainer #prevBtn,#carouselContainer #nextBtn { z-index:110; }
+        #carouselContainer #prevBtn { left:0; }
+        #carouselContainer #nextBtn { right:0; }
+        #carouselContainer .carousel-card:focus-visible { outline:3px solid #822384;outline-offset:12px;border-radius:28px; }
+        @media(min-width:640px) and (max-width:900px) {
+            #carouselContainer.book-open .category-card { padding:22px 16px; }
+            #carouselContainer.book-open .category-card h3 { font-size:22px; }
+            #carouselContainer.book-open .category-card p { font-size:13px; }
+        }
+        @media(prefers-reduced-motion:reduce) { #carouselContainer .carousel-card { transition:none; } }
+
     </style>
 
     <style>
@@ -754,6 +776,10 @@
             <a href="#recognition" class="nav-link text-ytac-blue">RECOGNITION</a>
             <a href="#gallery" class="nav-link text-ytac-blue">GALLERY</a>
             <a href="#contact" class="nav-link text-ytac-blue">CONTACT</a>
+            <a href="{{ url_for('login') }}"
+                class="inline-block bg-[#14afd9] text-white px-6 py-3 rounded-3xl font-semibold hover:opacity-90 transition">
+                Login Now
+            </a>
         </div>
     </nav>
     <header>
@@ -1130,7 +1156,8 @@
                         </div>
 
                         <!-- CATEGORY DESCRIPTION -->
-                        <div class="relative flex flex-col h-[65%] min-h-0 shrink-0 overflow-y-auto gap-2 p-6 sm:p-7 pointer-events-auto">
+                        <div
+                            class="relative flex flex-col h-[65%] min-h-0 shrink-0 overflow-y-auto gap-2 p-6 sm:p-7 pointer-events-auto">
                             <h3 id="detailTitle"
                                 class="font-heading font-black text-xl sm:text-2xl text-center text-[#004A5E] uppercase tracking-tight">
                             </h3>
@@ -2205,101 +2232,27 @@
             // CATEGORY CAROUSEL SECTION
             // =========================================================
 
+
             let currentAngle = 0;
-
-            function updateCarouselPositions(extraSwirl = 0) {
-                const cards = document.querySelectorAll('.carousel-card');
-                const radius = window.innerWidth < 640 ? 180 : 320;
-
-                cards.forEach((card, i) => {
-                    const baseAngle = i * 120;
-                    const totalAngle = (baseAngle + currentAngle + extraSwirl) * (Math.PI / 180);
-
-                    const x = Math.sin(totalAngle) * radius;
-                    const z = Math.cos(totalAngle) * radius;
-                    const scale = (z + radius * 1.5) / (radius * 2.5);
-                    const opacity = Math.max(0.35, (z + radius) / (radius * 2));
-
-                    card.style.transform = `translate3d(${x}px, 0, ${z}px) scale(${scale})`;
-                    card.style.zIndex = Math.round(z + radius);
-                    card.style.opacity = opacity;
-                });
-            }
-
+            let detailOpen = false;
+            let bookAnimating = false;
+            let carouselRotating = false;
+            const carouselOrbit = { angle: 0 };
+            let activeCard = null;
+            const carouselContainer = $('#carouselContainer');
+            const carouselCards = [...document.querySelectorAll('.carousel-card')];
+            const detailPanel = $('#challengeDetail');
+            const detailPhotos = [...document.querySelectorAll('.detail-photo')];
+            const galleryImages = [...document.querySelectorAll('.gallery-img')];
+            const detailTitle = $('#detailTitle');
+            const detailDescription = $('#detailDescription');
+            const closeDetail = $('#closeDetail');
             const nextButton = $('#nextBtn');
             const previousButton = $('#prevBtn');
-
-            nextButton?.addEventListener('click', () => {
-
-                if (detailOpen) {
-                    closeDetail.click();
-
-                    setTimeout(() => {
-                        currentAngle -= 120;
-                        updateCarouselPositions();
-                    }, 1000);
-
-                    return;
-                }
-
-                currentAngle -= 120;
-                updateCarouselPositions();
-            });
-
-            previousButton?.addEventListener('click', () => {
-                if (detailOpen) {
-                    closeDetail.click();
-
-                    setTimeout(() => {
-                        currentAngle += 120;
-                        updateCarouselPositions();
-                    }, 1000);
-
-                    return;
-                }
-
-                currentAngle += 120;
-                updateCarouselPositions();
-            });
-
-            function initializeCarousel() {
-                const carouselContainer = $('#carouselContainer');
-
-                if (carouselContainer) {
-                    carouselContainer.className =
-                        'relative w-full max-w-5xl min-h-[460px] py-4 ' +
-                        'flex items-center justify-center ' +
-                        'perspective-[1200px]';
-                }
-
-                $$('.carousel-card').forEach((card) => {
-                    card.className =
-                        'carousel-card absolute ' +
-                        'w-[340px] sm:w-[400px] ' +
-                        'transition-all duration-700 ' +
-                        'ease-out cursor-pointer [transform-style:preserve-3d]';
-                });
-
-                updateCarouselPositions();
-            }
-
-            // =========================================================
-            // CAROUSEL EXPAND BOOK EFFECT
-            // =========================================================
-            const detailPanel = document.getElementById("challengeDetail");
-            const closeDetail = document.getElementById("closeDetail");
-
-            const carouselCards = document.querySelectorAll(".carousel-card");
-            const detailPhotos = document.querySelectorAll(".detail-photo");
-            const galleryImages = document.querySelectorAll(".gallery-img");
-
-            let activeCard = null;
-            let detailOpen = false;
-
-            const galleries = {
+                        const galleries = {
 
                 "inno-tech": [
-                    "{{ url_for('static', filename='img/inno-tech-1.jpg') }}",
+                    "{{ url_for('static', filename='img/inno-tech-icon-nobg.png') }}",
                     "{{ url_for('static', filename='img/inno-tech-2.jpg') }}",
                     "{{ url_for('static', filename='img/inno-tech-3.jpg') }}",
                     "{{ url_for('static', filename='img/inno-tech-4.jpg') }}",
@@ -2307,7 +2260,7 @@
                 ],
 
                 "inno-maker": [
-                    "{{ url_for('static', filename='img/inno-maker-1.jpg') }}",
+                    "{{ url_for('static', filename='img/inno-maker-icon-nobg.png') }}",
                     "{{ url_for('static', filename='img/inno-maker-2.jpg') }}",
                     "{{ url_for('static', filename='img/inno-maker-3.jpg') }}",
                     "{{ url_for('static', filename='img/inno-maker-4.jpg') }}",
@@ -2336,243 +2289,144 @@
                 }
             };
 
-            const detailTitle = document.getElementById("detailTitle");
-            const detailDescription = document.getElementById("detailDescription");
 
-            gsap.set(detailPanel, {
-                opacity: 0,
-                rotationY: -90,
-                transformOrigin: "left center"
-            });
-
-            gsap.set(detailPhotos, {
-                opacity: 0,
-                scale: 0.8,
-                y: 20
-            });
-
-            carouselCards.forEach(card => {
-
-                card.addEventListener("click", (event) => {
-                    if (window.matchMedia("(max-width: 639px)").matches) {
-                        return;
+            function selectedIndex() { return ((Math.round(-currentAngle / 120) % 3) + 3) % 3; }
+            function updateCarouselPositions() {
+                const opened = detailOpen && window.innerWidth >= 640;
+                carouselContainer.classList.toggle('book-open', opened);
+                const width = carouselContainer.clientWidth;
+                const page = Math.min(380, width * .34);
+                const center = selectedIndex();
+                carouselCards.forEach((card, i) => {
+                    const offset = (i - center + 3) % 3;
+                    const side = offset === 1 ? 1 : -1;
+                    const chosen = offset === 0;
+                    card.classList.toggle('book-selected', chosen && opened);
+                    card.style.width = opened ? page + 'px' : '';
+                    card.style.zIndex = chosen ? 90 : 20;
+                    card.style.opacity = chosen ? 1 : .78;
+                    // Sample the orbit on every animation frame instead of sliding between slots.
+                    const radians = (i * 120 + carouselOrbit.angle) * Math.PI / 180;
+                    const depth = Math.cos(radians);
+                    const radius = Math.min(320, width * .36);
+                    const x = opened ? (chosen ? -page / 2 : side * (width / 2 - page * .18)) : Math.sin(radians) * radius;
+                    const y = opened ? 0 : (depth - 1) * 24;
+                    const z = opened ? 0 : (depth - 1) * 70;
+                    const scale = opened ? (chosen ? 1 : .64) : .82 + .18 * depth;
+                    if (!opened) {
+                        card.style.zIndex = Math.round(50 + depth * 40);
+                        card.style.opacity = .75 + .25 * depth;
                     }
-
-                    // Don't trigger expansion when Learn More is clicked
-                    if (event.target.closest("a")) {
-                        return;
-                    }
-
-                    // Don't open twice
-                    if (detailOpen) {
-                        return;
-                    }
-
-                    detailOpen = true;
-                    activeCard = card;
-
-                    const galleryName = card.dataset.gallery;
-
-                    const images = galleries[galleryName];
-
-                    // Safety check
-                    if (!images) {
-                        console.error("Gallery not found:", galleryName);
-                        return;
-                    }
-
-
-                    // ======================================
-                    // LOAD THE FEATURED IMAGE + DESCRIPTION
-                    // ======================================
-
-                    const info = categoryInfo[galleryName];
-
-                    galleryImages.forEach((img) => {
-
-                        img.src = images[0];
-
-                        img.alt = info ? `${info.title} photo` : `${galleryName} photo`;
-
-                    });
-
-                    if (info) {
-                        detailTitle.textContent = info.title;
-                        detailDescription.textContent = info.description;
-                    }
-
-
-                    // ======================================
-                    // GET THE ACTUAL CARD
-                    // ======================================
-
-                    const categoryCard =
-                        card.querySelector(".category-card");
-
-
-                    // ======================================
-                    // ENABLE PANEL
-                    // ======================================
-
-                    detailPanel.style.pointerEvents = "auto";
-
-
-                    // ======================================
-                    // HIDE OTHER CARDS
-                    // ======================================
-
-                    carouselCards.forEach(otherCard => {
-
-                        if (otherCard !== card) {
-
-                            gsap.to(otherCard, {
-                                opacity: 0,
-                                duration: 0.3,
-                                ease: "power2.out"
-                            });
-
-                        }
-
-                    });
-
-
-                    // ======================================
-                    // ANIMATION
-                    // ======================================
-
-                    const tl = gsap.timeline();
-
-
-                    // 1. Selected card moves slightly left
-
-                    tl.to(categoryCard, {
-                        x: -183,
-                        duration: 0.50,
-                        ease: "power3.out"
-                    });
-
-
-                    // 2. Gallery unfolds
-
-                    tl.to(detailPanel, {
-                        opacity: 1,
-                        rotationY: 0,
-                        duration: 0.6,
-                        ease: "power3.out"
-                    }, "-=0.1");
-
-
-                    // 3. Photos appear
-
-                    tl.to(detailPhotos, {
-                        opacity: 1,
-                        scale: 1,
-                        y: 0,
-                        duration: 0.45,
-                        stagger: 0.08,
-                        ease: "back.out(1.3)"
-                    }, "-=0.25");
-
+                    card.style.transform = 'translate3d(' + x + 'px,' + y + 'px,' + z + 'px) scale(' + scale + ')';
+                    card.setAttribute('aria-label', (chosen ? 'Open ' : (side > 0 ? 'Next: ' : 'Previous: ')) + categoryInfo[card.dataset.gallery].title);
                 });
-
-            });
-
-            closeDetail.addEventListener("click", (event) => {
-
-                event.stopPropagation();
-
-                if (!detailOpen) {
+                if (opened) {
+                    detailPanel.style.left = '50%';
+                    detailPanel.style.width = page + 'px';
+                    detailPanel.style.height = activeCard.querySelector('.category-card').offsetHeight + 'px';
+                }
+            }
+            function openBook(index) {
+                if (window.innerWidth < 640 || bookAnimating || carouselRotating) return;
+                if (detailOpen) {
+                    if (selectedIndex() !== index) closeBook(() => openBook(index));
                     return;
                 }
-
-
-                const tl = gsap.timeline({
-
-                    onComplete: () => {
-
+                bookAnimating = true;
+                currentAngle = -index * 120;
+                carouselOrbit.angle = currentAngle;
+                activeCard = carouselCards[index];
+                detailOpen = true;
+                const key = activeCard.dataset.gallery;
+                detailTitle.textContent = categoryInfo[key].title;
+                detailDescription.textContent = categoryInfo[key].description;
+                galleryImages.forEach(img => { img.src = galleries[key][0]; img.alt = categoryInfo[key].title + ' illustration'; });
+                updateCarouselPositions();
+                detailPanel.style.pointerEvents = 'auto';
+                detailPanel.setAttribute('aria-hidden', 'false');
+                gsap.fromTo(detailPanel, {opacity:0,rotationY:-160}, {opacity:1,rotationY:0,duration:1.15,delay:.1,transformOrigin:'left center',overwrite:true,ease:'power2.inOut',onComplete:() => { bookAnimating = false; }});
+            }
+            function closeBook(afterClose) {
+                if (bookAnimating || !detailOpen) return;
+                bookAnimating = true;
+                detailPanel.style.pointerEvents = 'none';
+                detailPanel.setAttribute('aria-hidden','true');
+                // Keep the spread in place until the page has folded back left.
+                gsap.to(detailPanel, {opacity:0,rotationY:-160,duration:1,
+                    transformOrigin:'left center',overwrite:true,ease:'power2.inOut',
+                    onComplete:() => {
                         detailOpen = false;
                         activeCard = null;
-
-                        detailPanel.style.pointerEvents = "none";
-
+                        bookAnimating = false;
+                        if (typeof afterClose === 'function') afterClose();
+                        else updateCarouselPositions();
                     }
-
                 });
-
-
-                // ======================================
-                // 1. PHOTOS DISAPPEAR
-                // ======================================
-
-                tl.to(detailPhotos, {
-
-                    opacity: 0,
-                    scale: 0.8,
-                    y: 20,
-
-                    duration: 0.3,
-
-                    stagger: 0.05,
-
-                    ease: "power2.in"
-
+            }
+            function turnBook(direction) {
+                if (bookAnimating || carouselRotating) return;
+                const wasOpen = detailOpen;
+                const moveToClosedCard = () => {
+                    // Keep the angle unwrapped: the third-to-first turn follows the
+                    // same direction instead of reversing across the whole carousel.
+                    const targetAngle = currentAngle - direction * 120;
+                    carouselRotating = true;
+                    updateCarouselPositions();
+                    gsap.to(carouselOrbit, {
+                        angle: targetAngle,
+                        duration: .7,
+                        delay: wasOpen ? .8 : 0,
+                        ease: 'power2.inOut',
+                        onStart: () => {
+                            // CSS transform transitions would smooth each frame into
+                            // a straight slide; GSAP controls the circular path here.
+                            carouselCards.forEach(card => { card.style.transition = 'none'; });
+                        },
+                        onUpdate: updateCarouselPositions,
+                        onComplete: () => {
+                            currentAngle = targetAngle;
+                            carouselOrbit.angle = targetAngle;
+                            updateCarouselPositions();
+                            carouselCards.forEach(card => { card.style.transition = ''; });
+                            carouselRotating = false;
+                        }
+                    });
+                };
+                if (detailOpen) closeBook(moveToClosedCard);
+                else moveToClosedCard();
+            }
+            nextButton.addEventListener('click', () => turnBook(1));
+            previousButton.addEventListener('click', () => turnBook(-1));
+            closeDetail.addEventListener('click', closeBook);
+            carouselCards.forEach((card,index) => {
+                card.tabIndex = 0;
+                card.addEventListener('click', event => { if (!event.target.closest('a')) openBook(index); });
+                card.addEventListener('keydown', event => {
+                    if (event.target !== card) return;
+                    if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openBook(index); }
                 });
-
-
-                // ======================================
-                // 2. PANEL CLOSES
-                // ======================================
-
-                tl.to(detailPanel, {
-                    opacity: 0,
-                    rotationY: -90,
-                    duration: 0.6,
-                    ease: "power3.in"
-                }, "-=0.1");
-
-
-                // ======================================
-                // 3. CARD RETURNS
-                // ======================================
-
-                if (activeCard) {
-
-                    const categoryCard =
-                        activeCard.querySelector(".category-card");
-
-                    tl.to(categoryCard, {
-
-                        x: 0,
-
-                        duration: 0.5,
-
-                        ease: "power3.out"
-
-                    }, "-=0.25");
-
-                }
-
-
-                // ======================================
-                // 4. OTHER CARDS RETURN
-                // ======================================
-
-                tl.to(carouselCards, {
-
-                    opacity: 1,
-
-                    duration: 0.3,
-
-                    ease: "power2.out"
-
-                }, "-=0.3");
-
             });
+            carouselContainer.addEventListener('keydown', event => {
+                if(event.key === 'Escape') { closeBook(); carouselCards[selectedIndex()].focus(); }
+                if(event.key === 'ArrowLeft') { event.preventDefault(); turnBook(-1); }
+                if(event.key === 'ArrowRight') { event.preventDefault(); turnBook(1); }
+            });
+            window.addEventListener('resize', () => {
+                if (window.innerWidth < 640 && detailOpen) closeBook();
+                else updateCarouselPositions();
+            });
+            function initializeCarousel() {
+                gsap.set(detailPanel,{opacity:0,rotationY:-90,transformOrigin:'left center'});
+                detailPanel.setAttribute('aria-hidden','true');
+                updateCarouselPositions();
+            }
+            
 
 
             // =========================================================
             // PATHWAY LIGHTENED & HIGH-LEGIBILITY THEMES
             // =========================================================
+
             const pathwaySection = $('#pathway');
             const pathwayTag = $('#pathwayTag');
             const pathwayTitle = $('#pathwayTitle');

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal — YTAC 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#00607a',
+                            green: '#14a39a',
+                            purple: '#822384',
+                            mint: '#84d4c7',
+                            ink: '#173e4b',
+                            muted: '#647b85',
+                            line: '#e1eaed',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ["'Plus Jakarta Sans'", 'sans-serif'],
+                        display: ["'Space Grotesk'", 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+    <style type="text/tailwindcss">
+        @layer base {
+            * { @apply box-border; }
+            body { @apply m-0 bg-[#f6f9fa] text-brand-ink font-sans text-[14px] leading-[1.65]; }
+            button, input, select, textarea { font: inherit; }
+            button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
+            button, a { touch-action: manipulation; }
+            a { @apply text-brand-blue; }
+            button { @apply cursor-pointer; }
+            h1, h2, h3, h4, .primary, .secondary { @apply font-display; }
+            h1, h2, h3, h4, p { @apply mt-0; }
+            [hidden] { @apply !hidden; }
+        }
+        @layer components {
+            .header { @apply bg-white border-b border-brand-line; }
+            .nav { @apply max-w-[1200px] mx-auto px-8 py-5 flex items-center justify-between gap-5; }
+            .logo { @apply h-14 w-auto block; }
+            .text-link { @apply text-[15px] font-extrabold no-underline; }
+            .container { @apply max-w-[1200px] mx-auto p-8; }
+
+            .hero { background: linear-gradient(110deg,#004b64,#006b7f 62%,#13958e); @apply rounded-3xl text-white px-10 py-12 flex flex-col items-center text-center gap-[22px] overflow-hidden relative; }
+            .eyebrow { @apply text-[10px] font-extrabold tracking-[1.8px] mb-3; }
+            .hero-badge { @apply inline-block bg-white/[0.12] border border-white/[0.22] px-5 py-[9px] rounded-full text-[11px] font-extrabold tracking-[1.6px] text-[#d7f2ec]; }
+            .hero h1 { @apply text-[46px] leading-[1.1] tracking-[-1.6px] m-0; }
+            .countdown { @apply flex gap-4 flex-wrap justify-center; }
+            .countdown-box { @apply bg-white/[0.08] border border-white/[0.19] rounded-2xl py-[18px] px-7 min-w-[100px]; }
+            .countdown-value { @apply block font-display text-[36px] font-bold text-brand-mint tracking-[-0.5px]; }
+            .countdown-label { @apply block text-[10px] tracking-[1.6px] font-bold text-[#d0e8ec] mt-2 uppercase; }
+            .hero-subtitle { @apply text-[13px] text-[#d0e8ec] m-0; }
+
+            .workspace-heading { @apply flex items-center justify-between gap-[15px] mt-[35px] mb-6; }
+            .muted { @apply text-brand-muted text-[9px] mb-[7px]; }
+            .workspace-heading h2 { @apply text-[34px] tracking-[-0.8px] m-0; }
+            .wave { @apply text-brand-green; }
+            .year-pill, .small-pill { @apply inline-flex items-center gap-2 text-[10px] font-bold border border-[#d6e9e4] py-[6px] px-3 rounded-full bg-[#edf8f4] text-[#08786c]; }
+            .year-pill span { @apply w-[6px] h-[6px] rounded-full bg-brand-green; }
+
+            .tabs { @apply flex gap-[30px] border-b border-brand-line mb-7; }
+            .tabs button { @apply bg-transparent border-0 border-b-[3px] border-transparent px-1 pb-4 text-brand-muted text-[10px]; }
+            .tabs button span { @apply text-[18px] font-extrabold ml-[9px]; }
+            .tabs button[aria-selected=true] { @apply text-brand-blue border-brand-blue; }
+
+            .layout { @apply grid grid-cols-[270px_minmax(0,1fr)] gap-[26px] items-start; }
+            .main-column { @apply grid gap-6 min-w-0; }
+            .card { @apply bg-white border border-brand-line rounded-[20px] shadow-[0_5px_20px_#003e5003]; }
+            .identity { @apply text-center py-7 px-[23px]; }
+            .avatar { background: linear-gradient(140deg,#d9f1e9,#c4e9ec); @apply w-[74px] h-[74px] border-[5px] border-[#f2f9f7] rounded-full grid place-items-center text-brand-blue font-display text-[26px] font-bold mx-auto mb-4; }
+            .identity h3 { overflow-wrap: anywhere; @apply text-[18px] mb-[5px]; }
+            .identity p { overflow-wrap: anywhere; @apply text-[11px] text-brand-muted mb-[18px]; }
+            .identity-divider { @apply h-px bg-brand-line my-6; }
+            .identity p:last-child { @apply mb-0; }
+
+            .note { @apply p-[26px] mt-5 rounded-[20px] bg-[#e7f2ef] relative; }
+            .note > span { @apply text-[34px] text-brand-green leading-none; }
+            .note h3 { @apply text-xl leading-[1.3] mt-[14px] mb-[10px]; }
+            .note p { @apply text-[#53776f] text-xs; }
+            .note a { @apply text-xs font-extrabold no-underline; }
+            .note-title { @apply text-[25px] leading-[1.3] tracking-[-0.5px] mt-[14px] mb-[18px] text-brand-blue; }
+            .note-title span { background: linear-gradient(180deg,transparent 62%,#c4e9ec 62%); }
+            .lavender { @apply bg-[#f0eaf4]; }
+            .lavender > span { @apply text-brand-purple; }
+            .lavender p { @apply text-[#786783]; }
+
+            .section-card { @apply p-7; }
+            .section-heading { @apply flex justify-between gap-4 mb-[25px]; }
+            .section-heading h3 { @apply text-[22px] tracking-[-0.5px] mb-[5px]; }
+            .section-heading p:last-child { @apply text-brand-muted text-[11px] m-0; }
+            .section-symbol, .upload-icon { @apply bg-[#e9f5f2] text-brand-green rounded-xl w-[42px] h-[42px] grid place-items-center text-[25px] shrink-0; }
+            .purple { @apply text-brand-purple bg-[#f3eaf4]; }
+
+            .fields, .upload-grid { @apply grid grid-cols-2 gap-5; }
+            .full { @apply col-span-full; }
+            label { @apply block text-[11px] font-bold mb-[7px]; }
+            label > span, h4 > span { @apply text-brand-green; }
+            input, select, textarea { @apply w-full min-w-0 border border-[#dbe5e9] rounded-[9px] py-3 px-[13px] text-brand-ink bg-[#fcfdfe] text-xs; }
+            input::placeholder, textarea::placeholder { @apply text-[#81929c]; }
+            textarea { @apply resize-y; }
+            input:focus, textarea:focus, select:focus { @apply outline outline-2 outline-offset-1 outline-[#84d4c7]; }
+            button:focus-visible, a:focus-visible { @apply outline outline-[3px] outline-offset-4 outline-brand-purple; }
+
+            .form-footer { @apply flex justify-between items-center gap-[18px] border-t border-[#edf1f3] mt-[25px] pt-5; }
+            .form-footer p, .help { @apply text-[10px] text-brand-muted m-0; }
+            .help { @apply mt-2; }
+            .primary, .secondary { @apply border border-brand-blue rounded-[10px] py-[11px] px-5 font-bold text-xs transition-colors duration-200 text-white bg-brand-blue; }
+            .primary span { @apply ml-4; }
+            .primary:hover { @apply bg-brand-purple border-brand-purple; }
+            .secondary { @apply bg-white text-brand-blue; }
+            .secondary:hover { @apply bg-[#edf7f5]; }
+
+            .password-wrap { @apply relative; }
+            .password-wrap input { @apply pr-[60px]; }
+            .password-wrap button { @apply absolute right-[5px] top-[3px] bottom-[3px] bg-transparent border-0 text-brand-blue text-[10px] font-bold px-[10px]; }
+
+            .feedback { @apply py-[13px] px-4 bg-[#edf7f5] rounded-[10px] text-brand-blue text-xs mt-[15px]; }
+            .preview-note { @apply text-center text-[10px] text-brand-muted mt-7; }
+            footer { @apply max-w-[1136px] mx-auto flex justify-between gap-3 py-6 border-t border-brand-line text-brand-muted text-[9px]; }
+
+            .project-summary { @apply p-[26px]; }
+            .project-summary h3 { @apply text-[25px] leading-[1.2] tracking-[-0.7px] mt-5 mb-3; }
+            .project-summary p { @apply text-xs text-brand-muted; }
+            .progress-label { @apply flex justify-between text-[10px] mt-[25px] mb-[10px]; }
+            .progress-track { @apply h-[5px] bg-[#edf2f4] rounded-[10px] overflow-hidden; }
+            .progress-track div { @apply h-full w-0 bg-brand-green transition-[width] duration-200; }
+            .checklist { @apply list-none p-0 mt-5; }
+            .checklist li { @apply text-[11px] text-brand-muted my-[13px]; }
+            .checklist span { @apply mr-[10px]; }
+            .checklist .done { @apply text-[#08786c]; }
+
+            .upload-group h4 { @apply text-sm m-0 mb-[3px]; }
+            .upload-group > p { @apply text-[10px] text-brand-muted mb-[13px]; }
+            .dropzone { @apply relative flex flex-col items-center justify-center text-center gap-[6px] py-[23px] px-[10px] bg-[#fafcfc] border-[1.5px] border-dashed border-[#c4dadd] rounded-[13px] min-h-[183px] text-[10px] font-normal cursor-pointer m-0; }
+            .dropzone strong { @apply text-[11px] text-brand-blue mt-[5px]; }
+            .dropzone span:not(.upload-icon), .dropzone small { @apply text-[9px] text-brand-muted; }
+            .dropzone input { @apply absolute inset-0 opacity-0 cursor-pointer w-full h-full; }
+            .dropzone:focus-within, .dropzone.drag-over { @apply outline outline-2 outline-brand-green bg-[#eef9f5]; }
+            .wide { @apply min-h-[163px]; }
+
+            .file-preview { overflow-wrap: anywhere; @apply flex gap-[10px] items-center bg-[#edf7f5] p-[10px] rounded-[9px] mt-[10px] text-[10px]; }
+            .file-preview img { @apply w-[45px] h-[48px] object-contain rounded; }
+            .file-preview span { @apply flex-1 min-w-0; }
+            .file-preview button { @apply border-0 bg-transparent text-brand-blue text-lg; }
+            .upload-group .file-error { @apply text-[#a52c47] mt-[5px]; }
+
+            .project-actions { @apply flex items-center justify-between gap-[14px]; }
+            .project-actions p { @apply text-[11px] text-brand-muted m-0; }
+
+            dialog { @apply border border-brand-line rounded-[22px] p-8 w-[calc(100%-32px)] max-w-[550px] text-brand-ink max-h-[90dvh] overflow-auto; }
+            dialog::backdrop { @apply bg-[#00354488] backdrop-blur-sm; }
+            dialog h2 { @apply text-[28px] mb-[10px]; }
+            dialog > p { @apply text-xs; }
+            dialog dl { overflow-wrap: anywhere; @apply text-xs; }
+            dialog dt { @apply font-extrabold mt-[15px]; }
+            dialog dd { white-space: pre-wrap; @apply my-[3px] text-brand-muted; }
+            dialog > button:first-child { @apply float-right border-0 bg-[#edf4f5] rounded-full w-8 h-8 text-[22px]; }
+            dialog .primary { @apply mt-5 w-full; }
+        }
+
+        @media (max-width: 900px) {
+            .hero { @apply px-7 py-9; }
+            .hero h1 { @apply text-[36px]; }
+            .countdown-box { @apply py-4 px-5 min-w-[84px]; }
+            .countdown-value { @apply text-[30px]; }
+            .layout { @apply grid-cols-[220px_minmax(0,1fr)] gap-5; }
+            .section-card { @apply p-[22px]; }
+            .fields, .upload-grid { @apply grid-cols-1; }
+            .form-footer { @apply items-start flex-col; }
+        }
+        @media (max-width: 640px) {
+            .nav { @apply px-5 py-4; }
+            .logo { @apply h-11; }
+            .container { @apply px-4 py-5; }
+            .hero { @apply px-5 py-7; }
+            .hero h1 { @apply text-[28px]; }
+            .hero-badge { @apply text-[10px] px-[15px] py-[7px]; }
+            .countdown { @apply gap-[10px]; }
+            .countdown-box { @apply py-[14px] px-4 min-w-[70px]; }
+            .countdown-value { @apply text-[26px]; }
+            .countdown-label { @apply text-[9px]; }
+            .workspace-heading { @apply mt-[26px]; }
+            .workspace-heading h2 { @apply text-[26px]; }
+            .year-pill { @apply text-[9px]; }
+            .layout { @apply grid-cols-1; }
+            .identity { @apply p-5 text-left grid grid-cols-[55px_1fr] gap-x-[15px] items-center; }
+            .avatar { grid-row: 1 / 4; @apply w-[55px] h-[55px] m-0; }
+            .identity h3 { @apply text-[17px]; }
+            .identity p { @apply mb-2; }
+            .identity .small-pill { @apply justify-self-start; }
+            .identity-divider, .identity p:last-child, aside .note { @apply hidden; }
+            .project-summary h3 { @apply text-[23px]; }
+            .project-summary h3 br { @apply hidden; }
+            .checklist { @apply grid grid-cols-2 gap-x-[10px] gap-y-0; }
+            .checklist li { @apply my-[7px]; }
+            .section-card { @apply px-5 py-[22px]; }
+            .section-heading h3 { @apply text-[21px]; }
+            input, select, textarea { @apply text-base; }
+            .form-footer { @apply gap-[13px]; }
+            .primary, .secondary { @apply min-h-[44px]; }
+            .form-footer button { @apply w-full; }
+            .project-actions { @apply flex-col items-stretch; }
+            .project-actions p { @apply text-center; }
+            .preview-note { @apply leading-[1.8]; }
+            footer { @apply mx-4 flex-col text-center gap-[3px]; }
+            .tabs { @apply gap-[26px]; }
+            .tabs button { @apply min-h-[44px]; }
+            .file-preview button { @apply min-w-[40px] min-h-[40px]; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            * { scroll-behavior: auto !important; transition: none !important; }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav" aria-label="Main navigation"><a href="{{ url_for('home') }}"><img class="logo"
+                    src="{{ url_for('static', filename='img/logo_nobg.png') }}" alt="YTAC home"></a><a
+                class="text-link" href="{{ url_for('login') }}">Back to login ↗</a></nav>
+    </header>
+    <main class="container">
+        <section class="hero">
+            <span class="hero-badge">YTAC 2026 · PROJECT SUBMISSION</span>
+            <h1>Submit your project</h1>
+            <div class="countdown" id="countdown" data-deadline="2026-12-31T23:59:59+08:00">
+                <div class="countdown-box"><span class="countdown-value" id="cdDays">00</span><span
+                        class="countdown-label">Days</span></div>
+                <div class="countdown-box"><span class="countdown-value" id="cdHours">00</span><span
+                        class="countdown-label">Hours</span></div>
+                <div class="countdown-box"><span class="countdown-value" id="cdMinutes">00</span><span
+                        class="countdown-label">Minutes</span></div>
+                <div class="countdown-box"><span class="countdown-value" id="cdSeconds">00</span><span
+                        class="countdown-label">Seconds</span></div>
+            </div>
+            <p class="hero-subtitle">until the submission deadline.</p>
+        </section>
+        <div class="workspace-heading">
+            <div>
+                <h2>Welcome, <span id="welcomeName">innovator</span> <span class="wave">✦</span></h2>
+            </div><span class="year-pill"><span></span> YTAC 2026</span>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Student portal"><button id="profileTab" role="tab"
+                aria-selected="true" aria-controls="profilePanel" data-tab="profile">01 <span>My
+                    profile</span></button><button id="projectTab" role="tab" aria-selected="false"
+                aria-controls="projectPanel" tabindex="-1" data-tab="project">02 <span>My project</span></button></div>
+        <section id="profilePanel" role="tabpanel" aria-labelledby="profileTab">
+            <div class="layout">
+                <aside>
+                    <div class="identity card">
+                        <div class="avatar" id="avatar"><svg viewBox="0 0 24 24" width="34" height="34" fill="none"
+                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="4" />
+                                <path d="M4 20c0-4 3.5-7 8-7s8 3 8 7" />
+                            </svg></div>
+                        <h3 id="profileName">Your student profile</h3>
+                        <p id="profileSchool">Your next chapter starts here.</p><span class="small-pill">YTAC
+                            participant</span>
+                        <div class="identity-divider"></div>
+                        <p>Keep your details up to date, secure your account and get ready to share your ideas.</p>
+                    </div>
+                    <div class="note"><span>✳</span>
+                        <h3 class="note-title">Made for your <span>next big idea</span>.</h3><a
+                            href="#project">Go to my project →</a>
+                    </div>
+                </aside>
+                <div class="main-column">
+                    <form method="post" id="profileForm" class="card section-card">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow muted">A LITTLE ABOUT YOU</p>
+                                <h3>Personal information</h3>
+                                <p>Make sure we have the right details for your YTAC journey.</p>
+                            </div><span class="section-symbol">↗</span>
+                        </div>
+                        <div class="fields">
+                            <div><label for="fullName">Full name <span>*</span></label><input id="fullName"
+                                    name="fullName" autocomplete="name" placeholder="Your full name" required
+                                    maxlength="100"></div>
+                            <div><label for="email">Email address <span>*</span></label><input id="email" name="email"
+                                    type="email" autocomplete="email" placeholder="you@example.com" required></div>
+                            <div><label for="phone">Phone number</label><input id="phone" name="phone" type="tel"
+                                    autocomplete="tel" placeholder="e.g. +60 12 345 6789" maxlength="30"></div>
+                            <div><label for="school">School / institution <span>*</span></label><input id="school"
+                                    name="school" autocomplete="organization" placeholder="Your school or institution"
+                                    required maxlength="160"></div>
+                            <div class="full"><label for="team">Team name</label><input id="team" name="team"
+                                    placeholder="The name behind your big idea" maxlength="100"></div>
+                        </div>
+                        <div class="form-footer">
+                            <p>Preview edits stay on this page only.</p><button class="primary" type="submit">Save
+                                changes <span>→</span></button>
+                        </div>
+                        <p class="feedback" id="profileStatus" role="status" hidden></p>
+                    </form>
+                    <form method="post" id="passwordForm" class="card section-card">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow muted">KEEP IT YOURS</p>
+                                <h3>Change password</h3>
+                                <p>Choose a strong password you don’t use elsewhere.</p>
+                            </div><span class="section-symbol purple">⌑</span>
+                        </div>
+                        <div class="fields">
+                            <div class="full"><label for="currentPassword">Current password <span>*</span></label>
+                                <div class="password-wrap"><input id="currentPassword" type="password"
+                                        autocomplete="current-password" required><button type="button"
+                                        data-password="currentPassword" aria-label="Show current password"
+                                        aria-pressed="false">Show</button></div>
+                            </div>
+                            <div><label for="newPassword">New password <span>*</span></label>
+                                <div class="password-wrap"><input id="newPassword" type="password"
+                                        autocomplete="new-password" minlength="8" required
+                                        aria-describedby="passwordHelp"><button type="button"
+                                        data-password="newPassword" aria-label="Show new password"
+                                        aria-pressed="false">Show</button></div>
+                            </div>
+                            <div><label for="confirmPassword">Confirm new password <span>*</span></label>
+                                <div class="password-wrap"><input id="confirmPassword" type="password"
+                                        autocomplete="new-password" minlength="8" required><button type="button"
+                                        data-password="confirmPassword" aria-label="Show confirmation password"
+                                        aria-pressed="false">Show</button></div>
+                            </div>
+                        </div>
+                        <p class="help" id="passwordHelp">Use at least 8 characters.</p>
+                        <div class="form-footer">
+                            <p>Keep your login details private.</p><button class="secondary" type="submit">Update
+                                password →</button>
+                        </div>
+                        <p class="feedback" id="passwordStatus" role="status" hidden></p>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <section id="projectPanel" role="tabpanel" aria-labelledby="projectTab" hidden>{% include 'submission.html' %}
+        </section>
+        <p class="preview-note">Design preview · Account changes and project uploads are not connected to the server
+            yet.</p>
+    </main>
+    <footer><span>© 2026 CodeKidz. All rights reserved.</span><span>EDUWEL SDN. BHD.</span>
+    </footer>
+    <script>
+'use strict';
+const $ = id => document.getElementById(id);
+(function initCountdown() {
+  const el = $('countdown');
+  if (!el) return;
+  const deadline = new Date(el.dataset.deadline).getTime();
+  const pad = n => String(Math.max(n, 0)).padStart(2, '0');
+  function tick() {
+    const diff = deadline - Date.now();
+    if (diff <= 0) { ['cdDays', 'cdHours', 'cdMinutes', 'cdSeconds'].forEach(id => $(id).textContent = '00'); clearInterval(timer); return; }
+    $('cdDays').textContent = pad(Math.floor(diff / 86400000));
+    $('cdHours').textContent = pad(Math.floor(diff % 86400000 / 3600000));
+    $('cdMinutes').textContent = pad(Math.floor(diff % 3600000 / 60000));
+    $('cdSeconds').textContent = pad(Math.floor(diff % 60000 / 1000));
+  }
+  tick();
+  const timer = setInterval(tick, 1000);
+})();
+const tabs = [...document.querySelectorAll('[data-tab]')];
+function showTab(name) {
+  tabs.forEach(tab => { const active = tab.dataset.tab === name; tab.setAttribute('aria-selected', active); tab.tabIndex = active ? 0 : -1; $(tab.dataset.tab + 'Panel').hidden = !active; });
+}
+function routeTab() { showTab(location.hash === '#project' ? 'project' : 'profile'); }
+tabs.forEach((tab, index) => {
+  tab.addEventListener('click', () => { history.replaceState(null, '', '#' + tab.dataset.tab); showTab(tab.dataset.tab); });
+  tab.addEventListener('keydown', event => { if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return; event.preventDefault(); const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length; tabs[next].click(); tabs[next].focus(); });
+});
+window.addEventListener('hashchange', routeTab); routeTab();
+function feedback(id, message) { $(id).textContent = message; $(id).hidden = false; }
+$('profileForm').addEventListener('submit', event => { event.preventDefault(); const name = $('fullName').value.trim(); if (!name || !$('school').value.trim()) { feedback('profileStatus', 'Please enter your name and school.'); return; } $('welcomeName').textContent = name.split(/\s+/)[0]; $('profileName').textContent = name; $('profileSchool').textContent = $('school').value.trim(); $('avatar').textContent = name.split(/\s+/).slice(0,2).map(part => part[0]).join('').toUpperCase(); feedback('profileStatus', 'Profile preview updated. These changes are not saved to an account and will reset when you leave this page.'); });
+document.querySelectorAll('[data-password]').forEach(button => button.addEventListener('click', () => { const input = $(button.dataset.password); const show = input.type === 'password'; input.type = show ? 'text' : 'password'; button.textContent = show ? 'Hide' : 'Show'; button.setAttribute('aria-pressed', show); button.setAttribute('aria-label', (show ? 'Hide ' : 'Show ') + document.querySelector('label[for="' + input.id + '"]').textContent.replace('*','').trim().toLowerCase()); }));
+$('confirmPassword').addEventListener('input', () => $('confirmPassword').setCustomValidity(''));
+$('newPassword').addEventListener('input', () => { $('newPassword').setCustomValidity(''); $('confirmPassword').setCustomValidity(''); });
+$('currentPassword').addEventListener('input', () => $('newPassword').setCustomValidity(''));
+$('passwordForm').addEventListener('submit', event => { event.preventDefault(); if ($('newPassword').value !== $('confirmPassword').value) { $('confirmPassword').setCustomValidity('Your passwords do not match.'); $('confirmPassword').reportValidity(); return; } if ($('currentPassword').value === $('newPassword').value) { $('newPassword').setCustomValidity('Choose a different password from your current password.'); $('newPassword').reportValidity(); return; } feedback('passwordStatus', 'Password format checked. Your password has not changed; account services must be connected first.'); $('passwordForm').reset(); document.querySelectorAll('[data-password]').forEach(button => { $(button.dataset.password).type = 'password'; button.textContent = 'Show'; button.setAttribute('aria-pressed','false'); button.setAttribute('aria-label','Show ' + document.querySelector('label[for="' + button.dataset.password + '"]').textContent.replace('*','').trim().toLowerCase()); }); });
+const configs = { banner:{extensions:['pdf','jpg','jpeg','png'],max:20,check:'checkBanner',label:'X-banner'}, photo:{extensions:['jpg','jpeg','png'],max:20,check:'checkPhoto',label:'Project photo'}, file:{extensions:['zip'],max:100,check:'checkFile',label:'Project file'} };
+const selected = {}; const objectURLs = {};
+function updateProgress() { const details = ['projectTitle','stage','category','abstract'].every(id => $(id).value.trim()); const states = {checkDetails:details}; Object.entries(configs).forEach(([key,config]) => states[config.check] = Boolean(selected[key])); let count = 0; Object.entries(states).forEach(([id,done]) => { $(id).classList.toggle('done',done); $(id).querySelector('span').textContent = done ? '✓' : '○'; if(done) count++; }); $('progressCount').textContent = count + ' / 4'; $('progressBar').style.width = count * 25 + '%'; $('projectBadge').textContent = count === 4 ? 'Ready to review' : 'Draft project'; }
+function clearFile(key) { delete selected[key]; $(key + 'File').value = ''; if(objectURLs[key]) { URL.revokeObjectURL(objectURLs[key]); delete objectURLs[key]; } $(key + 'Preview').replaceChildren(); $(key + 'Preview').hidden = true; updateProgress(); }
+function chooseFile(key, files) { const config = configs[key]; $(key + 'Error').textContent = ''; if (!files.length) return; const file = files[0]; const extension = file.name.split('.').pop().toLowerCase(); if (files.length !== 1 || !config.extensions.includes(extension) || file.size > config.max * 1024 * 1024 || file.size === 0) { clearFile(key); $(key + 'Error').textContent = 'Choose one non-empty ' + config.extensions.join(', ').toUpperCase() + ' file, up to ' + config.max + ' MB.'; return; } if(objectURLs[key]) URL.revokeObjectURL(objectURLs[key]); selected[key] = file; const preview = $(key + 'Preview'); preview.replaceChildren(); if(['jpg','jpeg','png'].includes(extension)) { const img = document.createElement('img'); objectURLs[key] = URL.createObjectURL(file); img.src = objectURLs[key]; img.alt = config.label + ' preview'; preview.append(img); } const name = document.createElement('span'); name.textContent = file.name + ' · ' + (file.size / 1024 / 1024).toFixed(2) + ' MB'; preview.append(name); const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = '×'; remove.setAttribute('aria-label','Remove ' + config.label); remove.addEventListener('click', () => { clearFile(key); $(key + 'File').focus(); }); preview.append(remove); preview.hidden = false; updateProgress(); }
+Object.keys(configs).forEach(key => { const input = $(key + 'File'); const zone = $(key + 'Zone'); input.setAttribute('aria-describedby', key + 'Error'); input.addEventListener('change', () => chooseFile(key,input.files)); ['dragenter','dragover'].forEach(type => zone.addEventListener(type,event => { event.preventDefault(); zone.classList.add('drag-over'); })); ['dragleave','drop'].forEach(type => zone.addEventListener(type,event => { event.preventDefault(); zone.classList.remove('drag-over'); })); zone.addEventListener('drop',event => { const files = event.dataTransfer.files; if(!files.length) return; input.files = files; chooseFile(key,files); }); });
+$('submissionForm').addEventListener('input',updateProgress);
+$('submissionForm').addEventListener('submit',event => { event.preventDefault(); if(!['projectTitle','abstract'].every(id => $(id).value.trim())) { feedback('submissionStatus','Please add a project title and abstract.'); return; } if(!Object.keys(configs).every(key => selected[key])) { feedback('submissionStatus','Please select all three project files.'); return; } const review = $('reviewDetails'); review.replaceChildren(); const rows = [['Project title',$('projectTitle').value],['Competition stage',$('stage').selectedOptions[0].text],['Category',$('category').selectedOptions[0].text],['Abstract',$('abstract').value],...Object.entries(configs).map(([key,config]) => [config.label,selected[key].name])]; rows.forEach(([label,value]) => { const dt = document.createElement('dt'); dt.textContent = label; const dd = document.createElement('dd'); dd.textContent = value; review.append(dt,dd); }); $('reviewDialog').showModal(); });
+document.querySelectorAll('.dialog-close').forEach(button => button.addEventListener('click',() => $('reviewDialog').close()));
+    </script>
+</body>
+
+</html>

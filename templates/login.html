@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — YTAC 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --blue: #00607A;
+            --green: #14A39A;
+            --purple: #822384;
+            --mint: #84D4C7;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #F9FBFC;
+            color: #334155;
+            font: 14px/1.65 'Plus Jakarta Sans', sans-serif;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        a {
+            color: var(--blue);
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e8eef1;
+        }
+
+        .nav {
+            max-width: 1024px;
+            margin: auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            display: block;
+            height: 40px;
+            width: auto;
+        }
+
+        .home {
+            font-weight: 700;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        main {
+            flex: 1;
+            padding: 36px 24px 56px;
+            background: radial-gradient(ellipse at 10% 20%, #84d4c725, transparent 50%), radial-gradient(ellipse at 95% 80%, #8223840c, transparent 45%);
+        }
+
+        .progress {
+            list-style: none;
+            padding: 0;
+            margin: 0 auto 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .progress li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress li+li:before {
+            content: '';
+            width: 32px;
+            height: 1px;
+            background: #d5e3e7;
+            margin-right: 4px;
+        }
+
+        .step {
+            width: 25px;
+            height: 25px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #e2f4ef;
+            color: #087b72;
+            font-size: 11px;
+        }
+
+        .current {
+            color: var(--blue);
+            font-weight: 800;
+        }
+
+        .current .step {
+            background: var(--blue);
+            color: white;
+        }
+
+        .card {
+            max-width: 540px;
+            margin: auto;
+            overflow: hidden;
+            border: 1px solid #e4ecef;
+            border-radius: 26px;
+            background: white;
+            box-shadow: 0 20px 65px #004a5e0d;
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            padding: 30px 32px;
+            text-align: center;
+            color: white;
+            background: linear-gradient(125deg, var(--blue), #0d7a97 55%, var(--green));
+        }
+
+        .hero:after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 1px solid #ffffff20;
+            border-radius: 50%;
+            top: -105px;
+            right: -90px;
+            box-shadow: 0 0 0 30px #ffffff05, 0 0 0 60px #ffffff04;
+            pointer-events: none;
+        }
+
+        .icon {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 14px;
+            border-radius: 15px;
+            border: 1px solid #ffffff40;
+            background: #ffffff15;
+        }
+
+        .eyebrow {
+            margin: 0 0 7px;
+            color: #ceeee9;
+            font-size: 10px;
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+
+        h1,
+        h2,
+        label,
+        .primary {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 32px;
+            letter-spacing: -.8px;
+            line-height: 1.2;
+        }
+
+        .hero p:last-child {
+            margin: 0;
+            color: #e5f4f6;
+            font-size: 13px;
+        }
+
+        .content {
+            padding: 28px 32px 30px;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #334155;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            min-width: 0;
+            border: 1px solid #dce5e9;
+            border-radius: 11px;
+            padding: 13px 15px;
+            background: #fcfdfe;
+            color: #243f4c;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        input::placeholder {
+            color: #94a3b0;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px #00607a15;
+        }
+
+        .password-wrap {
+            position: relative;
+        }
+
+        .password-wrap input {
+            padding-right: 70px;
+        }
+
+        .toggle {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            min-height: 38px;
+            padding: 5px 10px;
+            border: 0;
+            border-radius: 7px;
+            background: transparent;
+            color: var(--blue);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .hint {
+            margin: 7px 0 0;
+            color: #64748b;
+            font-size: 11px;
+        }
+
+        .primary {
+            width: 100%;
+            border: 0;
+            border-radius: 11px;
+            background: var(--blue);
+            color: white;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s;
+            box-shadow: 0 6px 16px #00607a18;
+        }
+
+        .primary:hover {
+            background: var(--purple);
+        }
+
+        .resend-link {
+            display: block;
+            width: 100%;
+            margin: 20px 0 0;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: var(--blue);
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.8;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            cursor: pointer;
+        }
+
+        .register {
+            margin: 23px 0 0;
+            padding-top: 20px;
+            border-top: 1px solid #edf1f3;
+            text-align: center;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .register a {
+            font-weight: 700;
+            text-underline-offset: 3px;
+        }
+
+        a:focus-visible,
+        button:focus-visible {
+            outline: 3px solid var(--purple);
+            outline-offset: 4px;
+        }
+
+        .status {
+            padding: 12px 14px;
+            margin: 16px 0 0;
+            background: #f0f8f8;
+            border: 1px solid #dceeed;
+            border-radius: 10px;
+            color: var(--blue);
+            font-size: 12px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 18px 24px;
+            background: white;
+            border-top: 1px solid #e8eef1;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        footer p+p {
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        dialog {
+            border: 1px solid #e4ecef;
+            border-radius: 24px;
+            padding: 32px;
+            width: calc(100% - 32px);
+            max-width: 450px;
+            max-height: calc(100dvh - 32px);
+            overflow: auto;
+            box-shadow: 0 24px 90px #003d5033;
+            color: #334155;
+        }
+
+        dialog::backdrop {
+            background: #00313f80;
+            backdrop-filter: blur(4px);
+        }
+
+        .dialog-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .mail-icon {
+            display: grid;
+            place-items: center;
+            width: 44px;
+            height: 44px;
+            background: #e9f6f3;
+            color: var(--green);
+            border-radius: 13px;
+        }
+
+        .close {
+            border: 0;
+            border-radius: 50%;
+            background: #f4f7f8;
+            color: #64748b;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        h2 {
+            margin: 0 0 10px;
+            color: var(--blue);
+            font-size: 25px;
+            line-height: 1.25;
+            letter-spacing: -.5px;
+        }
+
+        .dialog-copy {
+            margin: 0 0 22px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media(max-width:520px) {
+            main {
+                padding: 28px 16px 40px;
+            }
+
+            .nav {
+                padding: 16px;
+            }
+
+            .progress {
+                gap: 8px;
+                font-size: 10px;
+            }
+
+            .progress li {
+                gap: 5px;
+            }
+
+            .progress li+li:before {
+                width: 12px;
+                margin-right: 2px;
+            }
+
+            .content {
+                padding: 24px 22px;
+            }
+
+            .hero {
+                padding: 28px 22px;
+            }
+
+            input {
+                font-size: 16px;
+            }
+
+            dialog {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="nav" aria-label="Main navigation">
+            <a href="{{ url_for('home') }}" aria-label="YTAC home"><img class="logo"
+                    src="{{ url_for('static', filename='img/logo_nobg.png') }}" alt="YTAC"></a>
+            <a class="home" href="{{ url_for('home') }}">← Back to Home</a>
+        </nav>
+    </header>
+    <main>
+        <ol class="progress" aria-label="Registration progress">
+            <li><span class="step" aria-hidden="true">1</span> Registration</li>
+            <li><span class="step" aria-hidden="true">2</span> Confirmation</li>
+            <li class="current" aria-current="step"><span class="step" aria-hidden="true">3</span> Login</li>
+        </ol>
+        <article class="card" aria-labelledby="login-title">
+            <div class="hero">
+                <div class="icon"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+                        <rect x="5" y="10" width="14" height="11" rx="3" />
+                        <path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3" />
+                    </svg></div>
+                <p class="eyebrow">YOUTH TECH ASIA CHALLENGE 2026</p>
+                <h1 id="login-title">Welcome back!</h1>
+                <p>Your profile and projects, all in one place.</p>
+            </div>
+            <div class="content">
+                <form id="loginForm">
+                    <div class="field"><label for="loginEmail">Registered email</label><input id="loginEmail"
+                            name="email" type="email" autocomplete="username" placeholder="Enter your registered email"
+                            required></div>
+                    <div class="field"><label for="loginPassword">Password</label>
+                        <div class="password-wrap"><input id="loginPassword" name="password" type="password"
+                                autocomplete="current-password" placeholder="Enter your password"
+                                aria-describedby="passwordHint" required><button class="toggle" id="togglePassword"
+                                type="button" aria-controls="loginPassword" aria-label="Show password"
+                                aria-pressed="false">Show</button></div>
+                        <p class="hint" id="passwordHint">First time logging in? Use the password sent to your email.
+                        </p>
+                    </div>
+                    <p class="hint" style="margin-bottom:14px">Design preview — this opens the student portal without
+                        authenticating an account.</p><button type="submit" class="primary">Login Now <span
+                            aria-hidden="true">→</span></button>
+                    <p id="loginStatus" class="status" role="status" hidden></p>
+                </form>
+                <button type="button" class="resend-link" id="openResend" aria-haspopup="dialog"
+                    aria-controls="resendDialog">Did not receive your password after registration?<br>Click here to
+                    receive it again.</button>
+                <p class="register">New to YTAC? <a href="{{ url_for('registration') }}">Register your team</a></p>
+            </div>
+        </article>
+    </main>
+    <footer>
+        <p>Copyright © 2026 CodeKidz. All rights reserved.</p>
+        <p>EDUWELD SDN. BHD. (1439286P / 202101038986)</p>
+    </footer>
+    <dialog id="resendDialog" aria-labelledby="resendTitle" aria-describedby="resendDescription">
+        <div class="dialog-top">
+            <div class="mail-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="5" width="18" height="14" rx="3" />
+                    <path d="m4 7 8 6 8-6" />
+                </svg></div><button type="button" class="close" id="closeResend"
+                aria-label="Close resend password form">×</button>
+        </div>
+        <h2 id="resendTitle">Let's get you logged in.</h2>
+        <p class="dialog-copy" id="resendDescription">Enter the email address you used to register to request your login
+            password again.</p>
+        <form id="resendForm">
+            <div class="field"><label for="resendEmail">Registered email</label><input id="resendEmail" name="email"
+                    type="email" autocomplete="email" placeholder="Enter your registered email" required autofocus>
+            </div>
+            <button type="submit" class="primary">Resend Password <span aria-hidden="true">→</span></button>
+            <p id="resendStatus" class="status" role="status" hidden></p>
+            <p class="hint">Tip: Check your spam or junk folder for the original email.</p>
+        </form>
+    </dialog>
+    <script>
+        const loginEmail = document.getElementById('loginEmail');
+        const password = document.getElementById('loginPassword');
+        const toggle = document.getElementById('togglePassword');
+        const dialog = document.getElementById('resendDialog');
+        const resendEmail = document.getElementById('resendEmail');
+        const resendStatus = document.getElementById('resendStatus');
+        toggle.addEventListener('click', () => {
+            const show = password.type === 'password';
+            password.type = show ? 'text' : 'password';
+            toggle.textContent = show ? 'Hide' : 'Show';
+            toggle.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+            toggle.setAttribute('aria-pressed', String(show));
+        });
+        document.getElementById('openResend').addEventListener('click', () => {
+            resendEmail.value = loginEmail.value;
+            resendStatus.hidden = true;
+            dialog.showModal();
+            resendEmail.focus();
+        });
+        document.getElementById('closeResend').addEventListener('click', () => dialog.close());
+        // Frontend preview only. Replace with authentication after backend integration.
+        document.getElementById('loginForm').addEventListener('submit', event => {
+            event.preventDefault();
+            window.location.href = "{{ url_for('student_portal') }}";
+        });
+        // Frontend preview only. Display delivery confirmation only after API success.
+        document.getElementById('resendForm').addEventListener('submit', event => {
+            event.preventDefault();
+            resendStatus.textContent = 'Preview only — no email has been sent. Password delivery will work once connected.';
+            resendStatus.hidden = false;
+        });
+    </script>
+</body>
+
+</html>
