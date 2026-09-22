@@ -95,8 +95,7 @@
             </div>
         </section>
         <div class="project-actions">
-            <p>Ready to share your idea with the world?</p><button class="primary" type="submit">Review project
-                <span>→</span></button>
+            <p>Ready to share your idea with the world?</p><div class="action-buttons"><button class="secondary" id="saveDraft" type="button">Save draft</button><button class="primary" type="submit">Submit project <span>→</span></button></div>
         </div>
         <p class="feedback" id="submissionStatus" role="status" hidden></p>
     </form>
@@ -108,5 +107,5 @@
     <p>Review your details and selected files.</p>
     <dl id="reviewDetails"></dl>
     <p class="preview-note">Preview only. Your files have not been uploaded or submitted.</p><button type="button"
-        class="primary dialog-close">Continue editing →</button>
+        class="secondary dialog-close">Continue editing</button><button type="button" class="primary" id="confirmSubmission">Submit project →</button>
 </dialog>

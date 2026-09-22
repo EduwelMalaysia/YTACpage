@@ -282,6 +282,11 @@
         </div>
 
         <form id="registrationForm" class="space-y-14">
+            <div class="rounded-2xl bg-ytac-blue/5 p-4">
+                <p class="text-sm text-gray-600">Your progress saves automatically in this browser so you can leave and continue later. File uploads must be selected again when you return.</p>
+                <p id="draftStatus" role="status" aria-live="polite" class="text-sm text-ytac-blue mt-1"></p>
+            </div>
+
 
             <!-- SECTION 01: Contact Email -->
             <section>
@@ -726,11 +731,10 @@
                 </div>
                 <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 sm:p-8">
                     <label class="field-label block text-sm font-bold text-gray-700 mb-1.5">Upload payment
-                        slip</label>
+                        slip (optional)</label>
                     <input type="file" name="paymentSlip" accept=".pdf,.jpg,.jpeg,.png"
                         class="field-input w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm file:mr-4 file:py-1.5 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-ytac-blue/10 file:text-ytac-blue">
-                    <p class="text-xs text-gray-400 mt-2">Not applicable if you selected the free competition-only
-                        package.</p>
+                    <p class="text-xs text-gray-400 mt-2">You can submit your registration without uploading a payment slip.</p>
                 </div>
             </section>
 
@@ -948,6 +952,7 @@
                 removeBtn.addEventListener('click', () => {
                     card.remove();
                     memberCount--;
+                    saveDraft();
                     addMemberBtn.classList.remove('opacity-40', 'pointer-events-none');
                 });
             }
@@ -1054,6 +1059,65 @@
         // if (!res.ok) { /* show an error state instead of the confirmation panel */ }
         //
         const form = document.getElementById('registrationForm');
+
+        // Browser-local draft: file inputs are deliberately excluded.
+        const draftKey = 'ytac.registration.2026.draft.v1';
+        const draftStatus = document.getElementById('draftStatus');
+        const draftFields = () => Array.from(form.elements).filter(field =>
+            field.name && ['INPUT', 'SELECT', 'TEXTAREA'].includes(field.tagName) &&
+            !['file', 'password', 'hidden', 'submit', 'button', 'reset'].includes(field.type));
+
+        function saveDraft() {
+            try {
+                const fields = draftFields().map(field => ({
+                    name: field.name, type: field.type, value: field.value,
+                    checked: field.checked === true
+                }));
+                localStorage.setItem(draftKey, JSON.stringify({ version: 1, memberCount, fields }));
+                draftStatus.textContent = 'Progress saved automatically in this browser.';
+            } catch (error) {
+                draftStatus.textContent = 'Draft could not be saved. Browser storage may be unavailable or full. Keep this page open.';
+            }
+        }
+
+        function restoreDraft() {
+            try {
+                const raw = localStorage.getItem(draftKey);
+                if (!raw) return;
+                const draft = JSON.parse(raw);
+                if (draft.version !== 1 || !Array.isArray(draft.fields) ||
+                    !Number.isInteger(draft.memberCount) || draft.memberCount < 1 ||
+                    draft.memberCount > MAX_MEMBERS || draft.fields.some(field =>
+                        !field || typeof field.name !== 'string' || typeof field.type !== 'string' ||
+                        typeof field.value !== 'string' || typeof field.checked !== 'boolean')) {
+                    throw new Error('Invalid draft');
+                }
+                trimMembersTo(draft.memberCount);
+                growMembersTo(draft.memberCount);
+                draftFields().forEach(field => {
+                    const choice = field.type === 'radio' || field.type === 'checkbox';
+                    const saved = draft.fields.find(item => item.name === field.name &&
+                        item.type === field.type && (!choice || item.value === field.value));
+                    if (!saved) return;
+                    if (choice) field.checked = saved.checked;
+                    else field.value = saved.value;
+                });
+                // Reapply team mode and reveal conditional mentor, race and travel fields.
+                form.querySelectorAll('input[type="radio"]:checked').forEach(field => {
+                    field.dispatchEvent(new Event('change', { bubbles: true }));
+                });
+                draftStatus.textContent = 'Saved draft restored. Please select any file uploads again.';
+            } catch (error) {
+                draftStatus.textContent = 'Saved draft could not be restored. You can still fill in the form.';
+            }
+        }
+        restoreDraft();
+        form.addEventListener('input', saveDraft);
+        form.addEventListener('change', saveDraft);
+        form.addEventListener('click', event => {
+            if (event.target.closest('#addMemberBtn, .remove-member-btn')) saveDraft();
+        });
+
         form.addEventListener('submit', function (e) {
             e.preventDefault();
 

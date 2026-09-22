@@ -8,262 +8,1842 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
         rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            blue: '#00607a',
-                            green: '#14a39a',
-                            purple: '#822384',
-                            mint: '#84d4c7',
-                            ink: '#173e4b',
-                            muted: '#647b85',
-                            line: '#e1eaed',
-                        },
-                    },
-                    fontFamily: {
-                        sans: ["'Plus Jakarta Sans'", 'sans-serif'],
-                        display: ["'Space Grotesk'", 'sans-serif'],
-                    },
-                },
-            },
-        };
-    </script>
-    <style type="text/tailwindcss">
-        @layer base {
-            * { @apply box-border; }
-            body { @apply m-0 bg-[#f6f9fa] text-brand-ink font-sans text-[14px] leading-[1.65]; }
-            button, input, select, textarea { font: inherit; }
-            button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
-            button, a { touch-action: manipulation; }
-            a { @apply text-brand-blue; }
-            button { @apply cursor-pointer; }
-            h1, h2, h3, h4, .primary, .secondary { @apply font-display; }
-            h1, h2, h3, h4, p { @apply mt-0; }
-            [hidden] { @apply !hidden; }
-        }
-        @layer components {
-            .header { @apply bg-white border-b border-brand-line; }
-            .nav { @apply max-w-[1200px] mx-auto px-8 py-5 flex items-center justify-between gap-5; }
-            .logo { @apply h-14 w-auto block; }
-            .text-link { @apply text-[15px] font-extrabold no-underline; }
-            .container { @apply max-w-[1200px] mx-auto p-8; }
-
-            .hero { background: linear-gradient(110deg,#004b64,#006b7f 62%,#13958e); @apply rounded-3xl text-white px-10 py-12 flex flex-col items-center text-center gap-[22px] overflow-hidden relative; }
-            .eyebrow { @apply text-[10px] font-extrabold tracking-[1.8px] mb-3; }
-            .hero-badge { @apply inline-block bg-white/[0.12] border border-white/[0.22] px-5 py-[9px] rounded-full text-[11px] font-extrabold tracking-[1.6px] text-[#d7f2ec]; }
-            .hero h1 { @apply text-[46px] leading-[1.1] tracking-[-1.6px] m-0; }
-            .countdown { @apply flex gap-4 flex-wrap justify-center; }
-            .countdown-box { @apply bg-white/[0.08] border border-white/[0.19] rounded-2xl py-[18px] px-7 min-w-[100px]; }
-            .countdown-value { @apply block font-display text-[36px] font-bold text-brand-mint tracking-[-0.5px]; }
-            .countdown-label { @apply block text-[10px] tracking-[1.6px] font-bold text-[#d0e8ec] mt-2 uppercase; }
-            .hero-subtitle { @apply text-[13px] text-[#d0e8ec] m-0; }
-
-            .workspace-heading { @apply flex items-center justify-between gap-[15px] mt-[35px] mb-6; }
-            .muted { @apply text-brand-muted text-[9px] mb-[7px]; }
-            .workspace-heading h2 { @apply text-[34px] tracking-[-0.8px] m-0; }
-            .wave { @apply text-brand-green; }
-            .year-pill, .small-pill { @apply inline-flex items-center gap-2 text-[10px] font-bold border border-[#d6e9e4] py-[6px] px-3 rounded-full bg-[#edf8f4] text-[#08786c]; }
-            .year-pill span { @apply w-[6px] h-[6px] rounded-full bg-brand-green; }
-
-            .tabs { @apply flex gap-[30px] border-b border-brand-line mb-7; }
-            .tabs button { @apply bg-transparent border-0 border-b-[3px] border-transparent px-1 pb-4 text-brand-muted text-[10px]; }
-            .tabs button span { @apply text-[18px] font-extrabold ml-[9px]; }
-            .tabs button[aria-selected=true] { @apply text-brand-blue border-brand-blue; }
-
-            .layout { @apply grid grid-cols-[270px_minmax(0,1fr)] gap-[26px] items-start; }
-            .main-column { @apply grid gap-6 min-w-0; }
-            .card { @apply bg-white border border-brand-line rounded-[20px] shadow-[0_5px_20px_#003e5003]; }
-            .identity { @apply text-center py-7 px-[23px]; }
-            .avatar { background: linear-gradient(140deg,#d9f1e9,#c4e9ec); @apply w-[74px] h-[74px] border-[5px] border-[#f2f9f7] rounded-full grid place-items-center text-brand-blue font-display text-[26px] font-bold mx-auto mb-4; }
-            .identity h3 { overflow-wrap: anywhere; @apply text-[18px] mb-[5px]; }
-            .identity p { overflow-wrap: anywhere; @apply text-[11px] text-brand-muted mb-[18px]; }
-            .identity-divider { @apply h-px bg-brand-line my-6; }
-            .identity p:last-child { @apply mb-0; }
-
-            .note { @apply p-[26px] mt-5 rounded-[20px] bg-[#e7f2ef] relative; }
-            .note > span { @apply text-[34px] text-brand-green leading-none; }
-            .note h3 { @apply text-xl leading-[1.3] mt-[14px] mb-[10px]; }
-            .note p { @apply text-[#53776f] text-xs; }
-            .note a { @apply text-xs font-extrabold no-underline; }
-            .note-title { @apply text-[25px] leading-[1.3] tracking-[-0.5px] mt-[14px] mb-[18px] text-brand-blue; }
-            .note-title span { background: linear-gradient(180deg,transparent 62%,#c4e9ec 62%); }
-            .lavender { @apply bg-[#f0eaf4]; }
-            .lavender > span { @apply text-brand-purple; }
-            .lavender p { @apply text-[#786783]; }
-
-            .section-card { @apply p-7; }
-            .section-heading { @apply flex justify-between gap-4 mb-[25px]; }
-            .section-heading h3 { @apply text-[22px] tracking-[-0.5px] mb-[5px]; }
-            .section-heading p:last-child { @apply text-brand-muted text-[11px] m-0; }
-            .section-symbol, .upload-icon { @apply bg-[#e9f5f2] text-brand-green rounded-xl w-[42px] h-[42px] grid place-items-center text-[25px] shrink-0; }
-            .purple { @apply text-brand-purple bg-[#f3eaf4]; }
-
-            .fields, .upload-grid { @apply grid grid-cols-2 gap-5; }
-            .full { @apply col-span-full; }
-            label { @apply block text-[11px] font-bold mb-[7px]; }
-            label > span, h4 > span { @apply text-brand-green; }
-            input, select, textarea { @apply w-full min-w-0 border border-[#dbe5e9] rounded-[9px] py-3 px-[13px] text-brand-ink bg-[#fcfdfe] text-xs; }
-            input::placeholder, textarea::placeholder { @apply text-[#81929c]; }
-            textarea { @apply resize-y; }
-            input:focus, textarea:focus, select:focus { @apply outline outline-2 outline-offset-1 outline-[#84d4c7]; }
-            button:focus-visible, a:focus-visible { @apply outline outline-[3px] outline-offset-4 outline-brand-purple; }
-
-            .form-footer { @apply flex justify-between items-center gap-[18px] border-t border-[#edf1f3] mt-[25px] pt-5; }
-            .form-footer p, .help { @apply text-[10px] text-brand-muted m-0; }
-            .help { @apply mt-2; }
-            .primary, .secondary { @apply border border-brand-blue rounded-[10px] py-[11px] px-5 font-bold text-xs transition-colors duration-200 text-white bg-brand-blue; }
-            .primary span { @apply ml-4; }
-            .primary:hover { @apply bg-brand-purple border-brand-purple; }
-            .secondary { @apply bg-white text-brand-blue; }
-            .secondary:hover { @apply bg-[#edf7f5]; }
-
-            .password-wrap { @apply relative; }
-            .password-wrap input { @apply pr-[60px]; }
-            .password-wrap button { @apply absolute right-[5px] top-[3px] bottom-[3px] bg-transparent border-0 text-brand-blue text-[10px] font-bold px-[10px]; }
-
-            .feedback { @apply py-[13px] px-4 bg-[#edf7f5] rounded-[10px] text-brand-blue text-xs mt-[15px]; }
-            .preview-note { @apply text-center text-[10px] text-brand-muted mt-7; }
-            footer { @apply max-w-[1136px] mx-auto flex justify-between gap-3 py-6 border-t border-brand-line text-brand-muted text-[9px]; }
-
-            .project-summary { @apply p-[26px]; }
-            .project-summary h3 { @apply text-[25px] leading-[1.2] tracking-[-0.7px] mt-5 mb-3; }
-            .project-summary p { @apply text-xs text-brand-muted; }
-            .progress-label { @apply flex justify-between text-[10px] mt-[25px] mb-[10px]; }
-            .progress-track { @apply h-[5px] bg-[#edf2f4] rounded-[10px] overflow-hidden; }
-            .progress-track div { @apply h-full w-0 bg-brand-green transition-[width] duration-200; }
-            .checklist { @apply list-none p-0 mt-5; }
-            .checklist li { @apply text-[11px] text-brand-muted my-[13px]; }
-            .checklist span { @apply mr-[10px]; }
-            .checklist .done { @apply text-[#08786c]; }
-
-            .upload-group h4 { @apply text-sm m-0 mb-[3px]; }
-            .upload-group > p { @apply text-[10px] text-brand-muted mb-[13px]; }
-            .dropzone { @apply relative flex flex-col items-center justify-center text-center gap-[6px] py-[23px] px-[10px] bg-[#fafcfc] border-[1.5px] border-dashed border-[#c4dadd] rounded-[13px] min-h-[183px] text-[10px] font-normal cursor-pointer m-0; }
-            .dropzone strong { @apply text-[11px] text-brand-blue mt-[5px]; }
-            .dropzone span:not(.upload-icon), .dropzone small { @apply text-[9px] text-brand-muted; }
-            .dropzone input { @apply absolute inset-0 opacity-0 cursor-pointer w-full h-full; }
-            .dropzone:focus-within, .dropzone.drag-over { @apply outline outline-2 outline-brand-green bg-[#eef9f5]; }
-            .wide { @apply min-h-[163px]; }
-
-            .file-preview { overflow-wrap: anywhere; @apply flex gap-[10px] items-center bg-[#edf7f5] p-[10px] rounded-[9px] mt-[10px] text-[10px]; }
-            .file-preview img { @apply w-[45px] h-[48px] object-contain rounded; }
-            .file-preview span { @apply flex-1 min-w-0; }
-            .file-preview button { @apply border-0 bg-transparent text-brand-blue text-lg; }
-            .upload-group .file-error { @apply text-[#a52c47] mt-[5px]; }
-
-            .project-actions { @apply flex items-center justify-between gap-[14px]; }
-            .project-actions p { @apply text-[11px] text-brand-muted m-0; }
-
-            dialog { @apply border border-brand-line rounded-[22px] p-8 w-[calc(100%-32px)] max-w-[550px] text-brand-ink max-h-[90dvh] overflow-auto; }
-            dialog::backdrop { @apply bg-[#00354488] backdrop-blur-sm; }
-            dialog h2 { @apply text-[28px] mb-[10px]; }
-            dialog > p { @apply text-xs; }
-            dialog dl { overflow-wrap: anywhere; @apply text-xs; }
-            dialog dt { @apply font-extrabold mt-[15px]; }
-            dialog dd { white-space: pre-wrap; @apply my-[3px] text-brand-muted; }
-            dialog > button:first-child { @apply float-right border-0 bg-[#edf4f5] rounded-full w-8 h-8 text-[22px]; }
-            dialog .primary { @apply mt-5 w-full; }
+    <style>
+        /* ===== Design tokens (YTAC brand) ===== */
+        :root {
+            --blue: #00607A;
+            --blue-dark: #004a5e;
+            --green: #14A39A;
+            --purple: #822384;
+            --mint: #84D4C7;
+            --gray: #F4F4F4;
+            --ink: #0B2A33;
+            --muted: #5D7982;
+            --line: #E3ECEC;
+            --blue-50: #E6F1F4;
+            --blue-100: #D2E6EB;
+            --green-50: #E6F7F4;
+            --green-100: #CFF0E9;
+            --purple-50: #F4E9F5;
+            --purple-100: #E9D3EC;
+            --mint-50: #EEFAF6;
+            --bg: #F7FAF9;
+            --r-lg: 26px;
+            --r-md: 18px;
+            --r-sm: 12px;
+            --r-pill: 999px;
+            --shadow-card: 0 1px 2px rgba(11, 42, 51, .04), 0 10px 28px rgba(11, 42, 51, .06);
+            --shadow-pop: 0 12px 32px rgba(0, 96, 122, .14);
+            --font-sans: 'Plus Jakarta Sans', Arial, sans-serif;
+            --font-heading: 'Space Grotesk', 'Plus Jakarta Sans', Arial, sans-serif;
         }
 
-        @media (max-width: 900px) {
-            .hero { @apply px-7 py-9; }
-            .hero h1 { @apply text-[36px]; }
-            .countdown-box { @apply py-4 px-5 min-w-[84px]; }
-            .countdown-value { @apply text-[30px]; }
-            .layout { @apply grid-cols-[220px_minmax(0,1fr)] gap-5; }
-            .section-card { @apply p-[22px]; }
-            .fields, .upload-grid { @apply grid-cols-1; }
-            .form-footer { @apply items-start flex-col; }
+        * {
+            box-sizing: border-box
         }
-        @media (max-width: 640px) {
-            .nav { @apply px-5 py-4; }
-            .logo { @apply h-11; }
-            .container { @apply px-4 py-5; }
-            .hero { @apply px-5 py-7; }
-            .hero h1 { @apply text-[28px]; }
-            .hero-badge { @apply text-[10px] px-[15px] py-[7px]; }
-            .countdown { @apply gap-[10px]; }
-            .countdown-box { @apply py-[14px] px-4 min-w-[70px]; }
-            .countdown-value { @apply text-[26px]; }
-            .countdown-label { @apply text-[9px]; }
-            .workspace-heading { @apply mt-[26px]; }
-            .workspace-heading h2 { @apply text-[26px]; }
-            .year-pill { @apply text-[9px]; }
-            .layout { @apply grid-cols-1; }
-            .identity { @apply p-5 text-left grid grid-cols-[55px_1fr] gap-x-[15px] items-center; }
-            .avatar { grid-row: 1 / 4; @apply w-[55px] h-[55px] m-0; }
-            .identity h3 { @apply text-[17px]; }
-            .identity p { @apply mb-2; }
-            .identity .small-pill { @apply justify-self-start; }
-            .identity-divider, .identity p:last-child, aside .note { @apply hidden; }
-            .project-summary h3 { @apply text-[23px]; }
-            .project-summary h3 br { @apply hidden; }
-            .checklist { @apply grid grid-cols-2 gap-x-[10px] gap-y-0; }
-            .checklist li { @apply my-[7px]; }
-            .section-card { @apply px-5 py-[22px]; }
-            .section-heading h3 { @apply text-[21px]; }
-            input, select, textarea { @apply text-base; }
-            .form-footer { @apply gap-[13px]; }
-            .primary, .secondary { @apply min-h-[44px]; }
-            .form-footer button { @apply w-full; }
-            .project-actions { @apply flex-col items-stretch; }
-            .project-actions p { @apply text-center; }
-            .preview-note { @apply leading-[1.8]; }
-            footer { @apply mx-4 flex-col text-center gap-[3px]; }
-            .tabs { @apply gap-[26px]; }
-            .tabs button { @apply min-h-[44px]; }
-            .file-preview button { @apply min-w-[40px] min-h-[40px]; }
+
+        [hidden] {
+            display: none !important
         }
-        @media (prefers-reduced-motion: reduce) {
-            * { scroll-behavior: auto !important; transition: none !important; }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            line-height: 1.65;
+            color: var(--ink);
+            background: var(--bg)
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit
+        }
+
+        button,
+        a {
+            touch-action: manipulation
+        }
+
+        button {
+            cursor: pointer
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        p {
+            margin-top: 0
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .primary,
+        .secondary {
+            font-family: var(--font-heading);
+            letter-spacing: -.01em
+        }
+
+        a {
+            color: var(--blue)
+        }
+
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        summary:focus-visible {
+            outline: 3px solid var(--purple);
+            outline-offset: 3px;
+            border-radius: 6px
+        }
+
+        /* ===== Header ===== */
+        .header {
+            background: #fff;
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            z-index: 15
+        }
+
+        .nav {
+            margin: auto;
+            max-width: 1320px;
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 18px
+        }
+
+        .logo {
+            display: block;
+            width: auto;
+            height: 44px
+        }
+
+        .icon-button {
+            display: grid;
+            place-items: center;
+            width: 44px;
+            height: 44px;
+            background: var(--mint-50);
+            border: 1px solid var(--mint);
+            border-radius: var(--r-sm);
+            color: var(--blue);
+            transition: background .15s, transform .15s
+        }
+
+        .icon-button:hover {
+            background: var(--mint);
+            transform: translateY(-1px)
+        }
+
+        .icon-button svg {
+            width: 20px;
+            height: 20px
+        }
+
+        .account {
+            position: relative
+        }
+
+        .account-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 16px 7px 7px;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: var(--r-pill);
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--ink);
+            transition: border-color .15s, box-shadow .15s
+        }
+
+        .account-toggle:hover {
+            border-color: var(--mint);
+            box-shadow: 0 4px 14px rgba(0, 96, 122, .08)
+        }
+
+        .user-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue), var(--green));
+            display: grid;
+            place-items: center;
+            color: #fff
+        }
+
+        .account-toggle span[aria-hidden] {
+            color: var(--muted);
+            font-size: 11px
+        }
+
+        .account-menu {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 10px);
+            width: 250px;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: var(--r-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-pop);
+            z-index: 20
+        }
+
+        .account-menu strong {
+            display: block;
+            padding: 16px 18px;
+            background: var(--blue-50);
+            color: var(--blue);
+            overflow-wrap: anywhere;
+            font-size: 13px
+        }
+
+        .account-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 18px;
+            text-decoration: none;
+            color: var(--ink);
+            font-weight: 600;
+            font-size: 13px;
+            border-top: 1px solid var(--line)
+        }
+
+        .account-menu a:hover {
+            background: var(--mint-50)
+        }
+
+        .account-menu a svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0
+        }
+
+        .account-menu a:last-child {
+            color: #b52323
+        }
+
+        /* ===== Layout shell ===== */
+        .container {
+            margin: auto;
+            max-width: 1320px;
+            padding: 28px 32px 56px
+        }
+
+        /* ===== Hero ===== */
+        .hero {
+            position: relative;
+            overflow: hidden;
+            color: #fff;
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            align-items: center;
+            gap: 32px;
+            padding: 44px;
+            border-radius: var(--r-lg);
+            background: radial-gradient(560px 320px at 88% -10%, rgba(132, 212, 199, .35), transparent 60%), linear-gradient(120deg, var(--blue) 0%, #0b7e88 55%, var(--green) 100%)
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, .16) 1.4px, transparent 1.6px);
+            background-size: 20px 20px;
+            opacity: .5;
+            pointer-events: none
+        }
+
+        .hero-copy,
+        .deadline-card {
+            position: relative;
+            z-index: 1
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .4px;
+            margin-bottom: 12px;
+            color: #d7efee
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 7px 15px;
+            border-radius: var(--r-pill);
+            background: rgba(255, 255, 255, .14);
+            border: 1px solid rgba(255, 255, 255, .35);
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: .3px
+        }
+
+        .hero h1 {
+            font-size: clamp(30px, 4vw, 46px);
+            font-weight: 700;
+            line-height: 1.1;
+            margin: 18px 0 6px
+        }
+
+        .hero h1 mark {
+            background: var(--mint);
+            color: var(--blue-dark);
+            border-radius: 8px;
+            padding: 1px 10px;
+            box-decoration-break: clone
+        }
+
+        .hero h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #fff;
+            margin: 0 0 12px
+        }
+
+        .hero-copy>p {
+            max-width: 440px;
+            margin: 0;
+            color: #dcf2f0;
+            font-size: 14px
+        }
+
+        .deadline-card {
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .3);
+            border-radius: 22px;
+            padding: 26px;
+            text-align: center;
+            backdrop-filter: blur(6px)
+        }
+
+        .deadline-card h3 {
+            font-size: 17px;
+            color: #fff;
+            margin: 0 0 18px;
+            font-weight: 600
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 10px
+        }
+
+        .countdown-box {
+            flex: 1;
+            min-width: 0;
+            padding: 14px 6px;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 6px 16px rgba(0, 30, 40, .18)
+        }
+
+        .countdown-value,
+        .countdown-label {
+            display: block
+        }
+
+        .countdown-value {
+            font-weight: 700;
+            line-height: 1;
+            font-size: 28px;
+            color: var(--blue)
+        }
+
+        .countdown-label {
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: .6px;
+            font-size: 9px;
+            color: var(--muted);
+            margin-top: 5px
+        }
+
+        .hero-subtitle {
+            margin-top: 16px;
+            color: #dcf2f0;
+            font-size: 11.5px
+        }
+
+        /* ===== Workspace / dashboard ===== */
+        .workspace-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin: 40px 0 20px
+        }
+
+        .workspace-heading h2 {
+            margin: 0;
+            font-size: 23px;
+            font-weight: 700
+        }
+
+        .year-pill,
+        .small-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 11px;
+            font-weight: 700;
+            border: 1px solid var(--green-100);
+            padding: 6px 13px;
+            border-radius: var(--r-pill);
+            background: var(--green-50);
+            color: #0a7f74
+        }
+
+        .year-pill span {
+            width: 6px;
+            height: 6px;
+            background: var(--green);
+            border-radius: 50%
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px
+        }
+
+        .dashboard-card {
+            padding: 30px;
+            border-radius: var(--r-lg);
+            background: #fff;
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start
+        }
+
+        .dashboard-card.project-intro {
+            background: linear-gradient(135deg, var(--green-50), var(--mint-50));
+            border-color: var(--green-100)
+        }
+
+        .card-icon {
+            background: var(--blue-50);
+            color: var(--blue);
+            border-radius: 14px;
+            width: 52px;
+            height: 52px;
+            display: grid;
+            place-items: center
+        }
+
+        .card-icon svg {
+            width: 24px;
+            height: 24px
+        }
+
+        .project-intro .card-icon {
+            background: #fff;
+            color: var(--green)
+        }
+
+        .dashboard-card h3 {
+            font-size: 22px;
+            line-height: 1.25;
+            margin: 20px 0 10px;
+            font-weight: 700
+        }
+
+        .dashboard-card p {
+            color: var(--muted);
+            margin-bottom: 24px
+        }
+
+        .dashboard-card .primary {
+            margin-top: auto;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none
+        }
+
+        /* ===== Buttons ===== */
+        .primary,
+        .secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 1.5px solid var(--blue);
+            border-radius: var(--r-pill);
+            padding: 12px 22px;
+            font-weight: 700;
+            font-size: 13px;
+            color: #fff;
+            background: var(--blue);
+            text-decoration: none;
+            transition: background .15s, transform .15s, box-shadow .15s
+        }
+
+        .primary:hover {
+            background: var(--blue-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(0, 96, 122, .22)
+        }
+
+        .primary span {
+            font-size: 15px
+        }
+
+        .secondary {
+            background: #fff;
+            color: var(--blue)
+        }
+
+        .secondary:hover {
+            background: var(--blue-50)
+        }
+
+        /* ===== Tabs ===== */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid var(--line);
+            margin-bottom: 28px
+        }
+
+        .tabs button {
+            border: 0;
+            border-bottom: 3px solid transparent;
+            background: transparent;
+            padding: 12px 14px;
+            color: var(--muted);
+            font-weight: 600;
+            font-size: 13.5px;
+            margin-bottom: -1px
+        }
+
+        .tabs button[aria-current=page] {
+            color: var(--blue);
+            border-bottom-color: var(--green);
+            font-weight: 700
+        }
+
+        .page-title {
+            font-size: 27px;
+            font-weight: 700;
+            margin: 6px 0 4px
+        }
+
+        /* ===== Two-column layout (profile/project) ===== */
+        .layout {
+            display: grid;
+            grid-template-columns: 270px minmax(0, 1fr);
+            gap: 24px;
+            align-items: start
+        }
+
+        .main-column {
+            display: grid;
+            gap: 22px;
+            min-width: 0
+        }
+
+        .card {
+            background: #fff;
+            border-radius: var(--r-lg);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-card)
+        }
+
+        .identity {
+            text-align: center;
+            padding: 28px 22px
+        }
+
+        .avatar {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, var(--blue), var(--green));
+            color: #fff;
+            font-size: 24px;
+            font-weight: 700;
+            box-shadow: 0 0 0 5px var(--mint-50)
+        }
+
+        .identity h3 {
+            font-size: 18px;
+            margin-bottom: 4px;
+            overflow-wrap: anywhere
+        }
+
+        .identity p {
+            font-size: 11.5px;
+            color: var(--muted);
+            overflow-wrap: anywhere
+        }
+
+        .identity-divider {
+            height: 1px;
+            background: var(--line);
+            margin: 22px 0
+        }
+
+        .note {
+            padding: 26px;
+            margin-top: 20px;
+            border-radius: var(--r-lg);
+            background: linear-gradient(135deg, var(--purple-50), #fbf3fb);
+            border: 1px solid var(--purple-100)
+        }
+
+        .note>span {
+            display: inline-grid;
+            place-items: center;
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: #fff;
+            color: var(--purple)
+        }
+
+        .note>span svg {
+            width: 22px;
+            height: 22px
+        }
+
+        .note h3 {
+            font-size: 20px;
+            line-height: 1.3;
+            margin: 16px 0 10px;
+            font-weight: 700
+        }
+
+        .note h3 span {
+            color: var(--purple)
+        }
+
+        .note p,
+        .note a {
+            font-size: 12.5px
+        }
+
+        .note a {
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--purple)
+        }
+
+        .lavender {
+            background: var(--purple-50)
+        }
+
+        /* ===== Section / form cards ===== */
+        .section-card {
+            padding: 28px
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px
+        }
+
+        .section-heading h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+            font-weight: 700
+        }
+
+        .section-heading p:last-child {
+            font-size: 12px;
+            color: var(--muted);
+            margin: 0
+        }
+
+        .section-symbol,
+        .upload-icon {
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            background: var(--blue-50);
+            color: var(--blue);
+            border-radius: 13px;
+            width: 44px;
+            height: 44px
+        }
+
+        .section-symbol svg,
+        .upload-icon svg {
+            width: 21px;
+            height: 21px
+        }
+
+        .purple {
+            background: var(--purple-50);
+            color: var(--purple)
+        }
+
+        .fields,
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px
+        }
+
+        .full {
+            grid-column: 1/-1
+        }
+
+        label {
+            display: block;
+            font-size: 11.5px;
+            font-weight: 700;
+            margin-bottom: 7px;
+            color: var(--ink)
+        }
+
+        label>span,
+        h4>span {
+            color: var(--green)
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            min-width: 0;
+            border: 1.5px solid var(--line);
+            border-radius: var(--r-sm);
+            padding: 12px 14px;
+            color: var(--ink);
+            background: #fcfdfd;
+            font-size: 13px
+        }
+
+        textarea {
+            resize: vertical
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 2px solid var(--mint);
+            outline-offset: 1px;
+            border-color: var(--mint)
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            border-top: 1px solid var(--line);
+            margin-top: 24px;
+            padding-top: 20px
+        }
+
+        .form-footer p,
+        .help {
+            font-size: 11px;
+            color: var(--muted);
+            margin: 0
+        }
+
+        .help {
+            margin-top: 8px
+        }
+
+        .password-wrap {
+            position: relative
+        }
+
+        .password-wrap input {
+            padding-right: 64px
+        }
+
+        .password-wrap button {
+            position: absolute;
+            right: 6px;
+            top: 6px;
+            bottom: 6px;
+            background: var(--mint-50);
+            border: 0;
+            border-radius: 8px;
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 0 12px
+        }
+
+        .feedback {
+            padding: 13px 16px;
+            background: var(--green-50);
+            border-radius: var(--r-sm);
+            color: #0a7f74;
+            font-size: 12.5px;
+            margin-top: 15px;
+            font-weight: 600
+        }
+
+        /* ===== Project summary / progress ===== */
+        .project-summary {
+            padding: 26px
+        }
+
+        .project-summary h3 {
+            font-size: 23px;
+            line-height: 1.2;
+            margin: 18px 0 10px;
+            font-weight: 700
+        }
+
+        .project-summary p {
+            font-size: 12.5px;
+            color: var(--muted)
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            margin: 22px 0 8px;
+            font-weight: 600
+        }
+
+        .progress-track {
+            height: 6px;
+            background: var(--gray);
+            border-radius: var(--r-pill);
+            overflow: hidden
+        }
+
+        .progress-track div {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--green), var(--mint));
+            border-radius: var(--r-pill);
+            transition: width .25s
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+            margin-top: 18px
+        }
+
+        .checklist li {
+            font-size: 12px;
+            color: var(--muted);
+            margin: 13px 0;
+            display: flex;
+            align-items: center;
+            gap: 9px
+        }
+
+        .checklist span {
+            width: 18px;
+            height: 18px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--gray);
+            color: #9aa9ae;
+            font-size: 10px;
+            flex-shrink: 0
+        }
+
+        .checklist .done {
+            color: var(--ink);
+            font-weight: 600
+        }
+
+        .checklist .done span {
+            background: var(--green);
+            color: #fff
+        }
+
+        /* ===== Uploads ===== */
+        .upload-group h4 {
+            font-size: 13.5px;
+            margin: 0 0 3px;
+            font-weight: 700
+        }
+
+        .upload-group>p {
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 12px
+        }
+
+        .dropzone {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 6px;
+            padding: 22px 10px;
+            background: var(--mint-50);
+            border: 1.5px dashed var(--mint);
+            border-radius: var(--r-md);
+            min-height: 180px;
+            font-size: 11px;
+            font-weight: 400;
+            cursor: pointer;
+            margin: 0;
+            transition: background .15s, border-color .15s
+        }
+
+        .dropzone strong {
+            font-size: 12px;
+            color: var(--blue);
+            margin-top: 5px
+        }
+
+        .dropzone span:not(.upload-icon),
+        .dropzone small {
+            font-size: 10px;
+            color: var(--muted)
+        }
+
+        .dropzone input {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%
+        }
+
+        .dropzone:focus-within,
+        .dropzone.drag-over {
+            outline: 2px solid var(--green);
+            background: var(--green-50);
+            border-color: var(--green)
+        }
+
+        .file-preview {
+            overflow-wrap: anywhere;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: var(--green-50);
+            padding: 10px;
+            border-radius: var(--r-sm);
+            margin-top: 10px;
+            font-size: 11px
+        }
+
+        .file-preview img {
+            width: 44px;
+            height: 48px;
+            object-fit: contain;
+            border-radius: 6px
+        }
+
+        .file-preview span {
+            flex: 1;
+            min-width: 0
+        }
+
+        .file-preview button {
+            border: 0;
+            background: transparent;
+            color: var(--blue);
+            font-size: 18px
+        }
+
+        .upload-group .file-error {
+            color: #a52c47;
+            margin-top: 5px;
+            font-size: 11px
+        }
+
+        .project-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px
+        }
+
+        .project-actions p {
+            font-size: 11.5px;
+            color: var(--muted);
+            margin: 0
+        }
+
+        /* ===== Empty states / gallery ===== */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px
+        }
+
+        .empty-card {
+            text-align: center;
+            padding: 38px 24px
+        }
+
+        .empty-symbol {
+            display: inline-grid;
+            place-items: center;
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: var(--green-50);
+            color: var(--green);
+            margin-bottom: 16px
+        }
+
+        .empty-symbol svg {
+            width: 26px;
+            height: 26px
+        }
+
+        .empty-card h3 {
+            font-size: 18px;
+            font-weight: 700
+        }
+
+        .empty-card p {
+            color: var(--muted);
+            font-size: 12.5px
+        }
+
+        .gallery .empty-card {
+            border: 1.5px dashed var(--line);
+            box-shadow: none
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px
+        }
+
+        /* ===== Dialogs (review modal + nav drawer) ===== */
+        dialog {
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 32px;
+            width: calc(100% - 32px);
+            max-width: 550px;
+            color: var(--ink);
+            max-height: 90dvh;
+            overflow: auto;
+            box-shadow: var(--shadow-pop)
+        }
+
+        dialog::backdrop {
+            background: rgba(6, 35, 44, .55);
+            backdrop-filter: blur(3px)
+        }
+
+        dialog h2 {
+            font-size: 26px;
+            margin-bottom: 10px;
+            font-weight: 700
+        }
+
+        dialog>p,
+        dialog dl {
+            font-size: 12.5px
+        }
+
+        dialog dl {
+            overflow-wrap: anywhere
+        }
+
+        dialog dt {
+            font-weight: 800;
+            margin-top: 15px;
+            color: var(--blue)
+        }
+
+        dialog dd {
+            white-space: pre-wrap;
+            margin: 3px 0;
+            color: var(--muted)
+        }
+
+        #reviewDialog>button:first-child {
+            float: right;
+            border: 0;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 20px;
+            background: var(--gray);
+            color: var(--ink)
+        }
+
+        dialog .primary {
+            margin-top: 20px;
+            width: 100%
+        }
+
+        .drawer {
+            position: fixed;
+            inset: 0 auto 0 0;
+            margin: 0;
+            width: min(340px, 90vw);
+            max-width: none;
+            max-height: none;
+            height: 100dvh;
+            border: 0;
+            border-right: 1px solid var(--line);
+            border-radius: 0;
+            padding: 26px 22px;
+            display: flex;
+            flex-direction: column;
+            z-index: 50;
+            box-shadow: 12px 0 40px rgba(11, 42, 51, .14)
+        }
+
+        .drawer:not([open]) {
+            display: none
+        }
+
+        .drawer::backdrop {
+            background: rgba(6, 35, 44, .5);
+            backdrop-filter: blur(3px)
+        }
+
+        .drawer-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px
+        }
+
+        .drawer-top img {
+            width: 150px;
+            max-width: 65%;
+            height: auto
+        }
+
+        .drawer h2 {
+            text-align: center;
+            color: var(--blue);
+            font-size: 23px;
+            margin: 26px 0 0;
+            font-weight: 700
+        }
+
+        .drawer-caption {
+            text-align: center;
+            letter-spacing: 2.5px;
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--muted);
+            margin-top: 4px
+        }
+
+        .drawer nav {
+            display: grid;
+            gap: 5px;
+            margin: 22px 0;
+            overflow: auto
+        }
+
+        .drawer nav a,
+        .drawer summary {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 11px 13px;
+            font-weight: 700;
+            font-size: 13.5px;
+            color: var(--ink);
+            text-decoration: none;
+            border-radius: var(--r-sm);
+            cursor: pointer;
+            list-style: none
+        }
+
+        .drawer nav a::-webkit-details-marker,
+        .drawer summary::-webkit-details-marker {
+            display: none
+        }
+
+        .drawer nav .nav-ico {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: var(--gray);
+            color: var(--blue)
+        }
+
+        .drawer nav .nav-ico svg {
+            width: 17px;
+            height: 17px
+        }
+
+        .drawer nav a:hover,
+        .drawer nav a[aria-current=page] {
+            background: var(--mint-50);
+            color: var(--blue)
+        }
+
+        .drawer nav a[aria-current=page] .nav-ico {
+            background: var(--mint);
+            color: var(--blue-dark)
+        }
+
+        .drawer details a {
+            display: flex;
+            margin: 3px 0 3px 18px;
+            font-size: 12.5px;
+            padding: 9px 12px
+        }
+
+        .drawer details a .nav-ico {
+            width: 24px;
+            height: 24px;
+            background: transparent
+        }
+
+        .drawer-logout {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            text-align: center;
+            background: var(--blue);
+            color: #fff;
+            border: 0;
+            border-radius: var(--r-pill);
+            padding: 13px;
+            font-weight: 700;
+            text-decoration: none
+        }
+
+        .drawer-logout:hover {
+            background: var(--blue-dark)
+        }
+
+        .drawer-logout svg {
+            width: 16px;
+            height: 16px
+        }
+
+        body:has(.drawer[open]) {
+            overflow: hidden
+        }
+
+        .preview-note {
+            text-align: center;
+            font-size: 10.5px;
+            color: var(--muted);
+            margin-top: 32px
+        }
+
+        footer {
+            max-width: 1320px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 26px 32px;
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 10px
+        }
+
+        @media(max-width:900px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 28px
+            }
+
+            .hero-copy>p {
+                max-width: none
+            }
+
+            .dashboard-grid,
+            .gallery {
+                grid-template-columns: 1fr
+            }
+
+            .layout {
+                grid-template-columns: 220px minmax(0, 1fr);
+                gap: 20px
+            }
+
+            .fields,
+            .upload-grid {
+                grid-template-columns: 1fr
+            }
+
+            .section-card {
+                padding: 22px
+            }
+
+            .form-footer {
+                align-items: flex-start;
+                flex-direction: column
+            }
+
+            .project-actions {
+                align-items: stretch;
+                flex-direction: column
+            }
+        }
+
+        @media(max-width:640px) {
+            .nav {
+                padding: 14px 18px
+            }
+
+            .nav-left {
+                gap: 12px
+            }
+
+            .logo {
+                height: 34px
+            }
+
+            .account-toggle span:not([aria-hidden]):not(.user-icon) {
+                display: none
+            }
+
+            .account-toggle {
+                padding: 6px
+            }
+
+            .container {
+                padding: 22px 18px 44px
+            }
+
+            .hero {
+                padding: 22px 18px;
+                gap: 22px
+            }
+
+            .hero h1 {
+                font-size: 28px
+            }
+
+            .hero h2 {
+                font-size: 21px
+            }
+
+            .deadline-card {
+                padding: 16px 10px
+            }
+
+            .countdown-value {
+                font-size: 22px
+            }
+
+            .countdown {
+                gap: 7px
+            }
+
+            .countdown-box {
+                padding: 11px 4px
+            }
+
+            .layout {
+                grid-template-columns: 1fr
+            }
+
+            .identity {
+                padding: 20px
+            }
+
+            .section-card {
+                padding: 22px 18px
+            }
+
+            input,
+            select,
+            textarea {
+                font-size: 16px
+            }
+
+            .primary,
+            .secondary {
+                min-height: 44px
+            }
+
+            .form-footer button {
+                width: 100%
+            }
+
+            footer {
+                flex-direction: column;
+                text-align: center
+            }
+
+            .file-preview button {
+                min-width: 40px;
+                min-height: 40px
+            }
+
+            .workspace-heading h2 {
+                font-size: 19px
+            }
+
+            .action-buttons {
+                flex-direction: column
+            }
+
+            .drawer-top img {
+                width: 130px
+            }
+        }
+
+        @media(prefers-reduced-motion:reduce) {
+            * {
+                scroll-behavior: auto !important;
+                transition: none !important
+            }
+        }
+    </style>
+    <style id="student-readable-type">
+        /* Comfortable reading sizes throughout the student portal. */
+        body {
+            font-size: 16px;
+            line-height: 1.7
+        }
+
+        .hero-copy>p {
+            font-size: 16px
+        }
+
+        .hero-badge {
+            font-size: 12px
+        }
+
+        .eyebrow {
+            font-size: 12px
+        }
+
+        .hero-subtitle {
+            font-size: 14px
+        }
+
+        .deadline-card h3 {
+            font-size: 20px
+        }
+
+        .countdown-value {
+            font-size: 38px
+        }
+
+        .countdown-label {
+            font-size: 12px;
+            letter-spacing: .8px
+        }
+
+        .year-pill,
+        .small-pill {
+            font-size: 12px
+        }
+
+        .dashboard-card p {
+            font-size: 16px
+        }
+
+        .primary,
+        .secondary {
+            font-size: 15px;
+            line-height: 1.5;
+            min-height: 48px
+        }
+
+        .dashboard-card .primary {
+            font-size: 14px
+        }
+
+        .account-toggle,
+        .account-menu a {
+            font-size: 16px
+        }
+
+        .account-menu strong {
+            font-size: 16px
+        }
+
+        .drawer-caption {
+            font-size: 12px;
+            letter-spacing: 2px
+        }
+
+        .drawer nav a,
+        .drawer summary {
+            font-size: 16px
+        }
+
+        .drawer details a {
+            font-size: 14px
+        }
+
+        .drawer-logout {
+            font-size: 16px
+        }
+
+        .tabs button {
+            font-size: 16px
+        }
+
+        .identity h3 {
+            font-size: 21px
+        }
+
+        .identity p {
+            font-size: 14px
+        }
+
+        .note p,
+        .note a {
+            font-size: 14px
+        }
+
+        .section-heading h3 {
+            font-size: 25px
+        }
+
+        .section-heading p:last-child {
+            font-size: 14px
+        }
+
+        label {
+            font-size: 14px
+        }
+
+        input,
+        select,
+        textarea {
+            font-size: 16px;
+            line-height: 1.5
+        }
+
+        .form-footer p,
+        .help {
+            font-size: 13px
+        }
+
+        .password-wrap button {
+            font-size: 13px
+        }
+
+        .feedback {
+            font-size: 15px
+        }
+
+        .preview-note {
+            font-size: 13px
+        }
+
+        footer {
+            font-size: 12px
+        }
+
+        .project-summary p {
+            font-size: 14px
+        }
+
+        .progress-label {
+            font-size: 13px
+        }
+
+        .checklist li {
+            font-size: 14px
+        }
+
+        .upload-group h4 {
+            font-size: 17px
+        }
+
+        .upload-group>p {
+            font-size: 13px
+        }
+
+        .dropzone {
+            font-size: 14px
+        }
+
+        .dropzone strong {
+            font-size: 15px
+        }
+
+        .dropzone span:not(.upload-icon),
+        .dropzone small {
+            font-size: 13px
+        }
+
+        .file-preview {
+            font-size: 13px
+        }
+
+        .project-actions p {
+            font-size: 14px
+        }
+
+        .empty-card h3 {
+            font-size: 21px
+        }
+
+        .empty-card p {
+            font-size: 15px
+        }
+
+        dialog>p,
+        dialog dl {
+            font-size: 15px
+        }
+
+        @media(max-width:900px) {
+            .form-footer {
+                gap: 14px
+            }
+
+            .countdown-value {
+                font-size: 34px
+            }
+        }
+
+        @media(max-width:640px) {
+            .hero h1 {
+                font-size: 32px
+            }
+
+            .hero h2 {
+                font-size: 25px
+            }
+
+            .hero-copy>p {
+                font-size: 15px
+            }
+
+            .deadline-card h3 {
+                font-size: 18px
+            }
+
+            .countdown-value {
+                font-size: 28px
+            }
+
+            .countdown-label {
+                font-size: 10px;
+                letter-spacing: .4px
+            }
+
+            .hero-subtitle {
+                font-size: 13px
+            }
+
+            .workspace-heading h2 {
+                font-size: 22px
+            }
+
+            .year-pill {
+                font-size: 11px
+            }
+
+            .dashboard-card h3 {
+                font-size: 25px
+            }
+
+            .dashboard-card .primary {
+                font-size: 14px
+            }
+
+            .section-heading h3 {
+                font-size: 23px
+            }
+
+            .tabs {
+                gap: 14px
+            }
+
+            .tabs button {
+                font-size: 14px
+            }
+
+            .drawer-caption {
+                font-size: 12px
+            }
         }
     </style>
 </head>
 
 <body>
     <header class="header">
-        <nav class="nav" aria-label="Main navigation"><a href="{{ url_for('home') }}"><img class="logo"
-                    src="{{ url_for('static', filename='img/logo_nobg.png') }}" alt="YTAC home"></a><a
-                class="text-link" href="{{ url_for('login') }}">Back to login ↗</a></nav>
-    </header>
-    <main class="container">
-        <section class="hero">
-            <span class="hero-badge">YTAC 2026 · PROJECT SUBMISSION</span>
-            <h1>Submit your project</h1>
-            <div class="countdown" id="countdown" data-deadline="2026-12-31T23:59:59+08:00">
-                <div class="countdown-box"><span class="countdown-value" id="cdDays">00</span><span
-                        class="countdown-label">Days</span></div>
-                <div class="countdown-box"><span class="countdown-value" id="cdHours">00</span><span
-                        class="countdown-label">Hours</span></div>
-                <div class="countdown-box"><span class="countdown-value" id="cdMinutes">00</span><span
-                        class="countdown-label">Minutes</span></div>
-                <div class="countdown-box"><span class="countdown-value" id="cdSeconds">00</span><span
-                        class="countdown-label">Seconds</span></div>
+        <nav class="nav" aria-label="Main navigation">
+            <div class="nav-left"><button type="button" class="icon-button" id="menuToggle" aria-label="Open menu"
+                    aria-controls="navigationDrawer" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                        <line x1="4" y1="7" x2="20" y2="7" />
+                        <line x1="4" y1="12" x2="20" y2="12" />
+                        <line x1="4" y1="17" x2="20" y2="17" />
+                    </svg></button><a href="#home" aria-label="YTAC dashboard"><img class="logo"
+                        src="{{ url_for('static', filename='img/logo_nobg.png') }}" alt="Youth Tech Asia Challenge"></a>
             </div>
-            <p class="hero-subtitle">until the submission deadline.</p>
+            <div class="account"><button type="button" class="account-toggle" id="accountToggle" aria-expanded="false"
+                    aria-controls="accountMenu"><span class="user-icon"><svg width="18" height="18" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <circle cx="12" cy="8" r="4" />
+                            <path d="M4 21v-2a8 8 0 0 1 16 0v2" />
+                        </svg></span><span class="account-label">Hi, <span id="accountName">innovator</span></span><span
+                        aria-hidden="true">⌄</span></button>
+                <div class="account-menu" id="accountMenu" hidden><strong id="accountFullName">Your student
+                        account</strong><a href="#profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 20h4L18.5 9.5a2.12 2.12 0 0 0-3-3L5 17v3z" />
+                            <path d="M13.5 6.5l4 4" />
+                        </svg> Edit profile</a><a href="{{ url_for('login') }}"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                            aria-hidden="true">
+                            <path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" />
+                            <path d="M10 8l4 4-4 4" />
+                            <line x1="14" y1="12" x2="3" y2="12" />
+                        </svg> Sign out</a></div>
+            </div>
+        </nav>
+    </header>
+    <dialog class="drawer" id="navigationDrawer" aria-labelledby="menuTitle">
+        <div class="drawer-top"><img src="{{ url_for('static', filename='img/logo_nobg.png') }}" alt="YTAC"><button
+                class="icon-button" id="menuClose" type="button" aria-label="Close menu">×</button></div>
+        <h2 id="menuTitle">Your next big idea.</h2>
+        <p class="drawer-caption">STUDENT PORTAL</p>
+        <nav aria-label="Student menu"><a href="#home"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                        aria-hidden="true">
+                        <path d="M4 11.5 12 4l8 7.5" />
+                        <path d="M6 10v9a1 1 0 0 0 1 1h4v-6h2v6h4a1 1 0 0 0 1-1v-9" />
+                    </svg></span>Dashboard</a>
+            <details open>
+                <summary><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M6 3v18" />
+                            <path d="M6 4h11l-2.5 4L17 12H6" />
+                        </svg></span>Milestone</summary><a href="#project">Current year · 2026</a><a
+                    href="#history">History</a>
+            </details><a href="#badges"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 3l2.6 5.6 6.1.6-4.6 4.2 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.2 6.1-.6z" />
+                    </svg></span>Badge</a><a href="#certificate"><span class="nav-ico"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true">
+                        <path d="M7 3h7l4 4v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
+                        <path d="M13 3v5h5" />
+                        <line x1="9" y1="13" x2="15" y2="13" />
+                        <line x1="9" y1="17" x2="15" y2="17" />
+                    </svg></span>Certificate</a><a href="#endorsement"><span class="nav-ico"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 3l7 3v6c0 5-3.4 7.9-7 9-3.6-1.1-7-4-7-9V6l7-3z" />
+                        <path d="M9 12l2 2 4-4" />
+                    </svg></span>Endorsement</a>
+        </nav><a class="drawer-logout" href="{{ url_for('login') }}"><svg viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true">
+                <path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" />
+                <path d="M10 8l4 4-4 4" />
+                <line x1="14" y1="12" x2="3" y2="12" />
+            </svg>LOG OUT</a>
+    </dialog>
+    <main class="container">
+        <section id="homePanel" data-page="home">
+            <section class="hero">
+                <div class="hero-copy"><span class="hero-badge" id="todayDate">YTAC 2026 · STUDENT PORTAL</span>
+                    <h1>Welcome <mark>back!</mark></h1>
+                    <h2><span id="welcomeName">innovator</span> <span aria-hidden="true">👋</span></h2>
+                    <p>Your next big idea starts here. Keep your profile fresh and get your project ready to share.</p>
+                </div>
+                <div class="deadline-card">
+                    <p class="eyebrow">MAKE EVERY SECOND COUNT</p>
+                    <h3>Project submission countdown</h3>
+                    <div class="countdown" id="countdown" data-deadline="2026-12-31T23:59:59+08:00">
+                        <div class="countdown-box"><span class="countdown-value" id="cdDays">00</span><span
+                                class="countdown-label">Days</span></div>
+                        <div class="countdown-box"><span class="countdown-value" id="cdHours">00</span><span
+                                class="countdown-label">Hours</span></div>
+                        <div class="countdown-box"><span class="countdown-value" id="cdMinutes">00</span><span
+                                class="countdown-label">Minutes</span></div>
+                        <div class="countdown-box"><span class="countdown-value" id="cdSeconds">00</span><span
+                                class="countdown-label">Seconds</span></div>
+                    </div>
+                    <p class="hero-subtitle" id="deadlineLabel">until the submission deadline · 31 Dec 2026, 11:59 PM
+                        MYT</p>
+                </div>
+            </section>
+            <div class="workspace-heading">
+                <h2>Your workspace</h2><span class="year-pill">
+            </div>
+            <div class="dashboard-grid">
+                <article class="dashboard-card"><span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M4 20h4L18.5 9.5a2.12 2.12 0 0 0-3-3L5 17v3z" />
+                            <path d="M13.5 6.5l4 4" />
+                        </svg></span>
+                    <h3>Keep your profile<br>up to date</h3>
+                    <p>Make sure we have the right details for your YTAC journey. Update your personal information and
+                        keep your account secure.</p><a class="primary" href="#profile">EDIT YOUR INFORMATION
+                        <span>→</span></a>
+                </article>
+                <article class="dashboard-card project-intro"><span class="card-icon" aria-hidden="true"><svg
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18h6" />
+                            <path d="M10 21h4" />
+                            <path
+                                d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1.1 1.3 1.1 2.2h5a2.7 2.7 0 0 1 1.1-2.2A6 6 0 0 0 12 3z" />
+                        </svg></span>
+                    <h3>A big idea starts<br>with a first step.</h3>
+                    <p>Give your project a home. Add the details, then bring it to life with your X-banner, project
+                        photo and project file.</p><a class="primary" href="#project">SUBMIT YOUR PROJECT
+                        <span>→</span></a>
+                </article>
+            </div>
         </section>
-        <div class="workspace-heading">
-            <div>
-                <h2>Welcome, <span id="welcomeName">innovator</span> <span class="wave">✦</span></h2>
-            </div><span class="year-pill"><span></span> YTAC 2026</span>
-        </div>
-        <div class="tabs" role="tablist" aria-label="Student portal"><button id="profileTab" role="tab"
-                aria-selected="true" aria-controls="profilePanel" data-tab="profile">01 <span>My
-                    profile</span></button><button id="projectTab" role="tab" aria-selected="false"
-                aria-controls="projectPanel" tabindex="-1" data-tab="project">02 <span>My project</span></button></div>
-        <section id="profilePanel" role="tabpanel" aria-labelledby="profileTab">
+        <section id="profilePanel" data-page="profile" hidden aria-label="My profile">
+            <h2 class="page-title">My profile</h2>
             <div class="layout">
                 <aside>
                     <div class="identity card">
-                        <div class="avatar" id="avatar"><svg viewBox="0 0 24 24" width="34" height="34" fill="none"
-                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                                stroke-linejoin="round">
+                        <div class="avatar" id="avatar"><svg viewBox="0 0 24 24" width="30" height="30" fill="none"
+                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="8" r="4" />
                                 <path d="M4 20c0-4 3.5-7 8-7s8 3 8 7" />
                             </svg></div>
@@ -273,9 +1853,16 @@
                         <div class="identity-divider"></div>
                         <p>Keep your details up to date, secure your account and get ready to share your ideas.</p>
                     </div>
-                    <div class="note"><span>✳</span>
-                        <h3 class="note-title">Made for your <span>next big idea</span>.</h3><a
-                            href="#project">Go to my project →</a>
+                    <div class="note"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M12 2c2.5 2 4 5 4 9 0 2-.7 3.8-1.6 5.2L12 19l-2.4-2.8C8.7 14.8 8 13 8 11c0-4 1.5-7 4-9z" />
+                                <circle cx="12" cy="10" r="1.6" />
+                                <path d="M8.5 15.5L5 17l1.2-3.8" />
+                                <path d="M15.5 15.5L19 17l-1.2-3.8" />
+                            </svg></span>
+                        <h3 class="note-title">Made for your <span>next big idea</span>.</h3><a href="#project">Go to my
+                            project →</a>
                     </div>
                 </aside>
                 <div class="main-column">
@@ -285,7 +1872,15 @@
                                 <p class="eyebrow muted">A LITTLE ABOUT YOU</p>
                                 <h3>Personal information</h3>
                                 <p>Make sure we have the right details for your YTAC journey.</p>
-                            </div><span class="section-symbol">↗</span>
+                            </div><span class="section-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="3" y="5" width="18" height="14" rx="2" />
+                                    <circle cx="9" cy="12" r="2" />
+                                    <line x1="9" y1="16" x2="9.01" y2="16" />
+                                    <line x1="14" y1="10" x2="18" y2="10" />
+                                    <line x1="14" y1="14" x2="18" y2="14" />
+                                </svg></span>
                         </div>
                         <div class="fields">
                             <div><label for="fullName">Full name <span>*</span></label><input id="fullName"
@@ -313,7 +1908,12 @@
                                 <p class="eyebrow muted">KEEP IT YOURS</p>
                                 <h3>Change password</h3>
                                 <p>Choose a strong password you don’t use elsewhere.</p>
-                            </div><span class="section-symbol purple">⌑</span>
+                            </div><span class="section-symbol purple" aria-hidden="true"><svg viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="5" y="11" width="14" height="9" rx="2" />
+                                    <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                                </svg></span>
                         </div>
                         <div class="fields">
                             <div class="full"><label for="currentPassword">Current password <span>*</span></label>
@@ -346,7 +1946,83 @@
                 </div>
             </div>
         </section>
-        <section id="projectPanel" role="tabpanel" aria-labelledby="projectTab" hidden>{% include 'submission.html' %}
+        <section id="projectPanel" data-page="project" aria-label="Current year milestone" hidden>
+            <h2 class="page-title">Milestone</h2>
+            <div class="tabs"><button type="button" aria-current="page" onclick="location.hash='project'">Current year ·
+                    2026</button><button type="button" onclick="location.hash='history'">History</button></div>{%
+            include 'submission.html' %}
+        </section>
+        <section id="historyPanel" data-page="history" hidden>
+            <h2 class="page-title">Milestone</h2>
+            <div class="tabs"><button type="button" onclick="location.hash='project'">Current year ·
+                    2026</button><button type="button" aria-current="page"
+                    onclick="location.hash='history'">History</button></div>
+            <div class="card empty-card"><span class="empty-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M12 7v5l3.5 2" />
+                    </svg></span>
+                <h3>No previous submissions to show</h3>
+                <p>Your past competition projects will appear here when submission records are connected.</p>
+            </div>
+        </section>
+        <section id="badgesPanel" data-page="badges" hidden>
+            <h2 class="page-title">Your badge gallery</h2>
+            <p>Celebrate each step of your YTAC journey.</p>
+            <div class="gallery">
+                <article class="card empty-card"><span class="empty-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M12 3l2.6 5.6 6.1.6-4.6 4.2 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.2 6.1-.6z" />
+                        </svg></span>
+                    <h3>Participation</h3><span class="small-pill">Not awarded</span>
+                    <p>No badge available yet.</p>
+                </article>
+                <article class="card empty-card"><span class="empty-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M12 3l2.6 5.6 6.1.6-4.6 4.2 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.2 6.1-.6z" />
+                        </svg></span>
+                    <h3>Innovation</h3><span class="small-pill">Not awarded</span>
+                    <p>No badge available yet.</p>
+                </article>
+                <article class="card empty-card"><span class="empty-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M12 3l2.6 5.6 6.1.6-4.6 4.2 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.2 6.1-.6z" />
+                        </svg></span>
+                    <h3>Achievement</h3><span class="small-pill">Not awarded</span>
+                    <p>No badge available yet.</p>
+                </article>
+            </div>
+            <p class="help">Badge records are not connected in this preview.</p>
+        </section>
+        <section id="certificatePanel" data-page="certificate" hidden>
+            <h2 class="page-title">Certificate</h2>
+            <div class="card empty-card"><span class="empty-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M7 3h7l4 4v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
+                        <path d="M13 3v5h5" />
+                        <line x1="9" y1="13" x2="15" y2="13" />
+                        <line x1="9" y1="17" x2="15" y2="17" />
+                    </svg></span>
+                <h3>No certificate available yet</h3>
+                <p>Your certificate will appear here when issued and connected to your account.</p>
+            </div>
+        </section>
+        <section id="endorsementPanel" data-page="endorsement" hidden>
+            <h2 class="page-title">Endorsement</h2>
+            <div class="card empty-card"><span class="empty-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M12 3l7 3v6c0 5-3.4 7.9-7 9-3.6-1.1-7-4-7-9V6l7-3z" />
+                        <path d="M9 12l2 2 4-4" />
+                    </svg></span>
+                <h3>No endorsement available yet</h3>
+                <p>Your endorsement will appear here when issued and connected to your account.</p>
+            </div>
         </section>
         <p class="preview-note">Design preview · Account changes and project uploads are not connected to the server
             yet.</p>
@@ -354,50 +2030,59 @@
     <footer><span>© 2026 CodeKidz. All rights reserved.</span><span>EDUWEL SDN. BHD.</span>
     </footer>
     <script>
-'use strict';
-const $ = id => document.getElementById(id);
-(function initCountdown() {
-  const el = $('countdown');
-  if (!el) return;
-  const deadline = new Date(el.dataset.deadline).getTime();
-  const pad = n => String(Math.max(n, 0)).padStart(2, '0');
-  function tick() {
-    const diff = deadline - Date.now();
-    if (diff <= 0) { ['cdDays', 'cdHours', 'cdMinutes', 'cdSeconds'].forEach(id => $(id).textContent = '00'); clearInterval(timer); return; }
-    $('cdDays').textContent = pad(Math.floor(diff / 86400000));
-    $('cdHours').textContent = pad(Math.floor(diff % 86400000 / 3600000));
-    $('cdMinutes').textContent = pad(Math.floor(diff % 3600000 / 60000));
-    $('cdSeconds').textContent = pad(Math.floor(diff % 60000 / 1000));
-  }
-  tick();
-  const timer = setInterval(tick, 1000);
-})();
-const tabs = [...document.querySelectorAll('[data-tab]')];
-function showTab(name) {
-  tabs.forEach(tab => { const active = tab.dataset.tab === name; tab.setAttribute('aria-selected', active); tab.tabIndex = active ? 0 : -1; $(tab.dataset.tab + 'Panel').hidden = !active; });
-}
-function routeTab() { showTab(location.hash === '#project' ? 'project' : 'profile'); }
-tabs.forEach((tab, index) => {
-  tab.addEventListener('click', () => { history.replaceState(null, '', '#' + tab.dataset.tab); showTab(tab.dataset.tab); });
-  tab.addEventListener('keydown', event => { if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return; event.preventDefault(); const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length; tabs[next].click(); tabs[next].focus(); });
-});
-window.addEventListener('hashchange', routeTab); routeTab();
-function feedback(id, message) { $(id).textContent = message; $(id).hidden = false; }
-$('profileForm').addEventListener('submit', event => { event.preventDefault(); const name = $('fullName').value.trim(); if (!name || !$('school').value.trim()) { feedback('profileStatus', 'Please enter your name and school.'); return; } $('welcomeName').textContent = name.split(/\s+/)[0]; $('profileName').textContent = name; $('profileSchool').textContent = $('school').value.trim(); $('avatar').textContent = name.split(/\s+/).slice(0,2).map(part => part[0]).join('').toUpperCase(); feedback('profileStatus', 'Profile preview updated. These changes are not saved to an account and will reset when you leave this page.'); });
-document.querySelectorAll('[data-password]').forEach(button => button.addEventListener('click', () => { const input = $(button.dataset.password); const show = input.type === 'password'; input.type = show ? 'text' : 'password'; button.textContent = show ? 'Hide' : 'Show'; button.setAttribute('aria-pressed', show); button.setAttribute('aria-label', (show ? 'Hide ' : 'Show ') + document.querySelector('label[for="' + input.id + '"]').textContent.replace('*','').trim().toLowerCase()); }));
-$('confirmPassword').addEventListener('input', () => $('confirmPassword').setCustomValidity(''));
-$('newPassword').addEventListener('input', () => { $('newPassword').setCustomValidity(''); $('confirmPassword').setCustomValidity(''); });
-$('currentPassword').addEventListener('input', () => $('newPassword').setCustomValidity(''));
-$('passwordForm').addEventListener('submit', event => { event.preventDefault(); if ($('newPassword').value !== $('confirmPassword').value) { $('confirmPassword').setCustomValidity('Your passwords do not match.'); $('confirmPassword').reportValidity(); return; } if ($('currentPassword').value === $('newPassword').value) { $('newPassword').setCustomValidity('Choose a different password from your current password.'); $('newPassword').reportValidity(); return; } feedback('passwordStatus', 'Password format checked. Your password has not changed; account services must be connected first.'); $('passwordForm').reset(); document.querySelectorAll('[data-password]').forEach(button => { $(button.dataset.password).type = 'password'; button.textContent = 'Show'; button.setAttribute('aria-pressed','false'); button.setAttribute('aria-label','Show ' + document.querySelector('label[for="' + button.dataset.password + '"]').textContent.replace('*','').trim().toLowerCase()); }); });
-const configs = { banner:{extensions:['pdf','jpg','jpeg','png'],max:20,check:'checkBanner',label:'X-banner'}, photo:{extensions:['jpg','jpeg','png'],max:20,check:'checkPhoto',label:'Project photo'}, file:{extensions:['zip'],max:100,check:'checkFile',label:'Project file'} };
-const selected = {}; const objectURLs = {};
-function updateProgress() { const details = ['projectTitle','stage','category','abstract'].every(id => $(id).value.trim()); const states = {checkDetails:details}; Object.entries(configs).forEach(([key,config]) => states[config.check] = Boolean(selected[key])); let count = 0; Object.entries(states).forEach(([id,done]) => { $(id).classList.toggle('done',done); $(id).querySelector('span').textContent = done ? '✓' : '○'; if(done) count++; }); $('progressCount').textContent = count + ' / 4'; $('progressBar').style.width = count * 25 + '%'; $('projectBadge').textContent = count === 4 ? 'Ready to review' : 'Draft project'; }
-function clearFile(key) { delete selected[key]; $(key + 'File').value = ''; if(objectURLs[key]) { URL.revokeObjectURL(objectURLs[key]); delete objectURLs[key]; } $(key + 'Preview').replaceChildren(); $(key + 'Preview').hidden = true; updateProgress(); }
-function chooseFile(key, files) { const config = configs[key]; $(key + 'Error').textContent = ''; if (!files.length) return; const file = files[0]; const extension = file.name.split('.').pop().toLowerCase(); if (files.length !== 1 || !config.extensions.includes(extension) || file.size > config.max * 1024 * 1024 || file.size === 0) { clearFile(key); $(key + 'Error').textContent = 'Choose one non-empty ' + config.extensions.join(', ').toUpperCase() + ' file, up to ' + config.max + ' MB.'; return; } if(objectURLs[key]) URL.revokeObjectURL(objectURLs[key]); selected[key] = file; const preview = $(key + 'Preview'); preview.replaceChildren(); if(['jpg','jpeg','png'].includes(extension)) { const img = document.createElement('img'); objectURLs[key] = URL.createObjectURL(file); img.src = objectURLs[key]; img.alt = config.label + ' preview'; preview.append(img); } const name = document.createElement('span'); name.textContent = file.name + ' · ' + (file.size / 1024 / 1024).toFixed(2) + ' MB'; preview.append(name); const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = '×'; remove.setAttribute('aria-label','Remove ' + config.label); remove.addEventListener('click', () => { clearFile(key); $(key + 'File').focus(); }); preview.append(remove); preview.hidden = false; updateProgress(); }
-Object.keys(configs).forEach(key => { const input = $(key + 'File'); const zone = $(key + 'Zone'); input.setAttribute('aria-describedby', key + 'Error'); input.addEventListener('change', () => chooseFile(key,input.files)); ['dragenter','dragover'].forEach(type => zone.addEventListener(type,event => { event.preventDefault(); zone.classList.add('drag-over'); })); ['dragleave','drop'].forEach(type => zone.addEventListener(type,event => { event.preventDefault(); zone.classList.remove('drag-over'); })); zone.addEventListener('drop',event => { const files = event.dataTransfer.files; if(!files.length) return; input.files = files; chooseFile(key,files); }); });
-$('submissionForm').addEventListener('input',updateProgress);
-$('submissionForm').addEventListener('submit',event => { event.preventDefault(); if(!['projectTitle','abstract'].every(id => $(id).value.trim())) { feedback('submissionStatus','Please add a project title and abstract.'); return; } if(!Object.keys(configs).every(key => selected[key])) { feedback('submissionStatus','Please select all three project files.'); return; } const review = $('reviewDetails'); review.replaceChildren(); const rows = [['Project title',$('projectTitle').value],['Competition stage',$('stage').selectedOptions[0].text],['Category',$('category').selectedOptions[0].text],['Abstract',$('abstract').value],...Object.entries(configs).map(([key,config]) => [config.label,selected[key].name])]; rows.forEach(([label,value]) => { const dt = document.createElement('dt'); dt.textContent = label; const dd = document.createElement('dd'); dd.textContent = value; review.append(dt,dd); }); $('reviewDialog').showModal(); });
-document.querySelectorAll('.dialog-close').forEach(button => button.addEventListener('click',() => $('reviewDialog').close()));
+        'use strict';
+        const $ = id => document.getElementById(id);
+        (function initCountdown() {
+            const el = $('countdown');
+            if (!el) return;
+            const deadline = new Date(el.dataset.deadline).getTime();
+            const pad = n => String(Math.max(n, 0)).padStart(2, '0');
+            function tick() {
+                const diff = deadline - Date.now();
+                if (diff <= 0) { ['cdDays', 'cdHours', 'cdMinutes', 'cdSeconds'].forEach(id => $(id).textContent = '00'); clearInterval(timer); $('deadlineLabel').textContent = 'The submission deadline has passed.'; return; }
+                $('cdDays').textContent = pad(Math.floor(diff / 86400000));
+                $('cdHours').textContent = pad(Math.floor(diff % 86400000 / 3600000));
+                $('cdMinutes').textContent = pad(Math.floor(diff % 3600000 / 60000));
+                $('cdSeconds').textContent = pad(Math.floor(diff % 60000 / 1000));
+            }
+            const timer = setInterval(tick, 1000);
+            tick();
+        })();
+        const drawer = $('navigationDrawer');
+        $('menuToggle').addEventListener('click', () => { drawer.showModal(); $('menuToggle').setAttribute('aria-expanded', 'true'); });
+        $('menuClose').addEventListener('click', () => drawer.close());
+        drawer.addEventListener('close', () => $('menuToggle').setAttribute('aria-expanded', 'false'));
+        drawer.addEventListener('click', event => { if (event.target === drawer && event.clientX >= drawer.getBoundingClientRect().right) drawer.close(); });
+        drawer.querySelectorAll('a').forEach(link => link.addEventListener('click', () => drawer.close()));
+        function closeAccount() { $('accountMenu').hidden = true; $('accountToggle').setAttribute('aria-expanded', 'false'); }
+        $('accountToggle').addEventListener('click', () => { const open = $('accountMenu').hidden; $('accountMenu').hidden = !open; $('accountToggle').setAttribute('aria-expanded', String(open)); });
+        document.addEventListener('click', event => { if (!event.target.closest('.account')) closeAccount(); });
+        document.addEventListener('keydown', event => { if (event.key === 'Escape' && !$('accountMenu').hidden) { closeAccount(); $('accountToggle').focus(); } });
+        $('accountMenu').querySelectorAll('a').forEach(a => a.addEventListener('click', closeAccount));
+        function routeTab() { const requested = location.hash.slice(1) || 'home'; const pages = [...document.querySelectorAll('[data-page]')]; const name = pages.some(p => p.dataset.page === requested) ? requested : 'home'; pages.forEach(p => p.hidden = p.dataset.page !== name); drawer.querySelectorAll('a').forEach(a => { if (a.hash === '#' + name) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }); }
+        window.addEventListener('hashchange', () => { routeTab(); const heading = document.querySelector('[data-page]:not([hidden]) h2'); if (heading) { heading.tabIndex = -1; heading.focus({ preventScroll: true }); } window.scrollTo(0, 0); }); routeTab();
+        $('todayDate').textContent = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kuala_Lumpur' }).format(new Date()).toUpperCase();
+        function feedback(id, message) { $(id).textContent = message; $(id).hidden = false; }
+        $('profileForm').addEventListener('submit', event => { event.preventDefault(); const name = $('fullName').value.trim(); if (!name || !$('school').value.trim()) { feedback('profileStatus', 'Please enter your name and school.'); return; } $('welcomeName').textContent = name.split(/\s+/)[0]; $('profileName').textContent = name; $('accountName').textContent = name.split(/\s+/)[0]; $('accountFullName').textContent = name; $('profileSchool').textContent = $('school').value.trim(); $('avatar').textContent = name.split(/\s+/).slice(0, 2).map(part => part[0]).join('').toUpperCase(); feedback('profileStatus', 'Profile preview updated. These changes are not saved to an account and will reset when you leave this page.'); });
+        document.querySelectorAll('[data-password]').forEach(button => button.addEventListener('click', () => { const input = $(button.dataset.password); const show = input.type === 'password'; input.type = show ? 'text' : 'password'; button.textContent = show ? 'Hide' : 'Show'; button.setAttribute('aria-pressed', show); button.setAttribute('aria-label', (show ? 'Hide ' : 'Show ') + document.querySelector('label[for="' + input.id + '"]').textContent.replace('*', '').trim().toLowerCase()); }));
+        $('confirmPassword').addEventListener('input', () => $('confirmPassword').setCustomValidity(''));
+        $('newPassword').addEventListener('input', () => { $('newPassword').setCustomValidity(''); $('confirmPassword').setCustomValidity(''); });
+        $('currentPassword').addEventListener('input', () => $('newPassword').setCustomValidity(''));
+        $('passwordForm').addEventListener('submit', event => { event.preventDefault(); if ($('newPassword').value !== $('confirmPassword').value) { $('confirmPassword').setCustomValidity('Your passwords do not match.'); $('confirmPassword').reportValidity(); return; } if ($('currentPassword').value === $('newPassword').value) { $('newPassword').setCustomValidity('Choose a different password from your current password.'); $('newPassword').reportValidity(); return; } feedback('passwordStatus', 'Password format checked. Your password has not changed; account services must be connected first.'); $('passwordForm').reset(); document.querySelectorAll('[data-password]').forEach(button => { $(button.dataset.password).type = 'password'; button.textContent = 'Show'; button.setAttribute('aria-pressed', 'false'); button.setAttribute('aria-label', 'Show ' + document.querySelector('label[for="' + button.dataset.password + '"]').textContent.replace('*', '').trim().toLowerCase()); }); });
+        const configs = { banner: { extensions: ['pdf', 'jpg', 'jpeg', 'png'], max: 20, check: 'checkBanner', label: 'X-banner' }, photo: { extensions: ['jpg', 'jpeg', 'png'], max: 20, check: 'checkPhoto', label: 'Project photo' }, file: { extensions: ['zip'], max: 100, check: 'checkFile', label: 'Project file' } };
+        const selected = {}; const objectURLs = {};
+        function updateProgress() { const details = ['projectTitle', 'stage', 'category', 'abstract'].every(id => $(id).value.trim()); const states = { checkDetails: details }; Object.entries(configs).forEach(([key, config]) => states[config.check] = Boolean(selected[key])); let count = 0; Object.entries(states).forEach(([id, done]) => { $(id).classList.toggle('done', done); $(id).querySelector('span').textContent = done ? '✓' : '○'; if (done) count++; }); $('progressCount').textContent = count + ' / 4'; $('progressBar').style.width = count * 25 + '%'; $('projectBadge').textContent = count === 4 ? 'Ready to review' : 'Draft project'; }
+        function clearFile(key) { delete selected[key]; $(key + 'File').value = ''; if (objectURLs[key]) { URL.revokeObjectURL(objectURLs[key]); delete objectURLs[key]; } $(key + 'Preview').replaceChildren(); $(key + 'Preview').hidden = true; updateProgress(); }
+        function chooseFile(key, files) { const config = configs[key]; $(key + 'Error').textContent = ''; if (!files.length) return; const file = files[0]; const extension = file.name.split('.').pop().toLowerCase(); if (files.length !== 1 || !config.extensions.includes(extension) || file.size > config.max * 1024 * 1024 || file.size === 0) { clearFile(key); $(key + 'Error').textContent = 'Choose one non-empty ' + config.extensions.join(', ').toUpperCase() + ' file, up to ' + config.max + ' MB.'; return; } if (objectURLs[key]) URL.revokeObjectURL(objectURLs[key]); selected[key] = file; const preview = $(key + 'Preview'); preview.replaceChildren(); if (['jpg', 'jpeg', 'png'].includes(extension)) { const img = document.createElement('img'); objectURLs[key] = URL.createObjectURL(file); img.src = objectURLs[key]; img.alt = config.label + ' preview'; preview.append(img); } const name = document.createElement('span'); name.textContent = file.name + ' · ' + (file.size / 1024 / 1024).toFixed(2) + ' MB'; preview.append(name); const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = '×'; remove.setAttribute('aria-label', 'Remove ' + config.label); remove.addEventListener('click', () => { clearFile(key); $(key + 'File').focus(); }); preview.append(remove); preview.hidden = false; updateProgress(); }
+        Object.keys(configs).forEach(key => { const input = $(key + 'File'); const zone = $(key + 'Zone'); input.setAttribute('aria-describedby', key + 'Error'); input.addEventListener('change', () => chooseFile(key, input.files));['dragenter', 'dragover'].forEach(type => zone.addEventListener(type, event => { event.preventDefault(); zone.classList.add('drag-over'); }));['dragleave', 'drop'].forEach(type => zone.addEventListener(type, event => { event.preventDefault(); zone.classList.remove('drag-over'); })); zone.addEventListener('drop', event => { const files = event.dataTransfer.files; if (!files.length) return; input.files = files; chooseFile(key, files); }); });
+        $('submissionForm').addEventListener('input', updateProgress);
+        $('submissionForm').addEventListener('submit', event => { event.preventDefault(); if (!['projectTitle', 'abstract'].every(id => $(id).value.trim())) { feedback('submissionStatus', 'Please add a project title and abstract.'); return; } if (!Object.keys(configs).every(key => selected[key])) { feedback('submissionStatus', 'Please select all three project files.'); return; } const review = $('reviewDetails'); review.replaceChildren(); const rows = [['Project title', $('projectTitle').value], ['Competition stage', $('stage').selectedOptions[0].text], ['Category', $('category').selectedOptions[0].text], ['Abstract', $('abstract').value], ...Object.entries(configs).map(([key, config]) => [config.label, selected[key].name])]; rows.forEach(([label, value]) => { const dt = document.createElement('dt'); dt.textContent = label; const dd = document.createElement('dd'); dd.textContent = value; review.append(dt, dd); }); $('reviewDialog').showModal(); });
+        const draftKey = 'ytac-2026-project-preview';
+        const draftFields = ['projectTitle', 'stage', 'category', 'abstract'];
+        $('saveDraft').addEventListener('click', () => { try { const draft = Object.fromEntries(draftFields.map(id => [id, $(id).value])); localStorage.setItem(draftKey, JSON.stringify(draft)); feedback('submissionStatus', 'Draft details saved in this browser. Files must be selected again after reopening. This is not a server submission.'); } catch (error) { feedback('submissionStatus', 'This browser could not save your draft. Keep this page open to retain your work.'); } });
+        try { const draft = JSON.parse(localStorage.getItem(draftKey) || 'null'); if (draft && typeof draft === 'object') { draftFields.forEach(id => { if (typeof draft[id] === 'string') $(id).value = draft[id]; }); updateProgress(); feedback('submissionStatus', 'Saved draft details restored. Please select your files again before submitting.'); } } catch (error) { }
+        $('confirmSubmission').addEventListener('click', () => { $('reviewDialog').close(); feedback('submissionStatus', 'Submission is not available in this design preview. Your project has not been uploaded or submitted. Use Save draft to keep your project details in this browser.'); $('submissionStatus').scrollIntoView({ block: 'center' }); });
+        document.querySelectorAll('.dialog-close').forEach(button => button.addEventListener('click', () => $('reviewDialog').close()));
     </script>
 </body>
 

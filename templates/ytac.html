@@ -550,13 +550,18 @@
         /* A centered two-page spread, with neighboring covers visible at both edges. */
         #carouselContainer { max-width:1200px; padding-block:42px; perspective:1600px; }
         #carouselContainer .category-grid { min-height:560px; }
-        #carouselContainer .carousel-card { transition:transform .4s ease,opacity .2s ease,width .2s ease; }
-        #carouselContainer .category-card { background:linear-gradient(105deg,#f8f9fb 0%,#fff 7%,#fff 92%,#f3f2f6 100%); box-shadow:inset -4px 0 10px #23384c10,2px 2px 0 #dcdfe6,0 14px 30px #17364e21; }
-        #carouselContainer .category-card::after { content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(90deg,transparent 95%,#12304710); }
-        #carouselContainer.book-open .book-selected .category-card { border-radius:26px 5px 5px 26px; }
-        #carouselContainer #challengeDetail { border-radius:5px 26px 26px 5px; background:linear-gradient(90deg,#e9e9ee 0,#f7f7fa 3%,#fff 9%,#fff 97%,#f5f4f8 100%); box-shadow:inset 6px 0 12px #23384c10,2px 2px 0 #dcdfe6,0 14px 30px #17364e21; padding-top:28px; }
-        #carouselContainer #challengeDetail .detail-photo { height:38%; }
-        #carouselContainer #challengeDetail .gallery-img { object-fit:contain; }
+        #carouselContainer .carousel-card { will-change:transform,opacity,width; }
+        #carouselContainer.is-animating .category-card { backdrop-filter:none; -webkit-backdrop-filter:none; }
+        #carouselContainer #challengeDetail { backface-visibility:hidden; -webkit-backface-visibility:hidden; }
+        #carouselContainer .category-card { background:#fff; box-shadow:2px 2px 0 #dcdfe6,0 14px 30px #17364e21; }
+        #carouselContainer .category-card::after { content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(90deg,transparent 95%,#12304710);opacity:0; }
+        #carouselContainer.book-open .book-selected .category-card { border-radius:26px 5px 5px 26px; background:linear-gradient(105deg,#f8f9fb 0%,#fff 7%,#fff 92%,#f3f2f6 100%); box-shadow:inset -4px 0 10px #23384c10,2px 2px 0 #dcdfe6,0 14px 30px #17364e21; }
+        #carouselContainer.book-open .book-selected .category-card::after { opacity:1; }
+        #carouselContainer #challengeDetail { border-radius:5px 26px 26px 5px; background:linear-gradient(90deg,#e9e9ee 0,#f7f7fa 3%,#fff 9%,#fff 97%,#f5f4f8 100%); box-shadow:inset 6px 0 12px #23384c10,2px 2px 0 #dcdfe6,0 14px 30px #17364e21; padding-top:16px; }
+        #carouselContainer #challengeDetail { padding-top: 36px; /* Space above the picture */}
+        #carouselContainer #challengeDetail .detail-photo { width:calc(100% - 32px); height:28%; margin-top:0; }
+        #carouselContainer #challengeDetail .detail-photo + div { flex:1; height:auto; min-height:0; }
+        #carouselContainer #challengeDetail .gallery-img { width:100%; height:100%; object-fit:cover; object-position:center; }
         #carouselContainer #prevBtn,#carouselContainer #nextBtn { z-index:110; }
         #carouselContainer #prevBtn { left:0; }
         #carouselContainer #nextBtn { right:0; }
@@ -568,6 +573,33 @@
         }
         @media(prefers-reduced-motion:reduce) { #carouselContainer .carousel-card { transition:none; } }
 
+
+        /* Pathway hover highlight: no movement or automatic expansion. */
+        #pathway .pathway-node {
+            transition: max-width .5s cubic-bezier(.4,0,.2,1),
+                        min-height .5s cubic-bezier(.4,0,.2,1),
+                        padding .4s ease, transform .3s ease,
+                        border-color .3s ease, box-shadow .3s ease,
+                        background-color .3s ease;
+        }
+        @media (hover: hover) and (pointer: fine) {
+            #pathway .pathway-node:hover {
+                border-color: rgba(20,163,154,.55);
+                box-shadow: 0 0 0 3px rgba(132,212,199,.18),
+                            0 0 24px rgba(20,163,154,.20),
+                            0 16px 28px rgba(0,96,122,.12);
+            }
+            #pathway .pathway-node:hover .expand-icon {
+                animation: pathway-icon-pulse .9s ease-in-out;
+            }
+        }
+        @keyframes pathway-icon-pulse {
+            0%, 100% { scale: 1; }
+            50% { scale: 1.14; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #pathway .pathway-node:hover .expand-icon { animation: none; }
+        }
     </style>
 
     <style>
@@ -754,7 +786,125 @@
         }
     </style>
 
+    <style>
+        /* Two staggered gallery rows with individually sized photographs. */
+        @media (min-width:640px) {
+            #gallery .gallery-track {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                height: 100%;
+                width: max-content;
+                gap: 24px;
+                padding: 8px 5vw;
+                box-sizing: border-box;
+            }
+
+            #gallery .gallery-track>.gallery-row {
+                display: flex;
+                flex: 0 0 calc((100% - 24px) / 2);
+                align-items: center;
+                gap: 24px;
+                width: max-content;
+                height: calc((100% - 24px) / 2);
+                min-height: 0;
+                max-height: none;
+                translate: none;
+                transform: none;
+            }
+
+            #gallery .gallery-track>.gallery-row:nth-child(2) {
+                padding-left: 100px;
+            }
+
+            #gallery .gallery-row>.gallery-item {
+                flex: none;
+                width: auto;
+                height: var(--photo-height);
+                aspect-ratio: calc(var(--photo-ratio) * 1.2);
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            #gallery .gallery-item>img,
+            #gallery .gallery-item>div {
+                flex: 1;
+                min-height: 0;
+                height: 0;
+                width: 100%;
+                overflow: hidden;
+                border-radius: 16px;
+            }
+
+            #gallery .gallery-item img {
+                width: 100%;
+                object-fit: cover;
+            }
+
+            #gallery .gallery-item>div>img {
+                height: 100%;
+            }
+
+            #gallery .gallery-item>span {
+                flex: none;
+                padding-left: 8px;
+            }
+        }
+
+        @media (max-width:639px) {
+            #gallery .gallery-track>.gallery-row {
+                display: contents;
+            }
+
+            #gallery .gallery-row>.gallery-item {
+                width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            #gallery .gallery-item>img,
+            #gallery .gallery-item>div {
+                flex: none;
+                height: auto;
+            }
+        }
+    </style>
+    <style>
+        /* Gallery performance: keep the moving track on its own GPU layer,
+           avoid per-frame blur/filter work over the moving photos. */
+        @media (min-width:640px) {
+            #gallery .gallery-track {
+                will-change: transform;
+                backface-visibility: hidden;
+                transform: translate3d(0,0,0);
+                contain: layout style;
+            }
+            #gallery .gallery-item img {
+                backface-visibility: hidden;
+                image-rendering: auto;
+            }
+            #gallery .gallery-title-overlay { will-change: transform; transform: translateZ(0); }
+            #gallery .gallery-title-overlay span,
+            #gallery .gallery-title-overlay h2 {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                filter: none !important;
+            }
+            #gallery .gallery-title-overlay span { background-color: rgba(59,7,100,0.85) !important; }
+            #gallery .gallery-title-overlay h2 { text-shadow: 0 4px 12px rgba(0,0,0,0.8); }
+        }
+        #navbar.gallery-nav {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            background-color: rgba(26,26,26,0.55) !important;
+        }
+    </style>
 </head>
+
 
 <body
     class="bg-[#F9FBFC] bg-[radial-gradient(rgba(118,111,208,0.08)_1px,transparent_1px),linear-gradient(to_right,rgba(67,100,164,0.03)_1px,transparent_1px)] [background-size:32px_32px,64px_64px] select-none">
@@ -1144,20 +1294,20 @@
     [transform-style:preserve-3d] [perspective:1200px]">
 
                         <!-- CLOSE BUTTON -->
-                        <button id="closeDetail" type="button"
+                        <button id="closeDetail" type="button" style="display: none;"
                             class="absolute top-4 right-4 z-[120] w-9 h-9 rounded-full bg-white shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-100 hover:scale-110 transition-all duration-200 pointer-events-auto">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
 
                         <!-- FEATURED PHOTO (wide, top of card) -->
                         <div
-                            class="detail-photo relative mx-auto w-[80%] h-[30%] rounded-xl shrink-0 overflow-hidden cursor-pointer pointer-events-auto">
+                            class="detail-photo relative mx-auto w-[80%] h-[28%] rounded-xl shrink-0 overflow-hidden cursor-pointer pointer-events-auto">
                             <img class="gallery-img block w-full h-full object-cover pointer-events-auto" src="" alt="">
                         </div>
 
                         <!-- CATEGORY DESCRIPTION -->
                         <div
-                            class="relative flex flex-col h-[65%] min-h-0 shrink-0 overflow-y-auto gap-2 p-6 sm:p-7 pointer-events-auto">
+                            class="relative flex flex-col h-[65%] min-h-0 shrink-0 overflow-y-auto gap-2 p-7 sm:p-8 pointer-events-auto">
                             <h3 id="detailTitle"
                                 class="font-heading font-black text-xl sm:text-2xl text-center text-[#004A5E] uppercase tracking-tight">
                             </h3>
@@ -1223,7 +1373,7 @@
                 <div class="pathway-tree max-w-full w-full mx-auto flex flex-col items-center gap-2 min-h-[500px]">
 
                     <!-- YTAC Node -->
-                    <div class="pathway-node w-full bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-2 hover:border-white text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
+                    <div class="pathway-node w-full bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
                         data-stage="malaysia">
 
                         <!-- Left Column: Main Node Content -->
@@ -1350,7 +1500,7 @@
                     </div>
 
                     <!-- ICIA Node -->
-                    <div class="pathway-node w-full bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-2 hover:border-white text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
+                    <div class="pathway-node w-full bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
                         data-stage="asean">
 
                         <!-- Left Column: Main Node Content -->
@@ -1477,7 +1627,7 @@
                     </div>
 
                     <!-- IITS Node -->
-                    <div class="pathway-node w-full bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 hover:-translate-y-2 hover:border-white text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
+                    <div class="pathway-node w-full bg-white p-6 sm:p-8 rounded-3xl shadow-xl border-4 border-ytac-blue/20 text-left cursor-pointer transition-all duration-300 flex flex-col lg:flex-row gap-6 items-stretch"
                         data-stage="international">
 
                         <!-- Left Column: Main Node Content -->
@@ -1657,7 +1807,7 @@
             </div>
 
             <!-- TITLE OVERLAY -->
-            <div class="absolute top-10 sm:top-24 left-0 w-full z-20 text-center pointer-events-none">
+            <div class="gallery-title-overlay absolute top-10 sm:top-24 left-0 w-full z-20 text-center pointer-events-none">
 
                 <span
                     class="font-heading text-purple-300 text-sm font-extrabold tracking-widest uppercase bg-purple-900/60 border border-purple-500/30 px-4 py-1.5 rounded-lg inline-block mb-2 shadow-lg backdrop-blur-sm">
@@ -1679,138 +1829,109 @@
             <div
                 class="gallery-sticky relative sm:absolute sm:top-48 sm:bottom-24 w-full flex items-center overflow-hidden">
 
-                <div
-                    class="gallery-track flex sm:h-full items-center gap-12 px-[10vw] sm:[&>div]:max-h-full sm:[&>div]:translate-none sm:max-[1367px]:gap-6 sm:max-[1367px]:px-8 sm:max-[1367px]:[&>div]:w-[min(72vw,56rem,calc(150svh_-_30rem))] sm:max-[1367px]:[&>div]:h-auto sm:max-[1367px]:[&>div>img]:aspect-[3/2] sm:max-[1367px]:[&>div>img]:flex-none sm:max-[1367px]:[&>div>img]:h-auto sm:max-[1367px]:[&>div>div]:aspect-[3/2] sm:max-[1367px]:[&>div>div]:flex-none">
+                <div class="gallery-track">
+                    <div class="gallery-row">
+                        <div class="gallery-item flex flex-col gap-2" style="--photo-ratio:1.55; --photo-height:86%; transform: translate(-20px, -15px); position:relative; z-index:2">
+                            <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                                YTAC, 2026
+                            </span>
 
-                    <!-- IMAGE 1 -->
-                    <div class="shrink-0 w-[26vw] h-[43vh] flex flex-col gap-2 translate-y-30">
-                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
-                            YTAC, 2026
-                        </span>
+                            <img decoding="async" loading="eager" draggable="false" src="{{ url_for('static', filename='img/2026 pic 2.jpg') }}"
+                                class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        </div>
+                        <div class="gallery-item flex flex-col gap-2" style="--photo-ratio:1.9; --photo-height:100%;">
+                            <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                                YTAC, 2026
+                            </span>
 
-                        <img src="{{ url_for('static', filename='img/2026 pic 2.jpg') }}"
-                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
-                    </div>
+                            <img decoding="async" loading="eager" draggable="false" src="{{ url_for('static', filename='img/2026 pic 1.jpg') }}"
+                                class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        </div>
+                        <div class="gallery-item flex flex-col gap-2" style="--photo-ratio:1.4; --photo-height:90%;">
+                            <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                                YTAC, 2026
+                            </span>
 
+                            <img decoding="async" loading="eager" draggable="false" src="{{ url_for('static', filename='img/2026 pic 4.jpg') }}"
+                                class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        </div>
+                        <div class="gallery-item flex flex-col gap-2" style="--photo-ratio:1.7; --photo-height:94%;">
+                            <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                                YTAC, 2026
+                            </span>
 
-                    <!-- IMAGE 2 -->
-                    <div class="shrink-0 w-[45vw] h-[60vh] flex flex-col gap-2 translate-y-14">
-                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
-                            YTAC, 2026
-                        </span>
+                            <img decoding="async" loading="eager" draggable="false" src="{{ url_for('static', filename='img/2025 pic 1.jpg') }}"
+                                class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        </div>
+                        <div class="gallery-item flex flex-col gap-2" style="--photo-ratio:1.85; --photo-height:100%;">
+                            <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                                YTAC, 2025
+                            </span>
 
-                        <img src="{{ url_for('static', filename='img/2026 pic 1.jpg') }}"
-                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
-                    </div>
+                            <img decoding="async" loading="eager" draggable="false" src="{{ url_for('static', filename='img/2025 pic 4.jpg') }}"
+                                class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        </div>
+                        <div class="gallery-item flex flex-col gap-2" style="--photo-ratio:1.5; --photo-height:84%;">
+                            <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                                YTAC, 2025
+                            </span>
 
-
-                    <!-- IMAGE 3 -->
-                    <div class="shrink-0 w-[28vw] h-[48vh] flex flex-col gap-2 translate-y-13">
-                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
-                            YTAC, 2026
-                        </span>
-
-                        <img src="{{ url_for('static', filename='img/2026 pic 4.jpg') }}"
-                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
-                    </div>
-
-
-                    <!-- IMAGE 4 -->
-                    <div class="shrink-0 w-[28vw] h-[48vh] flex flex-col gap-2 translate-y-11">
-                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
-                            YTAC, 2026
-                        </span>
-
-                        <img src="{{ url_for('static', filename='img/2025 pic 1.jpg') }}"
-                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
-                    </div>
-
-
-                    <!-- IMAGE 5 -->
-                    <div class="shrink-0 w-[45vw] h-[70vh] flex flex-col gap-2 translate-y-4">
-                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
-                            YTAC, 2025
-                        </span>
-
-                        <img src="{{ url_for('static', filename='img/2025 pic 4.jpg') }}"
-                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
-                    </div>
-
-
-                    <!-- IMAGE 6 -->
-                    <div class="shrink-0 w-[32vw] h-[48vh] flex flex-col gap-2 translate-y-8">
-                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
-                            YTAC, 2025
-                        </span>
-
-                        <img src="{{ url_for('static', filename='img/2025 pic 2.jpg') }}"
-                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
-                    </div>
-
-
-                    <!-- IMAGE 7 -->
-                    <div class="shrink-0 w-[38vw] h-[55vh] flex flex-col gap-2 translate-y-8">
-                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
-                            YTAC, 2025
-                        </span>
-
-                        <img src="{{ url_for('static', filename='img/2025 pic 3.jpg') }}"
-                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
-                    </div>
-
-
-                    <!-- IMAGE 8 -->
-                    <div class="shrink-0 w-[48vw] h-[68vh] flex flex-col gap-2">
-                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
-                            YTAC, 2025
-                        </span>
-
-                        <div class="flex-1 min-h-0 rounded-2xl overflow-hidden">
-                            <img src="{{ url_for('static', filename='img/2025 pic 5.jpg') }}"
-                                class="block w-full h-full object-cover" alt="YTAC 2025 event">
+                            <img decoding="async" loading="eager" draggable="false" src="{{ url_for('static', filename='img/2025 pic 2.jpg') }}"
+                                class="w-full flex-1 min-h-0 object-cover rounded-xl">
                         </div>
                     </div>
+                    <div class="gallery-row">
+                        <div class="gallery-item flex flex-col gap-2" style="--photo-ratio:1.8; --photo-height:96%;">
+                            <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                                YTAC, 2025
+                            </span>
 
-                    <!-- IMAGE 9 -->
-                    <div class="shrink-0 w-[35vw] h-[50vh] flex flex-col gap-2 translate-y-8">
-                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
-                            YTAC, 2025
-                        </span>
+                            <img decoding="async" loading="eager" draggable="false" src="{{ url_for('static', filename='img/2025 pic 3.jpg') }}"
+                                class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        </div>
+                        <div class="gallery-item flex flex-col gap-2" style="--photo-ratio:1.55; --photo-height:88%;">
+                            <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                                YTAC, 2025
+                            </span>
 
-                        <img src="{{ url_for('static', filename='img/2025 pic 6.jpg') }}"
-                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                            <div class="flex-1 min-h-0 rounded-2xl overflow-hidden">
+                                <img decoding="async" loading="eager" draggable="false" src="{{ url_for('static', filename='img/2025 pic 5.jpg') }}"
+                                    class="block w-full h-full object-cover" alt="YTAC 2025 event">
+                            </div>
+                        </div>
+                        <div class="gallery-item flex flex-col gap-2" style="--photo-ratio:1.9; --photo-height:100%;">
+                            <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                                YTAC, 2025
+                            </span>
+
+                            <img decoding="async" loading="eager" draggable="false" src="{{ url_for('static', filename='img/2025 pic 6.jpg') }}"
+                                class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        </div>
+                        <div class="gallery-item flex flex-col gap-2" style="--photo-ratio:1.5; --photo-height:85%;">
+                            <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                                YTAC, 2025
+                            </span>
+
+                            <img decoding="async" loading="eager" draggable="false" src="{{ url_for('static', filename='img/2025 pic 7.jpg') }}"
+                                class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        </div>
+                        <div class="gallery-item flex flex-col gap-2" style="--photo-ratio:1.75; --photo-height:96%;">
+                            <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                                YTAC, 2024
+                            </span>
+
+                            <img decoding="async" loading="eager" draggable="false" src="{{ url_for('static', filename='img/2024 pic 2.jpg') }}"
+                                class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        </div>
+                        <div class="gallery-item flex flex-col gap-2" style="--photo-ratio:1.6; --photo-height:90%;">
+                            <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
+                                YTAC, 2024
+                            </span>
+
+                            <img decoding="async" loading="eager" draggable="false" src="{{ url_for('static', filename='img/2024 pic 1.jpg') }}"
+                                class="w-full flex-1 min-h-0 object-cover rounded-xl">
+                        </div>
                     </div>
-
-                    <!-- IMAGE 10 -->
-                    <div class="shrink-0 w-[42vw] h-[58vh] flex flex-col gap-2 translate-y-8">
-                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
-                            YTAC, 2025
-                        </span>
-
-                        <img src="{{ url_for('static', filename='img/2025 pic 7.jpg') }}"
-                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
-                    </div>
-
-                    <!-- IMAGE 11 -->
-                    <div class="shrink-0 w-[48vw] h-[68vh] flex flex-col gap-2 translate-y-8">
-                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
-                            YTAC, 2024
-                        </span>
-
-                        <img src="{{ url_for('static', filename='img/2024 pic 2.jpg') }}"
-                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
-                    </div>
-
-                    <!-- IMAGE 12 -->
-                    <div class="shrink-0 w-[33vw] h-[50vh] flex flex-col gap-2 translate-y-8">
-                        <span class="shrink-0 text-xs pl-6 pt-1 font-bold tracking-widest text-gray-300 uppercase">
-                            YTAC, 2024
-                        </span>
-
-                        <img src="{{ url_for('static', filename='img/2024 pic 1.jpg') }}"
-                            class="w-full flex-1 min-h-0 object-cover rounded-xl">
-                    </div>
-
                 </div>
             </div>
 
@@ -1852,17 +1973,19 @@
         <section class="contact relative px-[5%] bg-white pt-12 pb-10 w-full" id="contact">
             <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-stretch justify-between gap-12">
 
-                <div class="contact-container-1 flex-1 flex flex-col justify-between">
-                    <h3
-                        class="font-heading font-black text-3xl sm:text-4xl text-ytac-blue uppercase tracking-tight mx-2 my-6 mb-6">
-                        IGNITE YOUR JOURNEY AND CONNECT WITH US
-                    </h3>
+                <div class="contact-container-1 flex-1 min-w-0 flex flex-col justify-center gap-8 sm:gap-10">
+                    <div class="flex flex-col gap-4 px-2">
+                        <span class="block w-16 h-1.5 rounded-full bg-[linear-gradient(90deg,#822384,#84D4C7)]"></span>
+                        <h3
+                            class="font-heading font-black text-[34px] sm:text-[52px] leading-[1.08] text-ytac-blue uppercase tracking-tight m-0">
+                            IGNITE YOUR JOURNEY AND <span class="text-ytac-purple">CONNECT WITH US</span>
+                        </h3>
+                    </div>
                     <div
-                        class="map-container w-full h-[320px] rounded-3xl overflow-hidden shadow-xl border border-gray-100">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3605.3435929285715!2d101.6904511744704!3d3.085504953541636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc4bf370d14b0f%3A0x49a006ae9caa139d!2sCodeKids%20by%20EDUWEL!5e1!3m2!1sen!2smy!4v1787562569506!5m2!1sen!2smy"
-                            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
-                            referrerpolicy="strict-origin-when-cross-origin" title="YTAC Location Map"></iframe>
+                        class="ytac-logo-panel relative w-full rounded-3xl flex items-center justify-center overflow-hidden bg-white border border-ytac-mint/40 shadow-[0_12px_32px_rgba(66,108,189,0.10)] px-6 py-8 sm:py-10 before:content-[''] before:absolute before:inset-x-0 before:top-0 before:h-1.5 before:bg-[linear-gradient(90deg,#822384,#84D4C7)]">
+                        <img src="{{ url_for('static', filename='img/logo_nobg.png') }}"
+                            alt="Youth Tech Asia Challenge (YTAC)"
+                            class="block w-full max-w-[420px] h-auto object-contain" loading="lazy" decoding="async">
                     </div>
                 </div>
 
@@ -2239,6 +2362,14 @@
             let carouselRotating = false;
             const carouselOrbit = { angle: 0 };
             let activeCard = null;
+            // Single set of timing values shared by every carousel animation so
+            // card repositioning, the book flip, and the rotation stay in sync.
+            const CARD_EASE = 'power2.inOut';
+            const CARD_DUR = 0.55;
+            const PANEL_EASE = 'power2.inOut';
+            const PANEL_DUR = 0.95;
+            const ROTATE_EASE = 'power2.inOut';
+            const ROTATE_DUR = 0.65;
             const carouselContainer = $('#carouselContainer');
             const carouselCards = [...document.querySelectorAll('.carousel-card')];
             const detailPanel = $('#challengeDetail');
@@ -2249,7 +2380,7 @@
             const closeDetail = $('#closeDetail');
             const nextButton = $('#nextBtn');
             const previousButton = $('#prevBtn');
-                        const galleries = {
+            const galleries = {
 
                 "inno-tech": [
                     "{{ url_for('static', filename='img/inno-tech-icon-nobg.png') }}",
@@ -2291,33 +2422,39 @@
 
 
             function selectedIndex() { return ((Math.round(-currentAngle / 120) % 3) + 3) % 3; }
-            function updateCarouselPositions() {
+            // Pass animate=true only when the book is opening/closing, so the cards
+            // tween through GSAP with the exact same duration/ease as the panel flip.
+            // Init and resize call this with animate=false for an instant snap.
+            function updateCarouselPositions(animate) {
                 const opened = detailOpen && window.innerWidth >= 640;
                 carouselContainer.classList.toggle('book-open', opened);
-                const width = carouselContainer.clientWidth;
-                const page = Math.min(380, width * .34);
+                const containerWidth = carouselContainer.clientWidth;
+                const page = Math.min(380, containerWidth * .34);
+                const naturalWidth = window.innerWidth >= 640 ? 380 : 340;
+                const radius = Math.min(320, containerWidth * .36);
                 const center = selectedIndex();
+                const duration = animate ? CARD_DUR : 0;
                 carouselCards.forEach((card, i) => {
                     const offset = (i - center + 3) % 3;
                     const side = offset === 1 ? 1 : -1;
                     const chosen = offset === 0;
                     card.classList.toggle('book-selected', chosen && opened);
-                    card.style.width = opened ? page + 'px' : '';
-                    card.style.zIndex = chosen ? 90 : 20;
-                    card.style.opacity = chosen ? 1 : .78;
-                    // Sample the orbit on every animation frame instead of sliding between slots.
+
                     const radians = (i * 120 + carouselOrbit.angle) * Math.PI / 180;
                     const depth = Math.cos(radians);
-                    const radius = Math.min(320, width * .36);
-                    const x = opened ? (chosen ? -page / 2 : side * (width / 2 - page * .18)) : Math.sin(radians) * radius;
+                    const x = opened ? (chosen ? -page / 2 : side * (page - page * .64 * .30)) : Math.sin(radians) * radius;
                     const y = opened ? 0 : (depth - 1) * 24;
                     const z = opened ? 0 : (depth - 1) * 70;
                     const scale = opened ? (chosen ? 1 : .64) : .82 + .18 * depth;
-                    if (!opened) {
-                        card.style.zIndex = Math.round(50 + depth * 40);
-                        card.style.opacity = .75 + .25 * depth;
-                    }
-                    card.style.transform = 'translate3d(' + x + 'px,' + y + 'px,' + z + 'px) scale(' + scale + ')';
+                    const opacity = opened ? (chosen ? 1 : .78) : .75 + .25 * depth;
+                    const targetWidth = opened ? page : naturalWidth;
+
+                    card.style.zIndex = opened ? (chosen ? 90 : 20) : Math.round(50 + depth * 40);
+                    gsap.to(card, {
+                        x, y, z, scale, opacity, width: targetWidth,
+                        duration, ease: CARD_EASE, overwrite: 'auto',
+                        onComplete: () => { if (!opened) card.style.width = ''; }
+                    });
                     card.setAttribute('aria-label', (chosen ? 'Open ' : (side > 0 ? 'Next: ' : 'Previous: ')) + categoryInfo[card.dataset.gallery].title);
                 });
                 if (opened) {
@@ -2337,58 +2474,80 @@
                 carouselOrbit.angle = currentAngle;
                 activeCard = carouselCards[index];
                 detailOpen = true;
+                carouselContainer.classList.add('is-animating');
                 const key = activeCard.dataset.gallery;
                 detailTitle.textContent = categoryInfo[key].title;
                 detailDescription.textContent = categoryInfo[key].description;
                 galleryImages.forEach(img => { img.src = galleries[key][0]; img.alt = categoryInfo[key].title + ' illustration'; });
-                updateCarouselPositions();
+                // Cards make room and the page flip run on the same clock so they
+                // read as one motion instead of two animations racing each other.
+                updateCarouselPositions(true);
                 detailPanel.style.pointerEvents = 'auto';
                 detailPanel.setAttribute('aria-hidden', 'false');
-                gsap.fromTo(detailPanel, {opacity:0,rotationY:-160}, {opacity:1,rotationY:0,duration:1.15,delay:.1,transformOrigin:'left center',overwrite:true,ease:'power2.inOut',onComplete:() => { bookAnimating = false; }});
+                gsap.fromTo(detailPanel, { opacity: 0, rotationY: -160 }, { opacity: 1, rotationY: 0, duration: PANEL_DUR, delay: .08, transformOrigin: 'left center', overwrite: true, ease: PANEL_EASE, onComplete: () => { bookAnimating = false; carouselContainer.classList.remove('is-animating'); } });
             }
             function closeBook(afterClose) {
                 if (bookAnimating || !detailOpen) return;
                 bookAnimating = true;
+                carouselContainer.classList.add('is-animating');
                 detailPanel.style.pointerEvents = 'none';
-                detailPanel.setAttribute('aria-hidden','true');
+                detailPanel.setAttribute('aria-hidden', 'true');
                 // Keep the spread in place until the page has folded back left.
-                gsap.to(detailPanel, {opacity:0,rotationY:-160,duration:1,
-                    transformOrigin:'left center',overwrite:true,ease:'power2.inOut',
-                    onComplete:() => {
+                gsap.to(detailPanel, {
+                    opacity: 0, rotationY: -160, duration: PANEL_DUR * .85,
+                    transformOrigin: 'left center', overwrite: true, ease: PANEL_EASE,
+                    onComplete: () => {
                         detailOpen = false;
                         activeCard = null;
+                        updateCarouselPositions(true);
                         bookAnimating = false;
                         if (typeof afterClose === 'function') afterClose();
-                        else updateCarouselPositions();
+                        else carouselContainer.classList.remove('is-animating');
                     }
                 });
             }
             function turnBook(direction) {
                 if (bookAnimating || carouselRotating) return;
                 const wasOpen = detailOpen;
+                carouselContainer.classList.add('is-animating');
                 const moveToClosedCard = () => {
-                    // Keep the angle unwrapped: the third-to-first turn follows the
-                    // same direction instead of reversing across the whole carousel.
                     const targetAngle = currentAngle - direction * 120;
                     carouselRotating = true;
-                    updateCarouselPositions();
+                    // Cache geometry once. The orbit frames only update transforms
+                    // and opacity, without re-reading layout or changing card widths.
+                    const radius = Math.min(320, carouselContainer.clientWidth * .36);
+                    // Route every per-frame update through gsap.set (instead of writing
+                    // style.transform directly) so GSAP's internal transform cache stays
+                    // in sync — otherwise the next tween on these cards can jump/snap.
+                    const renderOrbit = () => {
+                        carouselCards.forEach((card, index) => {
+                            const radians = (index * 120 + carouselOrbit.angle) * Math.PI / 180;
+                            const depth = Math.cos(radians);
+                            gsap.set(card, {
+                                x: Math.sin(radians) * radius,
+                                y: (depth - 1) * 24,
+                                z: (depth - 1) * 70,
+                                scale: .82 + .18 * depth,
+                                opacity: .75 + .25 * depth,
+                                zIndex: Math.round(50 + depth * 40)
+                            });
+                        });
+                    };
                     gsap.to(carouselOrbit, {
                         angle: targetAngle,
-                        duration: .7,
-                        delay: wasOpen ? .8 : 0,
-                        ease: 'power2.inOut',
-                        onStart: () => {
-                            // CSS transform transitions would smooth each frame into
-                            // a straight slide; GSAP controls the circular path here.
-                            carouselCards.forEach(card => { card.style.transition = 'none'; });
-                        },
-                        onUpdate: updateCarouselPositions,
+                        duration: ROTATE_DUR,
+                        // A short, fixed pause lets the cards finish settling back from
+                        // the book layout before the rotation starts, without needing to
+                        // parse computed transition timings.
+                        delay: wasOpen ? CARD_DUR : 0,
+                        ease: ROTATE_EASE,
+                        onUpdate: renderOrbit,
                         onComplete: () => {
                             currentAngle = targetAngle;
                             carouselOrbit.angle = targetAngle;
-                            updateCarouselPositions();
-                            carouselCards.forEach(card => { card.style.transition = ''; });
+                            updateCarouselPositions(false);
                             carouselRotating = false;
+                            carouselContainer.classList.remove('is-animating');
                         }
                     });
                 };
@@ -2398,7 +2557,7 @@
             nextButton.addEventListener('click', () => turnBook(1));
             previousButton.addEventListener('click', () => turnBook(-1));
             closeDetail.addEventListener('click', closeBook);
-            carouselCards.forEach((card,index) => {
+            carouselCards.forEach((card, index) => {
                 card.tabIndex = 0;
                 card.addEventListener('click', event => { if (!event.target.closest('a')) openBook(index); });
                 card.addEventListener('keydown', event => {
@@ -2407,20 +2566,20 @@
                 });
             });
             carouselContainer.addEventListener('keydown', event => {
-                if(event.key === 'Escape') { closeBook(); carouselCards[selectedIndex()].focus(); }
-                if(event.key === 'ArrowLeft') { event.preventDefault(); turnBook(-1); }
-                if(event.key === 'ArrowRight') { event.preventDefault(); turnBook(1); }
+                if (event.key === 'Escape') { closeBook(); carouselCards[selectedIndex()].focus(); }
+                if (event.key === 'ArrowLeft') { event.preventDefault(); turnBook(-1); }
+                if (event.key === 'ArrowRight') { event.preventDefault(); turnBook(1); }
             });
             window.addEventListener('resize', () => {
                 if (window.innerWidth < 640 && detailOpen) closeBook();
-                else updateCarouselPositions();
+                else updateCarouselPositions(false);
             });
             function initializeCarousel() {
-                gsap.set(detailPanel,{opacity:0,rotationY:-90,transformOrigin:'left center'});
-                detailPanel.setAttribute('aria-hidden','true');
-                updateCarouselPositions();
+                gsap.set(detailPanel, { opacity: 0, rotationY: -90, transformOrigin: 'left center' });
+                detailPanel.setAttribute('aria-hidden', 'true');
+                updateCarouselPositions(false);
             }
-            
+
 
 
             // =========================================================
@@ -2700,6 +2859,22 @@
 
                             if (filter !== 'all') {
                                 node.classList.add('expanded');
+                            } else {
+                                // All returns every node to its original collapsed layout.
+                                node.classList.remove('expanded');
+                                const content = node.querySelector('.node-expanded-content');
+                                if (content) {
+                                    content.classList.remove('max-h-[1200px]');
+                                    content.classList.add('max-h-0');
+                                }
+                                const main = node.querySelector('.pathway-main');
+                                if (main) main.classList.remove('lg:w-[38%]', 'shrink-0');
+                                node.querySelectorAll('[id$="Viewer"]').forEach(viewer => {
+                                    viewer.classList.add('hidden');
+                                    viewer.classList.remove('flex');
+                                    const iframe = viewer.querySelector('iframe');
+                                    if (iframe) iframe.removeAttribute('src');
+                                });
                             }
 
                         } else {
@@ -3062,27 +3237,35 @@
                 const distance = () => Math.max(0,
                     galleryTrack.scrollWidth - galleryTrack.parentElement.clientWidth);
                 gsap.to(galleryTrack, {
-                    x: () => -distance(),
+                    x: () => -Math.round(distance()),
                     ease: "none",
+                    force3D: true,
+                    overwrite: "auto",
                     scrollTrigger: {
                         trigger: "#gallery",
                         start: "top top",
-                        end: () => `+=${Math.max(1, distance())}`,
-                        scrub: 1,
+                        end: () => `+=${Math.max(window.innerHeight * 3.6, distance() * 1.25)}`,
+                        scrub: true, // Lenis already smooths the scroll; extra scrub lag causes judder
                         pin: true,
                         pinSpacing: true,
                         anticipatePin: 1,
                         invalidateOnRefresh: true,
+                        fastScrollEnd: true,
                         onRefresh: () => lenis.resize(),
-                        onEnter: () => setNavTheme("dark"),
-                        onLeave: () => setNavTheme("light"),
-                        onEnterBack: () => setNavTheme("dark"),
-                        onLeaveBack: () => setNavTheme("light")
+                        onEnter: () => { setNavTheme("dark"); navbar.classList.add("gallery-nav"); },
+                        onLeave: () => { setNavTheme("light"); navbar.classList.remove("gallery-nav"); },
+                        onEnterBack: () => { setNavTheme("dark"); navbar.classList.add("gallery-nav"); },
+                        onLeaveBack: () => { setNavTheme("light"); navbar.classList.remove("gallery-nav"); }
                     }
                 });
             });
             galleryMedia.add("(max-width: 639px)", () => {
                 gsap.set(galleryTrack, { x: 0 });
+            });
+
+            // Pre-decode gallery photos so they don't decode mid-scroll.
+            document.querySelectorAll("#gallery .gallery-track img").forEach(img => {
+                if (img.decode) img.decode().catch(() => {});
             });
 
             // Recalculate pin spacing and the scroll limit after page assets settle.
